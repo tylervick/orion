@@ -1,4 +1,5 @@
 --swiftversion 5.9
+--exclude WebKit,Orion/WebKit
 --acronyms ID,URL,UUID
 --allman false
 --assetliterals visual-width
