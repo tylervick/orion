@@ -1,0 +1,8 @@
+included:
+  - Orion
+  - OrionTests
+  - OrionUITests
+
+excluded:
+  - WebKit
+  - Orion/WebKit
