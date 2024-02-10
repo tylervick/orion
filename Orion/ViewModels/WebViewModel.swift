@@ -25,11 +25,13 @@ final class WebViewModel: ObservableObject {
         connection.stateUpdateHandler = { state in
             switch state {
             case .ready:
+                defer {
+                    connection.cancel()
+                }
                 if let url = URL(string: "http://\(urlString)") {
                     completion(.success(url))
                     return
                 }
-                connection.cancel()
             case .failed(let error):
                 completion(.failure(error))
             default:
@@ -43,7 +45,9 @@ final class WebViewModel: ObservableObject {
         parseUrlString(urlString) { res in
             switch res {
             case .success(let url):
-                webView.load(URLRequest(url: url))
+                DispatchQueue.main.async {
+                    webView.load(URLRequest(url: url))
+                }
             case .failure(let error):
                 print("Failed to lookup domain: \(urlString) with error: \(error)")
             }
