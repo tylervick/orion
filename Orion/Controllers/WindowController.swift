@@ -8,40 +8,69 @@
 import Cocoa
 
 final class WindowController: NSWindowController {
-    let toolbarViewModel = ToolbarViewModel()
+    @IBOutlet var toolbar: NSToolbar!
+    @IBOutlet var backItem: NSToolbarItem!
+    @IBOutlet var forwardItem: NSToolbarItem!
+    @IBOutlet var reloadItem: NSToolbarItem!
+    @IBOutlet var locationTextField: NSTextField!
 
-    @IBOutlet var toolbar: Toolbar!
-    @IBOutlet var back: NSToolbarItem!
-    @IBOutlet var forward: NSToolbarItem!
-    @IBOutlet var reload: NSToolbarItem!
-    @IBOutlet var location: NSToolbarItem!
-
-    weak var toolbarActionDelegate: ToolbarActionDelegate?
+    weak var toolbarDelegate: ToolbarDelegate?
 
     override func windowDidLoad() {
-        if let webViewController = contentViewController as? ViewController {
-            toolbarActionDelegate = webViewController
-        }
+        toolbarDelegate = contentViewController as? ToolbarDelegate
+        bindViewModel()
+    }
 
-        window?.title = ""
+    private func bindViewModel() {
+        if let toolbarDelegate {
+            toolbarDelegate.viewModel.$urlString
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] urlString in
+                    print("Setting locationTextField string value to \(urlString)")
+                    self?.locationTextField.stringValue = urlString
+                }.store(in: &toolbarDelegate.cancellables)
+        }
     }
 
     @IBAction func backButtonClicked(_: NSToolbarItem) {
-        print("Prev button clicked")
+        toolbarDelegate?.performBack()
     }
 
     @IBAction func forwardButtonClicked(_: NSToolbarItem) {
-        print("Next button clicked")
+        toolbarDelegate?.performForward()
     }
 
     @IBAction func reloadButtonClicked(_: NSToolbarItem) {
         print("Reload button clicked")
-        toolbarActionDelegate?.performReload()
-    }
-
-    @IBAction func locationSent(_: Any) {
-        print("location sent")
+        toolbarDelegate?.performReload()
     }
 }
 
 extension WindowController: NSToolbarDelegate {}
+
+extension WindowController: NSToolbarItemValidation {
+    func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
+        switch item {
+        case backItem:
+            toolbarDelegate?.viewModel.canGoBack ?? false
+        case forwardItem:
+            toolbarDelegate?.viewModel.canGoForward ?? false
+        default:
+            true
+        }
+    }
+}
+
+extension WindowController: NSTextFieldDelegate {
+    func control(
+        _: NSControl,
+        textView _: NSTextView,
+        doCommandBy commandSelector: Selector
+    ) -> Bool {
+        if commandSelector == #selector(NSResponder.insertNewline(_:)) {
+            toolbarDelegate?.loadUrlString(locationTextField.stringValue)
+            return true
+        }
+        return false
+    }
+}

@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2F68A2D02B72BD0A0002ADBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2CF2B72BD0A0002ADBE /* AppDelegate.swift */; };
-		2F68A2D22B72BD0A0002ADBE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2D12B72BD0A0002ADBE /* ViewController.swift */; };
+		2F68A2D22B72BD0A0002ADBE /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2D12B72BD0A0002ADBE /* WebViewController.swift */; };
 		2F68A2D42B72BD0B0002ADBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F68A2D32B72BD0B0002ADBE /* Assets.xcassets */; };
 		2F68A2D72B72BD0B0002ADBE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F68A2D52B72BD0B0002ADBE /* Main.storyboard */; };
 		2F68A2E22B72BD0B0002ADBE /* OrionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2E12B72BD0B0002ADBE /* OrionTests.swift */; };
@@ -16,12 +16,10 @@
 		2F68A2EE2B72BD0B0002ADBE /* OrionUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2ED2B72BD0B0002ADBE /* OrionUITestsLaunchTests.swift */; };
 		2F68A2FD2B72BDDB0002ADBE /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F68A2FB2B72BDD10002ADBE /* WebKit.framework */; };
 		2F68A2FE2B72BDDB0002ADBE /* WebKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F68A2FB2B72BDD10002ADBE /* WebKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2F68A3092B72FA910002ADBE /* WebUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A3082B72FA910002ADBE /* WebUIViewModel.swift */; };
-		2F68A30B2B72FAD70002ADBE /* WebNavigationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A30A2B72FAD70002ADBE /* WebNavigationViewModel.swift */; };
 		2F68A30D2B72FB000002ADBE /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A30C2B72FB000002ADBE /* WebView.swift */; };
 		2F68A30F2B731F5D0002ADBE /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A30E2B731F5D0002ADBE /* WindowController.swift */; };
-		2F68A3112B7320D60002ADBE /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A3102B7320D60002ADBE /* Toolbar.swift */; };
-		2F68A3132B73210B0002ADBE /* ToolbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A3122B73210B0002ADBE /* ToolbarViewModel.swift */; };
+		2F9FF4222B759D970041DFA2 /* WebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9FF4212B759D970041DFA2 /* WebViewModel.swift */; };
+		2FD1021B2B781D5F00A2EEC7 /* HistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1021A2B781D5F00A2EEC7 /* HistoryItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +56,7 @@
 /* Begin PBXFileReference section */
 		2F68A2CC2B72BD0A0002ADBE /* Orion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F68A2CF2B72BD0A0002ADBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2F68A2D12B72BD0A0002ADBE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2F68A2D12B72BD0A0002ADBE /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		2F68A2D32B72BD0B0002ADBE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2F68A2D62B72BD0B0002ADBE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2F68A2D82B72BD0B0002ADBE /* Orion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Orion.entitlements; sourceTree = "<group>"; };
@@ -68,12 +66,10 @@
 		2F68A2EB2B72BD0B0002ADBE /* OrionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrionUITests.swift; sourceTree = "<group>"; };
 		2F68A2ED2B72BD0B0002ADBE /* OrionUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrionUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		2F68A2FB2B72BDD10002ADBE /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebKit.framework; sourceTree = "<group>"; };
-		2F68A3082B72FA910002ADBE /* WebUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebUIViewModel.swift; sourceTree = "<group>"; };
-		2F68A30A2B72FAD70002ADBE /* WebNavigationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebNavigationViewModel.swift; sourceTree = "<group>"; };
 		2F68A30C2B72FB000002ADBE /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		2F68A30E2B731F5D0002ADBE /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
-		2F68A3102B7320D60002ADBE /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
-		2F68A3122B73210B0002ADBE /* ToolbarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarViewModel.swift; sourceTree = "<group>"; };
+		2F9FF4212B759D970041DFA2 /* WebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewModel.swift; sourceTree = "<group>"; };
+		2FD1021A2B781D5F00A2EEC7 /* HistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,7 +169,7 @@
 		2F68A3012B72F6A60002ADBE /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				2F68A2D12B72BD0A0002ADBE /* ViewController.swift */,
+				2F68A2D12B72BD0A0002ADBE /* WebViewController.swift */,
 				2F68A30E2B731F5D0002ADBE /* WindowController.swift */,
 			);
 			path = Controllers;
@@ -182,7 +178,6 @@
 		2F68A3022B72F6DC0002ADBE /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2F68A3142B73236B0002ADBE /* Toolbar */,
 				2F68A30C2B72FB000002ADBE /* WebView.swift */,
 			);
 			path = Views;
@@ -191,6 +186,7 @@
 		2F68A3042B72F6F20002ADBE /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				2FD1021D2B781D9500A2EEC7 /* History */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -207,19 +203,17 @@
 		2F68A3072B72F9FD0002ADBE /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				2F68A3082B72FA910002ADBE /* WebUIViewModel.swift */,
-				2F68A30A2B72FAD70002ADBE /* WebNavigationViewModel.swift */,
-				2F68A3122B73210B0002ADBE /* ToolbarViewModel.swift */,
+				2F9FF4212B759D970041DFA2 /* WebViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
-		2F68A3142B73236B0002ADBE /* Toolbar */ = {
+		2FD1021D2B781D9500A2EEC7 /* History */ = {
 			isa = PBXGroup;
 			children = (
-				2F68A3102B7320D60002ADBE /* Toolbar.swift */,
+				2FD1021A2B781D5F00A2EEC7 /* HistoryItem.swift */,
 			);
-			path = Toolbar;
+			path = History;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -368,7 +362,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "#if [[ \"$(uname -m)\" == arm64 ]]; then\n#    export PATH=\"/opt/homebrew/bin:$PATH\"\n#fi\n\n#if which swiftlint > /dev/null; then\n#  swiftlint\n#else\n#  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n#fi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -377,14 +371,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F68A3132B73210B0002ADBE /* ToolbarViewModel.swift in Sources */,
-				2F68A3112B7320D60002ADBE /* Toolbar.swift in Sources */,
-				2F68A2D22B72BD0A0002ADBE /* ViewController.swift in Sources */,
+				2FD1021B2B781D5F00A2EEC7 /* HistoryItem.swift in Sources */,
+				2F68A2D22B72BD0A0002ADBE /* WebViewController.swift in Sources */,
 				2F68A30F2B731F5D0002ADBE /* WindowController.swift in Sources */,
 				2F68A30D2B72FB000002ADBE /* WebView.swift in Sources */,
-				2F68A30B2B72FAD70002ADBE /* WebNavigationViewModel.swift in Sources */,
 				2F68A2D02B72BD0A0002ADBE /* AppDelegate.swift in Sources */,
-				2F68A3092B72FA910002ADBE /* WebUIViewModel.swift in Sources */,
+				2F9FF4222B759D970041DFA2 /* WebViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
