@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import SwiftData
 
 final class WindowController: NSWindowController {
     @IBOutlet var toolbar: NSToolbar!
@@ -13,36 +14,66 @@ final class WindowController: NSWindowController {
     @IBOutlet var forwardItem: NSToolbarItem!
     @IBOutlet var reloadItem: NSToolbarItem!
     @IBOutlet var locationTextField: NSTextField!
+    @IBOutlet var extensionItem: NSToolbarItem!
 
-    weak var toolbarDelegate: ToolbarDelegate?
+    private var webViewController: WebViewController? {
+        contentViewController as? WebViewController
+    }
 
     override func windowDidLoad() {
-        toolbarDelegate = contentViewController as? ToolbarDelegate
+        do {
+            let storeUrl = try FileManager.default.url(
+                for: .documentDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: false
+            )
+            .appendingPathComponent("orion.store")
+            let configuration = ModelConfiguration(url: storeUrl, allowsSave: true)
+            let container = try ModelContainer(for: HistoryItem.self, configurations: configuration)
+            container.mainContext.autosaveEnabled = true
+            let webViewModel = WebViewModel(modelContext: container.mainContext)
+            contentViewController = WebViewController(viewModel: webViewModel)
+        } catch {
+            fatalError("Unable to create model container for window: \(error.localizedDescription)")
+        }
+
         bindViewModel()
     }
 
     private func bindViewModel() {
-        if let toolbarDelegate {
-            toolbarDelegate.viewModel.$urlString
+        if let webViewController {
+            webViewController.viewModel?.$urlString
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] urlString in
                     print("Setting locationTextField string value to \(urlString)")
                     self?.locationTextField.stringValue = urlString
-                }.store(in: &toolbarDelegate.cancellables)
+                }.store(in: &webViewController.cancellables)
         }
     }
 
     @IBAction func backButtonClicked(_: NSToolbarItem) {
-        toolbarDelegate?.performBack()
+        webViewController?.performBack()
     }
 
     @IBAction func forwardButtonClicked(_: NSToolbarItem) {
-        toolbarDelegate?.performForward()
+        webViewController?.performForward()
     }
 
     @IBAction func reloadButtonClicked(_: NSToolbarItem) {
-        print("Reload button clicked")
-        toolbarDelegate?.performReload()
+        webViewController?.performReload()
+    }
+
+    @IBAction func extensionButtonClicked(_: NSToolbarItem) {
+        if let sb = storyboard {
+            if let vc = sb
+                .instantiateController(
+                    withIdentifier: "extensionInstallVC"
+                ) as? ExtensionInstallViewController
+            {
+                contentViewController?.presentAsSheet(vc)
+            }
+        }
     }
 }
 
@@ -52,9 +83,9 @@ extension WindowController: NSToolbarItemValidation {
     func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
         switch item {
         case backItem:
-            toolbarDelegate?.viewModel.canGoBack ?? false
+            webViewController?.viewModel?.canGoBack ?? false
         case forwardItem:
-            toolbarDelegate?.viewModel.canGoForward ?? false
+            webViewController?.viewModel?.canGoForward ?? false
         default:
             true
         }
@@ -68,7 +99,7 @@ extension WindowController: NSTextFieldDelegate {
         doCommandBy commandSelector: Selector
     ) -> Bool {
         if commandSelector == #selector(NSResponder.insertNewline(_:)) {
-            toolbarDelegate?.loadUrlString(locationTextField.stringValue)
+            webViewController?.loadUrlString(locationTextField.stringValue)
             return true
         }
         return false

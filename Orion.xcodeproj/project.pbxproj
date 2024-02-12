@@ -20,6 +20,11 @@
 		2F68A30F2B731F5D0002ADBE /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A30E2B731F5D0002ADBE /* WindowController.swift */; };
 		2F9FF4222B759D970041DFA2 /* WebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9FF4212B759D970041DFA2 /* WebViewModel.swift */; };
 		2FD1021B2B781D5F00A2EEC7 /* HistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1021A2B781D5F00A2EEC7 /* HistoryItem.swift */; };
+		2FD102462B78968200A2EEC7 /* ExtensionManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD102452B78968200A2EEC7 /* ExtensionManagementViewController.swift */; };
+		2FD102482B793DDE00A2EEC7 /* ExtensionInstallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD102472B793DDE00A2EEC7 /* ExtensionInstallViewController.swift */; };
+		2FD1024A2B79806A00A2EEC7 /* ExtensionManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD102492B79806A00A2EEC7 /* ExtensionManagementViewModel.swift */; };
+		2FD1024C2B79815400A2EEC7 /* ExtensionMetadataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1024B2B79815400A2EEC7 /* ExtensionMetadataView.swift */; };
+		2FD1024E2B7981AF00A2EEC7 /* WebExtensionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1024D2B7981AF00A2EEC7 /* WebExtensionModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +75,11 @@
 		2F68A30E2B731F5D0002ADBE /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
 		2F9FF4212B759D970041DFA2 /* WebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewModel.swift; sourceTree = "<group>"; };
 		2FD1021A2B781D5F00A2EEC7 /* HistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItem.swift; sourceTree = "<group>"; };
+		2FD102452B78968200A2EEC7 /* ExtensionManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionManagementViewController.swift; sourceTree = "<group>"; };
+		2FD102472B793DDE00A2EEC7 /* ExtensionInstallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionInstallViewController.swift; sourceTree = "<group>"; };
+		2FD102492B79806A00A2EEC7 /* ExtensionManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionManagementViewModel.swift; sourceTree = "<group>"; };
+		2FD1024B2B79815400A2EEC7 /* ExtensionMetadataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionMetadataView.swift; sourceTree = "<group>"; };
+		2FD1024D2B7981AF00A2EEC7 /* WebExtensionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +181,8 @@
 			children = (
 				2F68A2D12B72BD0A0002ADBE /* WebViewController.swift */,
 				2F68A30E2B731F5D0002ADBE /* WindowController.swift */,
+				2FD102452B78968200A2EEC7 /* ExtensionManagementViewController.swift */,
+				2FD102472B793DDE00A2EEC7 /* ExtensionInstallViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -179,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				2F68A30C2B72FB000002ADBE /* WebView.swift */,
+				2FD1024B2B79815400A2EEC7 /* ExtensionMetadataView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -187,6 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				2FD1021D2B781D9500A2EEC7 /* History */,
+				2FD1024D2B7981AF00A2EEC7 /* WebExtensionModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -204,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				2F9FF4212B759D970041DFA2 /* WebViewModel.swift */,
+				2FD102492B79806A00A2EEC7 /* ExtensionManagementViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -372,10 +387,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FD1021B2B781D5F00A2EEC7 /* HistoryItem.swift in Sources */,
+				2FD1024C2B79815400A2EEC7 /* ExtensionMetadataView.swift in Sources */,
+				2FD102462B78968200A2EEC7 /* ExtensionManagementViewController.swift in Sources */,
+				2FD102482B793DDE00A2EEC7 /* ExtensionInstallViewController.swift in Sources */,
+				2FD1024E2B7981AF00A2EEC7 /* WebExtensionModel.swift in Sources */,
 				2F68A2D22B72BD0A0002ADBE /* WebViewController.swift in Sources */,
 				2F68A30F2B731F5D0002ADBE /* WindowController.swift in Sources */,
 				2F68A30D2B72FB000002ADBE /* WebView.swift in Sources */,
 				2F68A2D02B72BD0A0002ADBE /* AppDelegate.swift in Sources */,
+				2FD1024A2B79806A00A2EEC7 /* ExtensionManagementViewModel.swift in Sources */,
 				2F9FF4222B759D970041DFA2 /* WebViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
