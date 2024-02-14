@@ -15,18 +15,10 @@ final class WebExtensionViewModel: ObservableObject {
 
     let modelContext: ModelContext
 
-    init(modelContext: ModelContext, xpiUrl: URL) {
+    init(modelContext: ModelContext, xpiUrl: URL) throws {
         self.xpiUrl = xpiUrl
         self.modelContext = modelContext
-        do {
-            manifest = try parseManifestFromArchive(xpiUrl)
-        } catch {
-            print("""
-            Failed to parse manifest.
-            URL: \(xpiUrl)
-            Error: \(error.localizedDescription)
-            """)
-        }
+        self.manifest = try parseManifestFromArchive(xpiUrl)
     }
 
     private func parseManifestFromArchive(_ url: URL) throws -> WebExtensionManifest {
@@ -66,12 +58,7 @@ final class WebExtensionViewModel: ObservableObject {
             )
         }
 
-        if !FileManager.default.isWritableFile(atPath: webExtDir.path()) {
-            print("webext dir is not writable")
-            return
-        }
-
-        let installUrl = webExtDir.appending(component: id).appendingPathExtension(".xpi")
+        let installUrl = webExtDir.appending(component: id).appendingPathExtension("xpi")
         if FileManager.default.fileExists(atPath: installUrl.path()) {
             try FileManager.default.removeItem(at: installUrl)
         }

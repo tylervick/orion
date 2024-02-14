@@ -12,7 +12,7 @@ import WebKit
 final class WebViewController: NSViewController {
     var webView: WKWebView!
     let viewModel: WebViewModel?
-    var cancellables = Set<AnyCancellable>()
+    private var cancelBag = Set<AnyCancellable>()
 
     override func loadView() {
         super.loadView()
@@ -43,6 +43,10 @@ final class WebViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Load initial urlString if present
+        if let urlString = viewModel?.urlString {
+            loadUrlString(urlString)
+        }
     }
 
     func loadUrlString(_ urlString: String) {

@@ -19,7 +19,7 @@ final class ExtensionMetadataView: NSView {
     private func setupViews() {
         let nameLabel = NSTextField.create(label: metadata.name)
         let authorLabel = NSTextField.create(label: metadata.author)
-        let descriptionLabel = NSTextField.create(label: metadata.description)
+        let descriptionLabel = NSTextField.create(label: metadata._description ?? "")
         // etc...
 
         for item in [nameLabel, authorLabel, descriptionLabel] {

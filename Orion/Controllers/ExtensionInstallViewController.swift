@@ -42,6 +42,12 @@ final class ExtensionInstallViewController: NSViewController {
     }
 
     @IBAction func installButtonClicked(_: NSButton) {
-        dismiss(self)
+        do {
+            try viewModel?.installExtension()
+            dismiss(self)
+        } catch {
+            // show alert here
+            print("Failed to install extension: \(error.localizedDescription)")
+        }
     }
 }

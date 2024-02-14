@@ -714,7 +714,7 @@
                                 </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="7B4EFCD1-4BE9-4216-8A1C-1FA1766EB8F5" label="URL Bar" paletteLabel="URL Bar" sizingBehavior="auto" id="EPg-ef-yCJ" userLabel="Location">
                                     <nil key="toolTip"/>
-                                    <textField key="view" verticalHuggingPriority="750" contentType="url" id="6WM-5Q-JZk">
+                                    <textField key="view" focusRingType="none" verticalHuggingPriority="750" contentType="url" id="6WM-5Q-JZk">
                                         <rect key="frame" x="0.0" y="14" width="96" height="22"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Search or enter website name" usesSingleLineMode="YES" bezelStyle="round" id="bVb-rP-Krc">
@@ -830,7 +830,7 @@ Gw
                 </viewController>
                 <customObject id="XdW-G5-oCg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-468" y="1023"/>
+            <point key="canvasLocation" x="-414" y="731"/>
         </scene>
         <!--Extension Management View Controller-->
         <scene sceneID="Ir6-2u-li3">
@@ -851,7 +851,7 @@ Gw
                                     <action selector="closeButtonPressed:" target="3kH-Mv-ca0" id="0Ax-Hh-k6R"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IgF-hd-Ats">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IgF-hd-Ats">
                                 <rect key="frame" x="18" y="264" width="70" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Extensions" id="6D8-gp-Zpd">
                                     <font key="font" metaFont="system"/>
@@ -874,7 +874,7 @@ Gw
                 </viewController>
                 <customObject id="J4h-uS-FZJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="1035"/>
+            <point key="canvasLocation" x="614" y="250"/>
         </scene>
     </scenes>
     <resources>
