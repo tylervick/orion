@@ -8,16 +8,15 @@
 import Cocoa
 
 final class ExtensionMetadataView: NSView {
-    var metadata: WebExtensionMetadata!
+    var metadata: WebExtensionManifest!
 
-    convenience init(frame: NSRect, metadata: WebExtensionMetadata) {
+    convenience init(frame: NSRect, metadata: WebExtensionManifest) {
         self.init(frame: frame)
         self.metadata = metadata
         setupViews()
     }
 
     private func setupViews() {
-
         let nameLabel = NSTextField.create(label: metadata.name)
         let authorLabel = NSTextField.create(label: metadata.author)
         let descriptionLabel = NSTextField.create(label: metadata.description)
@@ -27,7 +26,7 @@ final class ExtensionMetadataView: NSView {
             addSubview(item)
             item.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+
         NSLayoutConstraint.activate([
             nameLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 18),
             nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -18),

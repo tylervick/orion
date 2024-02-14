@@ -12,17 +12,17 @@ import SwiftData
 final class WebExtensionModel {
     @Attribute(.unique)
     var id: String
-    var metadata: WebExtensionMetadata
+    var metadata: WebExtensionManifest
     var path: URL
 
-    init(id: String, metadata: WebExtensionMetadata, path: URL) {
+    init(id: String, metadata: WebExtensionManifest, path: URL) {
         self.id = id
         self.metadata = metadata
         self.path = path
     }
 }
 
-struct WebExtensionMetadata: Codable {
+struct WebExtensionManifest: Codable {
     let applications: [String: [String: String]]
     let author: String
     let browserAction: BrowserAction?
@@ -49,9 +49,9 @@ struct OptionsUI: Codable {
     let page: URL?
 }
 
-extension WebExtensionMetadata {
+extension WebExtensionManifest {
     // TODO: keep this test-only
-    static let sample = WebExtensionMetadata(
+    static let sample = WebExtensionManifest(
         applications: [:],
         author: "Test Author",
         browserAction: nil,

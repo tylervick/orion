@@ -10,11 +10,17 @@ import Cocoa
 final class ExtensionInstallViewController: NSViewController {
     @IBOutlet var extensionMetadataContainerView: NSView!
 
+    var viewModel: WebExtensionViewModel?
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let manifest = viewModel?.manifest else {
+            dismiss(self)
+            return
+        }
         let extensionMetadataView = ExtensionMetadataView(
             frame: extensionMetadataContainerView.frame,
-            metadata: .sample
+            metadata: manifest
         )
         extensionMetadataView.translatesAutoresizingMaskIntoConstraints = false
         extensionMetadataContainerView.addSubview(extensionMetadataView)

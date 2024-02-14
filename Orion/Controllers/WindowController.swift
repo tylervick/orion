@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import Combine
 import SwiftData
 
 final class WindowController: NSWindowController {
@@ -20,6 +21,9 @@ final class WindowController: NSWindowController {
         contentViewController as? WebViewController
     }
 
+    private lazy var xpiDownloadManager = XPIDownloadManager()
+    private var container: ModelContainer!
+
     override func windowDidLoad() {
         do {
             let storeUrl = try FileManager.default.url(
@@ -30,9 +34,12 @@ final class WindowController: NSWindowController {
             )
             .appendingPathComponent("orion.store")
             let configuration = ModelConfiguration(url: storeUrl, allowsSave: true)
-            let container = try ModelContainer(for: HistoryItem.self, configurations: configuration)
+            container = try ModelContainer(for: HistoryItem.self, configurations: configuration)
             container.mainContext.autosaveEnabled = true
-            let webViewModel = WebViewModel(modelContext: container.mainContext)
+            let webViewModel = WebViewModel(
+                modelContext: container.mainContext,
+                xpiDownloadManager: xpiDownloadManager
+            )
             contentViewController = WebViewController(viewModel: webViewModel)
         } catch {
             fatalError("Unable to create model container for window: \(error.localizedDescription)")
@@ -48,6 +55,29 @@ final class WindowController: NSWindowController {
                 .sink { [weak self] urlString in
                     print("Setting locationTextField string value to \(urlString)")
                     self?.locationTextField.stringValue = urlString
+                }.store(in: &webViewController.cancellables)
+
+            xpiDownloadManager.xpiPublisher
+                .compactMap { [weak self] xpiUrl -> WebExtensionViewModel? in
+                    guard let self else {
+                        return nil
+                    }
+                    return WebExtensionViewModel(
+                        modelContext: container.mainContext,
+                        xpiUrl: xpiUrl
+                    )
+                }.eraseToAnyPublisher()
+                .receive(on: DispatchQueue.main).sink { [weak self] vm in
+                    if let sb = self?.storyboard {
+                        if let vc = sb
+                            .instantiateController(
+                                withIdentifier: "extensionInstallVC"
+                            ) as? ExtensionInstallViewController
+                        {
+                            vc.viewModel = vm
+                            self?.contentViewController?.presentAsSheet(vc)
+                        }
+                    }
                 }.store(in: &webViewController.cancellables)
         }
     }

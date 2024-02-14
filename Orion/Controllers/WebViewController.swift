@@ -9,16 +9,6 @@ import Cocoa
 import Combine
 import WebKit
 
-protocol ToolbarDelegate: AnyObject {
-    var viewModel: WebViewModel { get }
-    var cancellables: Set<AnyCancellable> { get set }
-
-    func loadUrlString(_: String)
-    func performBack()
-    func performForward()
-    func performReload()
-}
-
 final class WebViewController: NSViewController {
     var webView: WKWebView!
     let viewModel: WebViewModel?
@@ -28,14 +18,17 @@ final class WebViewController: NSViewController {
         super.loadView()
         let configuration = WKWebViewConfiguration()
 
-        webView = WebView(
-            frame: view.frame,
-            configuration: configuration,
-            uiDelegate: self,
-            navDelegate: self
-        )
+        webView = WKWebView(frame: view.frame, configuration: configuration)
+        webView.navigationDelegate = viewModel
+        webView.translatesAutoresizingMaskIntoConstraints = false
 
-        view = webView!
+        view.addSubview(webView)
+        NSLayoutConstraint.activate([
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
     }
 
     init(viewModel: WebViewModel) {
@@ -66,32 +59,5 @@ final class WebViewController: NSViewController {
 
     func performReload() {
         webView?.reload()
-    }
-}
-
-extension WebViewController: WKUIDelegate {}
-
-extension WebViewController: WKNavigationDelegate {
-    private func updateViewModel(_ webView: WKWebView, navigation: WKNavigation) {
-        viewModel?.canGoBack = webView.canGoBack
-        viewModel?.canGoForward = webView.canGoForward
-        if let url = webView.url {
-            print("setting url from navigation: \(url)")
-            viewModel?.urlString = url.absoluteString
-        }
-        viewModel?.addHistoryItem(id: navigation.hash, url: webView.url)
-    }
-
-    func webView(_: WKWebView, didFinish _: WKNavigation!) {}
-
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        updateViewModel(webView, navigation: navigation)
-    }
-
-    func webView(
-        _ webView: WKWebView,
-        didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!
-    ) {
-        updateViewModel(webView, navigation: navigation)
     }
 }
