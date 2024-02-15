@@ -8,18 +8,40 @@
 import Cocoa
 
 final class ExtensionMetadataView: NSView {
-    var metadata: WebExtensionManifest!
+    var manifest: WebExtensionManifest? {
+        didSet {
+            if let manifest {
+                nameLabel?.stringValue = manifest.name
+                authorLabel?.stringValue = manifest.author
+                descriptionLabel?.stringValue = ""
+            }
+        }
+    }
 
-    convenience init(frame: NSRect, metadata: WebExtensionManifest) {
-        self.init(frame: frame)
-        self.metadata = metadata
+    private var nameLabel: NSTextField?
+    private var authorLabel: NSTextField?
+    private var descriptionLabel: NSTextField?
+
+    override init(frame: NSRect) {
+        super.init(frame: frame)
+        setupViews()
+    }
+
+    init(frame: NSRect, manifest: WebExtensionManifest) {
+        super.init(frame: frame)
+        self.manifest = manifest
+        setupViews()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
         setupViews()
     }
 
     private func setupViews() {
-        let nameLabel = NSTextField.create(label: metadata.name)
-        let authorLabel = NSTextField.create(label: metadata.author)
-        let descriptionLabel = NSTextField.create(label: metadata._description ?? "")
+        let nameLabel = NSTextField.create(label: manifest?.name ?? "")
+        let authorLabel = NSTextField.create(label: manifest?.author ?? "")
+        let descriptionLabel = NSTextField.create(label: "")
         // etc...
 
         for item in [nameLabel, authorLabel, descriptionLabel] {
@@ -47,6 +69,10 @@ final class ExtensionMetadataView: NSView {
             descriptionLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
             descriptionLabel.heightAnchor.constraint(equalToConstant: 144),
         ])
+
+        self.nameLabel = nameLabel
+        self.authorLabel = authorLabel
+        self.descriptionLabel = descriptionLabel
     }
 }
 

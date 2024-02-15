@@ -778,7 +778,7 @@
         <!--Extension Install View Controller-->
         <scene sceneID="ELd-RN-zwC">
             <objects>
-                <viewController storyboardIdentifier="extensionInstallVC" id="Y9Q-nR-ZP1" userLabel="Extension Install View Controller" customClass="ExtensionInstallViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="extensionInstallVC" id="Y9Q-nR-ZP1" userLabel="Extension Install View Controller" customClass="WebExtensionInstallViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="LuI-RU-jbN">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -835,7 +835,7 @@ Gw
         <!--Extension Management View Controller-->
         <scene sceneID="Ir6-2u-li3">
             <objects>
-                <viewController storyboardIdentifier="extensionManagementVC" id="3kH-Mv-ca0" userLabel="Extension Management View Controller" customClass="ExtensionManagementViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="extensionManagementVC" id="3kH-Mv-ca0" userLabel="Extension Management View Controller" customClass="WebExtensionManagementViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="zWT-Fi-Lcb">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -859,17 +859,51 @@ Gw
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2b4-3f-awH">
+                                <rect key="frame" x="0.0" y="60" width="450" height="196"/>
+                                <clipView key="contentView" id="N3N-RH-wbR">
+                                    <rect key="frame" x="1" y="1" width="448" height="194"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <collectionView id="20I-LV-SMG">
+                                            <rect key="frame" x="0.0" y="0.0" width="448" height="158"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="Eke-mL-tvO">
+                                                <size key="itemSize" width="50" height="50"/>
+                                            </collectionViewFlowLayout>
+                                            <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <connections>
+                                                <outlet property="dataSource" destination="3kH-Mv-ca0" id="eoN-ih-lbu"/>
+                                                <outlet property="delegate" destination="3kH-Mv-ca0" id="0KE-DB-eat"/>
+                                            </connections>
+                                        </collectionView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="j5q-hT-eIG">
+                                    <rect key="frame" x="1" y="144" width="233" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="kGX-cr-3y2">
+                                    <rect key="frame" x="234" y="1" width="15" height="143"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="2b4-3f-awH" firstAttribute="leading" secondItem="zWT-Fi-Lcb" secondAttribute="leading" id="4Wg-Jt-jR8"/>
+                            <constraint firstItem="2b4-3f-awH" firstAttribute="top" secondItem="IgF-hd-Ats" secondAttribute="bottom" constant="8" symbolic="YES" id="UTk-vj-HcB"/>
                             <constraint firstItem="IgF-hd-Ats" firstAttribute="top" secondItem="zWT-Fi-Lcb" secondAttribute="top" constant="20" symbolic="YES" id="VZJ-QJ-S8b"/>
                             <constraint firstItem="IgF-hd-Ats" firstAttribute="centerX" secondItem="zWT-Fi-Lcb" secondAttribute="centerX" constant="-172" id="Xcx-Yu-GAa"/>
                             <constraint firstAttribute="trailing" secondItem="PoC-MS-9tt" secondAttribute="trailing" constant="20" symbolic="YES" id="aPS-qu-soC"/>
                             <constraint firstAttribute="bottom" secondItem="PoC-MS-9tt" secondAttribute="bottom" constant="20" symbolic="YES" id="hHh-Xd-J4o"/>
                             <constraint firstItem="PoC-MS-9tt" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zWT-Fi-Lcb" secondAttribute="leading" constant="20" symbolic="YES" id="mhT-gz-jMT"/>
+                            <constraint firstAttribute="trailing" secondItem="2b4-3f-awH" secondAttribute="trailing" id="pE5-hP-bjC"/>
+                            <constraint firstItem="PoC-MS-9tt" firstAttribute="top" secondItem="2b4-3f-awH" secondAttribute="bottom" constant="20" symbolic="YES" id="uz8-mu-bef"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="closeButton" destination="PoC-MS-9tt" id="lpx-CA-Msh"/>
+                        <outlet property="collectionView" destination="20I-LV-SMG" id="T6x-1q-EwI"/>
                     </connections>
                 </viewController>
                 <customObject id="J4h-uS-FZJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

@@ -7,6 +7,7 @@
 
 import Cocoa
 import Combine
+import os.log
 import SwiftData
 
 final class WindowController: NSWindowController {
@@ -21,6 +22,7 @@ final class WindowController: NSWindowController {
         contentViewController as? WebViewController
     }
 
+    private lazy var logger = Logger()
     private var cancelBag = Set<AnyCancellable>()
 
     private lazy var xpiDownloadManager = XPIDownloadManager()
@@ -73,7 +75,8 @@ final class WindowController: NSWindowController {
                 }
                 return try? WebExtensionViewModel(
                     modelContext: container.mainContext,
-                    xpiUrl: xpiUrl
+                    xpiUrl: xpiUrl,
+                    logger: logger
                 )
             }
             .eraseToAnyPublisher()
@@ -82,7 +85,7 @@ final class WindowController: NSWindowController {
                 if let vc = self?.storyboard?
                     .instantiateController(
                         withIdentifier: "extensionInstallVC"
-                    ) as? ExtensionInstallViewController
+                    ) as? WebExtensionInstallViewController
                 {
                     vc.viewModel = vm
                     self?.contentViewController?.presentAsSheet(vc)
@@ -104,14 +107,16 @@ final class WindowController: NSWindowController {
     }
 
     @IBAction func extensionButtonClicked(_: NSToolbarItem) {
-        if let sb = storyboard {
-            if let vc = sb
-                .instantiateController(
-                    withIdentifier: "extensionInstallVC"
-                ) as? ExtensionInstallViewController
-            {
-                contentViewController?.presentAsSheet(vc)
-            }
+        if let vc = storyboard?
+            .instantiateController(
+                withIdentifier: "extensionManagementVC"
+            ) as? WebExtensionManagementViewController
+        {
+            vc.viewModel = WebExtensionManagementViewModel(
+                modelContext: container.mainContext,
+                logger: logger
+            )
+            contentViewController?.presentAsSheet(vc)
         }
     }
 }

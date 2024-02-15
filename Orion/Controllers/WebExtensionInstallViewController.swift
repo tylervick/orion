@@ -1,14 +1,15 @@
 //
-//  ExtensionInstallViewController.swift
+//  WebExtensionInstallViewController.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/11/24.
 //
 
 import Cocoa
+import os.log
 
-final class ExtensionInstallViewController: NSViewController {
-    @IBOutlet var extensionMetadataContainerView: NSView!
+final class WebExtensionInstallViewController: NSViewController {
+    @IBOutlet var metadataContainerView: NSView!
 
     var viewModel: WebExtensionViewModel?
 
@@ -19,21 +20,21 @@ final class ExtensionInstallViewController: NSViewController {
             return
         }
         let extensionMetadataView = ExtensionMetadataView(
-            frame: extensionMetadataContainerView.frame,
-            metadata: manifest
+            frame: metadataContainerView.frame,
+            manifest: manifest
         )
         extensionMetadataView.translatesAutoresizingMaskIntoConstraints = false
-        extensionMetadataContainerView.addSubview(extensionMetadataView)
+        metadataContainerView.addSubview(extensionMetadataView)
 
         NSLayoutConstraint.activate([
             extensionMetadataView.leadingAnchor
-                .constraint(equalTo: extensionMetadataContainerView.leadingAnchor),
+                .constraint(equalTo: metadataContainerView.leadingAnchor),
             extensionMetadataView.trailingAnchor
-                .constraint(equalTo: extensionMetadataContainerView.trailingAnchor),
+                .constraint(equalTo: metadataContainerView.trailingAnchor),
             extensionMetadataView.topAnchor
-                .constraint(equalTo: extensionMetadataContainerView.topAnchor),
+                .constraint(equalTo: metadataContainerView.topAnchor),
             extensionMetadataView.bottomAnchor
-                .constraint(equalTo: extensionMetadataContainerView.bottomAnchor),
+                .constraint(equalTo: metadataContainerView.bottomAnchor),
         ])
     }
 
@@ -44,10 +45,10 @@ final class ExtensionInstallViewController: NSViewController {
     @IBAction func installButtonClicked(_: NSButton) {
         do {
             try viewModel?.installExtension()
-            dismiss(self)
         } catch {
             // show alert here
-            print("Failed to install extension: \(error.localizedDescription)")
+            Logger().error("Failed to install extension: \(error.localizedDescription)")
         }
+        dismiss(self)
     }
 }

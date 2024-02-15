@@ -6,19 +6,26 @@
 //
 
 import Foundation
+import os.log
 import SwiftData
 import ZIPFoundation
+
+enum Errors: Error {
+    case manifestMissingOrMalformed
+}
 
 final class WebExtensionViewModel: ObservableObject {
     @Published var manifest: WebExtensionManifest?
     @Published var xpiUrl: URL
 
-    let modelContext: ModelContext
+    private let modelContext: ModelContext
+    private let logger: Logger
 
-    init(modelContext: ModelContext, xpiUrl: URL) throws {
+    init(modelContext: ModelContext, xpiUrl: URL, logger: Logger) throws {
         self.xpiUrl = xpiUrl
         self.modelContext = modelContext
-        self.manifest = try parseManifestFromArchive(xpiUrl)
+        self.logger = logger
+        manifest = try parseManifestFromArchive(xpiUrl)
     }
 
     private func parseManifestFromArchive(_ url: URL) throws -> WebExtensionManifest {
@@ -39,9 +46,12 @@ final class WebExtensionViewModel: ObservableObject {
         return try decoder.decode(WebExtensionManifest.self, from: data)
     }
 
-//    func unpackExtension(path _: URL) -> WebExtensionMetadata {}
-
     func installExtension() throws {
+        guard let manifest else {
+            logger.error("Failed to install extension: manifest is missing or malformed")
+            throw Errors.manifestMissingOrMalformed
+        }
+
         // Move the xpi archive from the tmp staging area to app support
         let id = UUID().uuidString
         let webExtDir = try FileManager.default.url(
@@ -65,16 +75,8 @@ final class WebExtensionViewModel: ObservableObject {
 
         try FileManager.default.moveItem(at: xpiUrl, to: installUrl)
 
-        if let manifest {
-            let model = WebExtensionModel(id: id, metadata: manifest, path: installUrl)
-            modelContext.insert(model)
-            try modelContext.save()
-        }
-    }
-
-    func uninstallExtension(_ model: WebExtensionModel) throws {
-        modelContext.delete(model)
+        let model = WebExtensionModel(id: id, manifest: manifest, path: installUrl)
+        modelContext.insert(model)
         try modelContext.save()
-        try FileManager.default.removeItem(at: model.path)
     }
 }

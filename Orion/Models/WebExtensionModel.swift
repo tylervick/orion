@@ -12,12 +12,12 @@ import SwiftData
 final class WebExtensionModel {
     @Attribute(.unique)
     var id: String
-    var metadata: WebExtensionManifest
+    var manifest: WebExtensionManifest
     var path: URL
 
-    init(id: String, metadata: WebExtensionManifest, path: URL) {
+    init(id: String, manifest: WebExtensionManifest, path: URL) {
         self.id = id
-        self.metadata = metadata
+        self.manifest = manifest
         self.path = path
     }
 }
@@ -27,7 +27,7 @@ struct WebExtensionManifest: Codable {
     let author: String
     let browserAction: BrowserAction?
     let defaultLocale: String?
-    let _description: String?
+//    let desc: String?
     let homepageUrl: URL?
     let icons: [String: URL]?
     let manifestVersion: Int
@@ -35,13 +35,13 @@ struct WebExtensionManifest: Codable {
     let optionsUi: OptionsUI?
     let permissions: [String]
     let version: String
-    
+
     enum CodingKeys: CodingKey {
         case applications
         case author
         case browserAction
         case defaultLocale
-        case description
+//        case desc
         case homepageUrl
         case icons
         case manifestVersion
@@ -50,13 +50,25 @@ struct WebExtensionManifest: Codable {
         case permissions
         case version
     }
-    
-    init(applications: [String : [String : String]], author: String, browserAction: BrowserAction?, defaultLocale: String?, _description: String?, homepageUrl: URL?, icons: [String : URL]?, manifestVersion: Int, name: String, optionsUi: OptionsUI?, permissions: [String], version: String) {
+
+    init(
+        applications: [String: [String: String]],
+        author: String,
+        browserAction: BrowserAction?,
+        defaultLocale: String?,
+        homepageUrl: URL?,
+        icons: [String: URL]?,
+        manifestVersion: Int,
+        name: String,
+        optionsUi: OptionsUI?,
+        permissions: [String],
+        version: String
+    ) {
         self.applications = applications
         self.author = author
         self.browserAction = browserAction
         self.defaultLocale = defaultLocale
-        self._description = _description
+//        self.desc = desc
         self.homepageUrl = homepageUrl
         self.icons = icons
         self.manifestVersion = manifestVersion
@@ -65,30 +77,30 @@ struct WebExtensionManifest: Codable {
         self.permissions = permissions
         self.version = version
     }
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.applications = try container.decode(Dictionary<String, Dictionary<String, String>>.self, forKey: .applications)
-        self.author = try container.decode(String.self, forKey: .author)
-        self.browserAction = try container.decodeIfPresent(BrowserAction.self, forKey: .browserAction)
-        self.defaultLocale = try container.decodeIfPresent(String.self, forKey: .defaultLocale)
-        self._description = try container.decodeIfPresent(String.self, forKey: .description)
-        self.homepageUrl = try container.decodeIfPresent(URL.self, forKey: .homepageUrl)
-        self.icons = try container.decodeIfPresent(Dictionary<String, URL>.self, forKey: .icons)
-        self.manifestVersion = try container.decode(Int.self, forKey: .manifestVersion)
-        self.name = try container.decode(String.self, forKey: .name)
-        self.optionsUi = try container.decodeIfPresent(OptionsUI.self, forKey: .optionsUi)
-        self.permissions = try container.decode([String].self, forKey: .permissions)
-        self.version = try container.decode(String.self, forKey: .version)
+        applications = try container.decode([String: [String: String]].self, forKey: .applications)
+        author = try container.decode(String.self, forKey: .author)
+        browserAction = try container.decodeIfPresent(BrowserAction.self, forKey: .browserAction)
+        defaultLocale = try container.decodeIfPresent(String.self, forKey: .defaultLocale)
+//        self.desc = try container.decodeIfPresent(String.self, forKey: .desc)
+        homepageUrl = try container.decodeIfPresent(URL.self, forKey: .homepageUrl)
+        icons = try container.decodeIfPresent([String: URL].self, forKey: .icons)
+        manifestVersion = try container.decode(Int.self, forKey: .manifestVersion)
+        name = try container.decode(String.self, forKey: .name)
+        optionsUi = try container.decodeIfPresent(OptionsUI.self, forKey: .optionsUi)
+        permissions = try container.decode([String].self, forKey: .permissions)
+        version = try container.decode(String.self, forKey: .version)
     }
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(applications, forKey: .applications)
         try container.encode(author, forKey: .author)
         try container.encodeIfPresent(browserAction, forKey: .browserAction)
         try container.encodeIfPresent(defaultLocale, forKey: .defaultLocale)
-        try container.encodeIfPresent(_description, forKey: .description)
+//        try container.encodeIfPresent(desc, forKey: .desc)
         try container.encodeIfPresent(homepageUrl, forKey: .homepageUrl)
         try container.encodeIfPresent(icons, forKey: .icons)
         try container.encode(manifestVersion, forKey: .manifestVersion)
@@ -118,7 +130,7 @@ extension WebExtensionManifest {
         author: "Test Author",
         browserAction: nil,
         defaultLocale: "en-US",
-        _description: "Test Description",
+//        desc: "Test Description",
         homepageUrl: nil,
         icons: nil,
         manifestVersion: 2,
