@@ -8,6 +8,7 @@
 import Foundation
 import WebKit
 import Combine
+import os.log
 
 final class XPIDownloadManager: NSObject, WKDownloadDelegate {
     private var pendingDownloads = [WKDownload: URL]()
@@ -15,6 +16,12 @@ final class XPIDownloadManager: NSObject, WKDownloadDelegate {
 
     var xpiPublisher: AnyPublisher<URL, Never> {
         downloadFinishedSubject.eraseToAnyPublisher()
+    }
+    
+    private let logger: Logger
+    
+    init(logger: Logger) {
+        self.logger = logger
     }
 
     func download(
@@ -26,19 +33,20 @@ final class XPIDownloadManager: NSObject, WKDownloadDelegate {
         let destUrl = tmpDir.appendingPathComponent(suggestedFilename, isDirectory: false)
         if FileManager.default.fileExists(atPath: destUrl.path()) {
             do {
-                print("Overwriting file at URL \(destUrl.path())")
+                logger.info("Overwriting file at URL \(destUrl.path())")
                 try FileManager.default.removeItem(at: destUrl)
             } catch {
-                print("Failed to delete existing file with error: \(error.localizedDescription)")
+                logger.error("Failed to delete existing file with error: \(error.localizedDescription)")
             }
         }
 
+        logger.debug("XPI download started: \(download), destUrl: \(destUrl)")
         pendingDownloads[download] = destUrl
         return destUrl
     }
 
     func downloadDidFinish(_ download: WKDownload) {
-        print("Download finished")
+        logger.debug("XPI download finished: \(download)")
         if let url = pendingDownloads.removeValue(forKey: download) {
             downloadFinishedSubject.send(url)
         }

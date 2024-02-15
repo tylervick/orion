@@ -23,9 +23,9 @@ final class WindowController: NSWindowController {
     }
 
     private lazy var logger = Logger()
-    private var cancelBag = Set<AnyCancellable>()
+    private lazy var xpiDownloadManager = XPIDownloadManager(logger: logger)
 
-    private lazy var xpiDownloadManager = XPIDownloadManager()
+    private var cancelBag = Set<AnyCancellable>()
 
     private let container: ModelContainer = {
         do {
