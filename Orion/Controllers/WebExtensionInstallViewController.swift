@@ -19,7 +19,7 @@ final class WebExtensionInstallViewController: NSViewController {
             dismiss(self)
             return
         }
-        let extensionMetadataView = ExtensionMetadataView(
+        let extensionMetadataView = WebExtensionMetadataView(
             frame: metadataContainerView.frame,
             manifest: manifest
         )

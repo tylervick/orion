@@ -7,7 +7,7 @@
 
 import Cocoa
 
-final class ExtensionMetadataView: NSView {
+final class WebExtensionMetadataView: NSView {
     var manifest: WebExtensionManifest? {
         didSet {
             if let manifest {

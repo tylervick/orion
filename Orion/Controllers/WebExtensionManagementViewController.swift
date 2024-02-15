@@ -14,13 +14,13 @@ extension NSUserInterfaceItemIdentifier {
 
 final class WebExtensionManagementCollectionViewItem: NSCollectionViewItem {
     override func loadView() {
-        view = ExtensionMetadataView()
+        view = WebExtensionMetadataView()
     }
 
     override var representedObject: Any? {
         didSet {
             if let model = representedObject as? WebExtensionModel {
-                (view as? ExtensionMetadataView)?.manifest = model.manifest
+                (view as? WebExtensionMetadataView)?.manifest = model.manifest
             }
         }
     }
