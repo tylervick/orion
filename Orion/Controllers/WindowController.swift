@@ -63,11 +63,9 @@ final class WindowController: NSWindowController {
         )
 
         windowViewModel?.subscribeToWebExtension(self)
-//        windowViewModel?.subscribeToWebExtension()
+
         bindViewModel()
     }
-
-    private func setupContentView() {}
 
     private func bindViewModel() {
         webViewController?.viewModel?.$urlString
@@ -77,31 +75,6 @@ final class WindowController: NSWindowController {
                 self?.locationTextField.stringValue = urlString
             }
             .store(in: &cancelBag)
-
-//        xpiDownloadManager.xpiPublisher
-//            .compactMap { [weak self] xpiUrl -> WebExtensionViewModel? in
-//                guard let self else {
-//                    return nil
-//                }
-//                return try? WebExtensionViewModel(
-//                    modelContext: container.mainContext,
-//                    xpiUrl: xpiUrl,
-//                    logger: logger
-//                )
-//            }
-//            .eraseToAnyPublisher()
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] vm in
-//                if let vc = self?.storyboard?
-//                    .instantiateController(
-//                        withIdentifier: "extensionInstallVC"
-//                    ) as? WebExtensionInstallViewController
-//                {
-//                    vc.viewModel = vm
-//                    self?.contentViewController?.presentAsSheet(vc)
-//                }
-//            }
-//            .store(in: &cancelBag)
     }
 
     @IBAction func backButtonClicked(_: NSToolbarItem) {
@@ -115,30 +88,35 @@ final class WindowController: NSWindowController {
     @IBAction func reloadButtonClicked(_: NSToolbarItem) {
         webViewController?.performReload()
     }
-    
-    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        if let webExManagementViewController = segue.destinationController as? WebExtensionManagementViewController {
-            webExManagementViewController.viewModel = windowViewModel?.makeWebExManagementViewModel()
+
+    override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
+        if let webExManagementViewController = segue
+            .destinationController as? WebExtensionManagementViewController
+        {
+            webExManagementViewController.viewModel = windowViewModel?
+                .makeWebExManagementViewModel()
         }
     }
 }
 
 extension WindowController: Subscriber {
     func receive(subscription: Subscription) {
-        subscription.store(in: &cancelBag)
+        subscription.request(.max(1))
     }
-    
+
     func receive(_ viewModel: WebExtensionViewModel) -> Subscribers.Demand {
-        if let vc = self.storyboard?.instantiateController(withIdentifier: "extensionInstallVC") as? WebExtensionInstallViewController {
+        if let vc = storyboard?
+            .instantiateController(
+                withIdentifier: "extensionInstallVC"
+            ) as? WebExtensionInstallViewController
+        {
             vc.viewModel = viewModel
             contentViewController?.presentAsSheet(vc)
         }
         return .max(1)
     }
-    
-    func receive(completion: Subscribers.Completion<Never>) {
-        
-    }
+
+    func receive(completion _: Subscribers.Completion<Never>) {}
 }
 
 extension WindowController: NSToolbarDelegate {
@@ -147,8 +125,8 @@ extension WindowController: NSToolbarDelegate {
         itemForItemIdentifier _: NSToolbarItem.Identifier,
         willBeInsertedIntoToolbar _: Bool
     ) -> NSToolbarItem? {
-        print("Test2")
-        return nil
+//        print("Test2")
+        nil
     }
 }
 

@@ -32,11 +32,11 @@ final class WindowViewModel: ObservableObject {
                 logger: logger
             )
         }
+        .receive(on: DispatchQueue.main)
         .subscribe(subscriber)
     }
-    
+
     func makeWebExManagementViewModel() -> WebExtensionManagementViewModel {
         WebExtensionManagementViewModel(modelContext: modelContext, logger: logger)
     }
-
 }

@@ -21,32 +21,21 @@ final class WebViewModel: NSObject, ObservableObject {
 
     let modelContext: ModelContext
     let xpiDownloadManager: WKDownloadDelegate?
+    let apiBridge: WKExtensionAPIBridge
 
     private lazy var cancelBag = Set<AnyCancellable>()
 
     init(modelContext: ModelContext, xpiDownloadManager: WKDownloadDelegate?) {
         self.modelContext = modelContext
         self.xpiDownloadManager = xpiDownloadManager
+        apiBridge = WKExtensionAPIBridge(modelContext: modelContext)
         super.init()
         logChanges()
     }
 
     func loadUserContentScripts(for webView: WKWebView) {
-        // Load WebExtension API bridge script
-        guard let jsUrl = Bundle.main.url(forResource: "browser.umd", withExtension: "js"),
-              let jsSource = try? String(contentsOf: jsUrl)
-        else {
-            print("Unable to locate browser.umd.js resource")
-            return
-        }
-
-        let browserScript = WKUserScript(
-            source: jsSource,
-            injectionTime: .atDocumentStart,
-            forMainFrameOnly: false
-        )
-        webView.configuration.userContentController.addUserScript(browserScript)
         // TODO: Get content scripts from WebExtensions
+        apiBridge.configure(webView: webView)
     }
 
     func loadUrl(_ urlString: String, for webView: WKWebView) {

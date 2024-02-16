@@ -802,7 +802,7 @@ Gw
                                     <action selector="cancelButtonClicked:" target="Y9Q-nR-ZP1" id="VJj-bt-LvZ"/>
                                 </connections>
                             </button>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="AOy-4B-I5o" userLabel="Extension Metadata Container View">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="AOy-4B-I5o" userLabel="Extension Metadata Container View" customClass="WebExtensionMetadataView" customModule="Orion" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="60" width="450" height="240"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="240" id="B97-Bh-GuH"/>
@@ -821,7 +821,7 @@ Gw
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="extensionMetadataContainerView" destination="AOy-4B-I5o" id="4R7-5x-mMd"/>
+                        <outlet property="metadataContainerView" destination="AOy-4B-I5o" id="mdd-s7-kfy"/>
                     </connections>
                 </viewController>
                 <customObject id="XdW-G5-oCg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
