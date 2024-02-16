@@ -1,5 +1,5 @@
 //
-//  ExtensionMetadataView.swift
+//  WebExtensionMetadataView.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/11/24.

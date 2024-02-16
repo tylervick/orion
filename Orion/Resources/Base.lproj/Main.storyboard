@@ -702,20 +702,20 @@
                                         <action selector="forwardButtonClicked:" target="B8D-0N-5wS" id="Q2C-aC-6A0"/>
                                     </connections>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="BA9BA183-7533-447F-885E-D4F39ED4AA2E" label="Reload" paletteLabel="Reload" tag="-1" image="NSRefreshTemplate" bordered="YES" sizingBehavior="auto" navigational="YES" id="3QO-rr-6J5">
+                                <toolbarItem implicitItemIdentifier="BA9BA183-7533-447F-885E-D4F39ED4AA2E" label="Reload" paletteLabel="Reload" tag="-1" image="NSRefreshTemplate" bordered="YES" sizingBehavior="auto" id="3QO-rr-6J5">
                                     <connections>
                                         <action selector="reloadButtonClicked:" target="B8D-0N-5wS" id="K8I-dm-se6"/>
                                     </connections>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="3CC1A2F0-704C-4EE4-A366-4231B1804808" label="Manage Extensions" paletteLabel="Manage Extensions" tag="-1" image="puzzlepiece.extension" catalog="system" bordered="YES" sizingBehavior="auto" navigational="YES" id="B3X-60-7yn" userLabel="Extension Item">
+                                <toolbarItem implicitItemIdentifier="3CC1A2F0-704C-4EE4-A366-4231B1804808" label="Manage Extensions" paletteLabel="Manage Extensions" tag="-1" image="puzzlepiece.extension" catalog="system" bordered="YES" sizingBehavior="auto" id="B3X-60-7yn" userLabel="Extension Item">
                                     <connections>
-                                        <action selector="extensionButtonClicked:" target="B8D-0N-5wS" id="JVk-dA-TTY"/>
+                                        <segue destination="3kH-Mv-ca0" kind="modal" identifier="extensionManagementSegue" id="RJc-AL-uuN"/>
                                     </connections>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="7B4EFCD1-4BE9-4216-8A1C-1FA1766EB8F5" label="URL Bar" paletteLabel="URL Bar" sizingBehavior="auto" id="EPg-ef-yCJ" userLabel="Location">
+                                <toolbarItem implicitItemIdentifier="7B4EFCD1-4BE9-4216-8A1C-1FA1766EB8F5" label="URL Bar" paletteLabel="URL Bar" visibilityPriority="3" sizingBehavior="auto" id="EPg-ef-yCJ" userLabel="Location">
                                     <nil key="toolTip"/>
                                     <textField key="view" focusRingType="none" verticalHuggingPriority="750" contentType="url" id="6WM-5Q-JZk">
-                                        <rect key="frame" x="0.0" y="14" width="96" height="22"/>
+                                        <rect key="frame" x="0.0" y="14" width="480" height="22"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Search or enter website name" usesSingleLineMode="YES" bezelStyle="round" id="bVb-rP-Krc">
                                             <font key="font" usesAppearanceFont="YES"/>
@@ -731,13 +731,11 @@
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="e7c-pv-4Nn"/>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
-                                <toolbarItem reference="e7c-pv-4Nn"/>
                                 <toolbarItem reference="EmV-Ic-byM"/>
                                 <toolbarItem reference="cgg-Ih-uNa"/>
-                                <toolbarItem reference="atJ-LE-CCq"/>
+                                <toolbarItem reference="e7c-pv-4Nn"/>
                                 <toolbarItem reference="EPg-ef-yCJ"/>
                                 <toolbarItem reference="3QO-rr-6J5"/>
-                                <toolbarItem reference="atJ-LE-CCq"/>
                                 <toolbarItem reference="e7c-pv-4Nn"/>
                                 <toolbarItem reference="B3X-60-7yn"/>
                             </defaultToolbarItems>
@@ -751,10 +749,8 @@
                     </window>
                     <connections>
                         <outlet property="backItem" destination="EmV-Ic-byM" id="r97-H7-cnr"/>
-                        <outlet property="extensionItem" destination="B3X-60-7yn" id="0uT-7g-xtY"/>
                         <outlet property="forwardItem" destination="cgg-Ih-uNa" id="DwX-SF-D2w"/>
                         <outlet property="locationTextField" destination="6WM-5Q-JZk" id="1c5-Qz-6tj"/>
-                        <outlet property="reloadItem" destination="3QO-rr-6J5" id="UBb-Pu-uvJ"/>
                         <outlet property="toolbar" destination="ePJ-5n-yfr" id="bTV-KQ-jhd"/>
                     </connections>
                 </windowController>

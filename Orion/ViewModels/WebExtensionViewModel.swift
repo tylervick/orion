@@ -8,6 +8,7 @@
 import Foundation
 import os.log
 import SwiftData
+import UniformTypeIdentifiers
 import ZIPFoundation
 
 enum Errors: Error {
@@ -68,7 +69,8 @@ final class WebExtensionViewModel: ObservableObject {
             )
         }
 
-        let installUrl = webExtDir.appending(component: id).appendingPathExtension("xpi")
+        let installUrl = webExtDir.appending(component: id)
+            .appendingPathExtension(UTType.xpi.preferredFilenameExtension ?? "xpi")
         if FileManager.default.fileExists(atPath: installUrl.path()) {
             try FileManager.default.removeItem(at: installUrl)
         }

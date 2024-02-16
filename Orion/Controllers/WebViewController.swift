@@ -16,9 +16,9 @@ final class WebViewController: NSViewController {
 
     override func loadView() {
         super.loadView()
-        let configuration = WKWebViewConfiguration()
 
-        webView = WKWebView(frame: view.frame, configuration: configuration)
+        webView = WKWebView(frame: view.frame)
+        webView.isInspectable = true
         webView.navigationDelegate = viewModel
         webView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -29,6 +29,9 @@ final class WebViewController: NSViewController {
             webView.topAnchor.constraint(equalTo: view.topAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+
+        webView.configuration.preferences.setValue(true, forKey:"developerExtrasEnabled")
+        viewModel?.loadUserContentScripts(for: webView)
     }
 
     init(viewModel: WebViewModel) {

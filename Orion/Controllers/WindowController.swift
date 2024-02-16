@@ -14,50 +14,60 @@ final class WindowController: NSWindowController {
     @IBOutlet var toolbar: NSToolbar!
     @IBOutlet var backItem: NSToolbarItem!
     @IBOutlet var forwardItem: NSToolbarItem!
-    @IBOutlet var reloadItem: NSToolbarItem!
     @IBOutlet var locationTextField: NSTextField!
-    @IBOutlet var extensionItem: NSToolbarItem!
 
     private var webViewController: WebViewController? {
         contentViewController as? WebViewController
     }
 
-    private lazy var logger = Logger()
-    private lazy var xpiDownloadManager = XPIDownloadManager(logger: logger)
-
+    private var windowViewModel: WindowViewModel?
     private var cancelBag = Set<AnyCancellable>()
 
-    private let container: ModelContainer = {
-        do {
-            let storeUrl = try FileManager.default.url(
-                for: .documentDirectory,
-                in: .userDomainMask,
-                appropriateFor: nil,
-                create: false
-            ).appendingPathComponent("orion.store")
+    private func makeContainer() throws -> ModelContainer {
+        let storeUrl = try FileManager.default.url(
+            for: .documentDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: false
+        ).appendingPathComponent("orion.store")
 
-            let configuration = ModelConfiguration(url: storeUrl, allowsSave: true)
-            let container = try ModelContainer(
-                for: HistoryItem.self,
-                WebExtensionModel.self,
-                configurations: configuration
-            )
-            container.mainContext.autosaveEnabled = true
-            return container
-        } catch {
-            fatalError("Unable to configure SwiftData storage: \(error.localizedDescription)")
-        }
-    }()
+        let configuration = ModelConfiguration(url: storeUrl, allowsSave: true)
+        let container = try ModelContainer(
+            for: HistoryItem.self,
+            WebExtensionModel.self,
+            configurations: configuration
+        )
+        container.mainContext.autosaveEnabled = true
+        return container
+    }
 
     override func windowDidLoad() {
+        guard let container = try? makeContainer() else {
+            fatalError("Failed to create ModelContainer")
+        }
+        let logger = Logger()
+        let xpiDownloadManager = XPIDownloadManager(logger: logger)
+        windowViewModel = WindowViewModel(
+            logger: logger,
+            xpiPublisher: xpiDownloadManager.xpiPublisher,
+            modelContext: container.mainContext
+        )
         let webViewModel = WebViewModel(
             modelContext: container.mainContext,
             xpiDownloadManager: xpiDownloadManager
         )
         contentViewController = WebViewController(viewModel: webViewModel)
+        toolbar.insertItem(
+            withItemIdentifier: NSToolbarItem.Identifier(rawValue: "Test"),
+            at: toolbar.items.count
+        )
 
+        windowViewModel?.subscribeToWebExtension(self)
+//        windowViewModel?.subscribeToWebExtension()
         bindViewModel()
     }
+
+    private func setupContentView() {}
 
     private func bindViewModel() {
         webViewController?.viewModel?.$urlString
@@ -68,30 +78,30 @@ final class WindowController: NSWindowController {
             }
             .store(in: &cancelBag)
 
-        xpiDownloadManager.xpiPublisher
-            .compactMap { [weak self] xpiUrl -> WebExtensionViewModel? in
-                guard let self else {
-                    return nil
-                }
-                return try? WebExtensionViewModel(
-                    modelContext: container.mainContext,
-                    xpiUrl: xpiUrl,
-                    logger: logger
-                )
-            }
-            .eraseToAnyPublisher()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] vm in
-                if let vc = self?.storyboard?
-                    .instantiateController(
-                        withIdentifier: "extensionInstallVC"
-                    ) as? WebExtensionInstallViewController
-                {
-                    vc.viewModel = vm
-                    self?.contentViewController?.presentAsSheet(vc)
-                }
-            }
-            .store(in: &cancelBag)
+//        xpiDownloadManager.xpiPublisher
+//            .compactMap { [weak self] xpiUrl -> WebExtensionViewModel? in
+//                guard let self else {
+//                    return nil
+//                }
+//                return try? WebExtensionViewModel(
+//                    modelContext: container.mainContext,
+//                    xpiUrl: xpiUrl,
+//                    logger: logger
+//                )
+//            }
+//            .eraseToAnyPublisher()
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] vm in
+//                if let vc = self?.storyboard?
+//                    .instantiateController(
+//                        withIdentifier: "extensionInstallVC"
+//                    ) as? WebExtensionInstallViewController
+//                {
+//                    vc.viewModel = vm
+//                    self?.contentViewController?.presentAsSheet(vc)
+//                }
+//            }
+//            .store(in: &cancelBag)
     }
 
     @IBAction func backButtonClicked(_: NSToolbarItem) {
@@ -105,23 +115,42 @@ final class WindowController: NSWindowController {
     @IBAction func reloadButtonClicked(_: NSToolbarItem) {
         webViewController?.performReload()
     }
-
-    @IBAction func extensionButtonClicked(_: NSToolbarItem) {
-        if let vc = storyboard?
-            .instantiateController(
-                withIdentifier: "extensionManagementVC"
-            ) as? WebExtensionManagementViewController
-        {
-            vc.viewModel = WebExtensionManagementViewModel(
-                modelContext: container.mainContext,
-                logger: logger
-            )
-            contentViewController?.presentAsSheet(vc)
+    
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        if let webExManagementViewController = segue.destinationController as? WebExtensionManagementViewController {
+            webExManagementViewController.viewModel = windowViewModel?.makeWebExManagementViewModel()
         }
     }
 }
 
-extension WindowController: NSToolbarDelegate {}
+extension WindowController: Subscriber {
+    func receive(subscription: Subscription) {
+        subscription.store(in: &cancelBag)
+    }
+    
+    func receive(_ viewModel: WebExtensionViewModel) -> Subscribers.Demand {
+        if let vc = self.storyboard?.instantiateController(withIdentifier: "extensionInstallVC") as? WebExtensionInstallViewController {
+            vc.viewModel = viewModel
+            contentViewController?.presentAsSheet(vc)
+        }
+        return .max(1)
+    }
+    
+    func receive(completion: Subscribers.Completion<Never>) {
+        
+    }
+}
+
+extension WindowController: NSToolbarDelegate {
+    func toolbar(
+        _: NSToolbar,
+        itemForItemIdentifier _: NSToolbarItem.Identifier,
+        willBeInsertedIntoToolbar _: Bool
+    ) -> NSToolbarItem? {
+        print("Test2")
+        return nil
+    }
+}
 
 extension WindowController: NSToolbarItemValidation {
     func validateToolbarItem(_ item: NSToolbarItem) -> Bool {

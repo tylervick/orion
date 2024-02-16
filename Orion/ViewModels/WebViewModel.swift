@@ -31,6 +31,24 @@ final class WebViewModel: NSObject, ObservableObject {
         logChanges()
     }
 
+    func loadUserContentScripts(for webView: WKWebView) {
+        // Load WebExtension API bridge script
+        guard let jsUrl = Bundle.main.url(forResource: "browser.umd", withExtension: "js"),
+              let jsSource = try? String(contentsOf: jsUrl)
+        else {
+            print("Unable to locate browser.umd.js resource")
+            return
+        }
+
+        let browserScript = WKUserScript(
+            source: jsSource,
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: false
+        )
+        webView.configuration.userContentController.addUserScript(browserScript)
+        // TODO: Get content scripts from WebExtensions
+    }
+
     func loadUrl(_ urlString: String, for webView: WKWebView) {
         parseUrlString(urlString) { res in
             switch res {
@@ -155,10 +173,8 @@ extension WebViewModel: WKNavigationDelegate {
         navigationResponse: WKNavigationResponse,
         didBecome download: WKDownload
     ) {
-        let xpiType = UTType("com.tylervick.orion.xpi")
-
         if let mimeType = navigationResponse.response.mimeType,
-           let xpiMimeType = xpiType?.preferredMIMEType,
+           let xpiMimeType = UTType.xpi.preferredMIMEType,
            mimeType == xpiMimeType
         {
             download.delegate = xpiDownloadManager

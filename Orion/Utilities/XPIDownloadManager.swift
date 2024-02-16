@@ -5,10 +5,10 @@
 //  Created by Tyler Vick on 2/15/24.
 //
 
-import Foundation
-import WebKit
 import Combine
+import Foundation
 import os.log
+import WebKit
 
 final class XPIDownloadManager: NSObject, WKDownloadDelegate {
     private var pendingDownloads = [WKDownload: URL]()
@@ -17,9 +17,9 @@ final class XPIDownloadManager: NSObject, WKDownloadDelegate {
     var xpiPublisher: AnyPublisher<URL, Never> {
         downloadFinishedSubject.eraseToAnyPublisher()
     }
-    
+
     private let logger: Logger
-    
+
     init(logger: Logger) {
         self.logger = logger
     }
@@ -36,7 +36,10 @@ final class XPIDownloadManager: NSObject, WKDownloadDelegate {
                 logger.info("Overwriting file at URL \(destUrl.path())")
                 try FileManager.default.removeItem(at: destUrl)
             } catch {
-                logger.error("Failed to delete existing file with error: \(error.localizedDescription)")
+                logger
+                    .error(
+                        "Failed to delete existing file with error: \(error.localizedDescription)"
+                    )
             }
         }
 
