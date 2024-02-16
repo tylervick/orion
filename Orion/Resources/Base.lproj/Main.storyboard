@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -684,12 +685,12 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" customClass="WindowController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="240" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
-                        <toolbar key="toolbar" implicitIdentifier="BF2280D5-9D13-4583-9A8E-98DA88D966D2" centeredItem="EPg-ef-yCJ" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="ePJ-5n-yfr" customClass="Toolbar" customModule="Orion" customModuleProvider="target">
+                        <toolbar key="toolbar" implicitIdentifier="BF2280D5-9D13-4583-9A8E-98DA88D966D2" centeredItem="EPg-ef-yCJ" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="ePJ-5n-yfr">
                             <allowedToolbarItems>
                                 <toolbarItem implicitItemIdentifier="05541678-FC2E-4C13-847D-EA2ED0A93704" label="Back" paletteLabel="Back" tag="-1" image="NSGoBackTemplate" bordered="YES" sizingBehavior="auto" navigational="YES" id="EmV-Ic-byM">
                                     <connections>
@@ -701,38 +702,42 @@
                                         <action selector="forwardButtonClicked:" target="B8D-0N-5wS" id="Q2C-aC-6A0"/>
                                     </connections>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="BA9BA183-7533-447F-885E-D4F39ED4AA2E" label="Reload" paletteLabel="Reload" tag="-1" image="NSRefreshTemplate" bordered="YES" sizingBehavior="auto" navigational="YES" id="3QO-rr-6J5">
+                                <toolbarItem implicitItemIdentifier="BA9BA183-7533-447F-885E-D4F39ED4AA2E" label="Reload" paletteLabel="Reload" tag="-1" image="NSRefreshTemplate" bordered="YES" sizingBehavior="auto" id="3QO-rr-6J5">
                                     <connections>
                                         <action selector="reloadButtonClicked:" target="B8D-0N-5wS" id="K8I-dm-se6"/>
                                     </connections>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="7B4EFCD1-4BE9-4216-8A1C-1FA1766EB8F5" label="URL Bar" paletteLabel="URL Bar" sizingBehavior="auto" id="EPg-ef-yCJ" userLabel="Location">
+                                <toolbarItem implicitItemIdentifier="3CC1A2F0-704C-4EE4-A366-4231B1804808" label="Manage Extensions" paletteLabel="Manage Extensions" tag="-1" image="puzzlepiece.extension" catalog="system" bordered="YES" sizingBehavior="auto" id="B3X-60-7yn" userLabel="Extension Item">
+                                    <connections>
+                                        <segue destination="3kH-Mv-ca0" kind="modal" identifier="extensionManagementSegue" id="RJc-AL-uuN"/>
+                                    </connections>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="7B4EFCD1-4BE9-4216-8A1C-1FA1766EB8F5" label="URL Bar" paletteLabel="URL Bar" visibilityPriority="3" sizingBehavior="auto" id="EPg-ef-yCJ" userLabel="Location">
                                     <nil key="toolTip"/>
                                     <textField key="view" focusRingType="none" verticalHuggingPriority="750" contentType="url" id="6WM-5Q-JZk">
-                                        <rect key="frame" x="0.0" y="14" width="96" height="22"/>
+                                        <rect key="frame" x="0.0" y="14" width="480" height="22"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Search or enter website name" usesSingleLineMode="YES" bezelStyle="round" id="bVb-rP-Krc">
                                             <font key="font" usesAppearanceFont="YES"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
+                                        <connections>
+                                            <outlet property="delegate" destination="B8D-0N-5wS" id="62V-IR-dD7"/>
+                                        </connections>
                                     </textField>
-                                    <connections>
-                                        <action selector="locationSent:" target="B8D-0N-5wS" id="eO8-jB-fyj"/>
-                                    </connections>
                                 </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="atJ-LE-CCq"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="e7c-pv-4Nn"/>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
-                                <toolbarItem reference="e7c-pv-4Nn"/>
                                 <toolbarItem reference="EmV-Ic-byM"/>
                                 <toolbarItem reference="cgg-Ih-uNa"/>
-                                <toolbarItem reference="atJ-LE-CCq"/>
+                                <toolbarItem reference="e7c-pv-4Nn"/>
                                 <toolbarItem reference="EPg-ef-yCJ"/>
                                 <toolbarItem reference="3QO-rr-6J5"/>
-                                <toolbarItem reference="atJ-LE-CCq"/>
                                 <toolbarItem reference="e7c-pv-4Nn"/>
+                                <toolbarItem reference="B3X-60-7yn"/>
                             </defaultToolbarItems>
                             <connections>
                                 <outlet property="delegate" destination="B8D-0N-5wS" id="sWi-mf-UqD"/>
@@ -743,22 +748,20 @@
                         </connections>
                     </window>
                     <connections>
-                        <outlet property="back" destination="EmV-Ic-byM" id="r97-H7-cnr"/>
-                        <outlet property="forward" destination="cgg-Ih-uNa" id="DwX-SF-D2w"/>
-                        <outlet property="location" destination="EPg-ef-yCJ" id="N7a-SV-7bM"/>
-                        <outlet property="reload" destination="3QO-rr-6J5" id="ZsC-z9-XtE"/>
+                        <outlet property="backItem" destination="EmV-Ic-byM" id="r97-H7-cnr"/>
+                        <outlet property="forwardItem" destination="cgg-Ih-uNa" id="DwX-SF-D2w"/>
+                        <outlet property="locationTextField" destination="6WM-5Q-JZk" id="1c5-Qz-6tj"/>
                         <outlet property="toolbar" destination="ePJ-5n-yfr" id="bTV-KQ-jhd"/>
-                        <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
                     </connections>
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="250"/>
         </scene>
-        <!--View Controller-->
+        <!--Web View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="webVC" id="XfG-lQ-9wD" customClass="WebViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -766,12 +769,151 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="730"/>
+            <point key="canvasLocation" x="75" y="590"/>
+        </scene>
+        <!--Extension Install View Controller-->
+        <scene sceneID="ELd-RN-zwC">
+            <objects>
+                <viewController storyboardIdentifier="extensionInstallVC" id="Y9Q-nR-ZP1" userLabel="Extension Install View Controller" customClass="WebExtensionInstallViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="LuI-RU-jbN">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pAd-XQ-Rsa">
+                                <rect key="frame" x="367" y="13" width="70" height="32"/>
+                                <buttonCell key="cell" type="push" title="Install" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DeC-zU-RE0">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="installButtonClicked:" target="Y9Q-nR-ZP1" id="IyS-C3-IRd"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bfo-Ee-rbf">
+                                <rect key="frame" x="293" y="13" width="76" height="32"/>
+                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2aG-82-YpQ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="cancelButtonClicked:" target="Y9Q-nR-ZP1" id="VJj-bt-LvZ"/>
+                                </connections>
+                            </button>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="AOy-4B-I5o" userLabel="Extension Metadata Container View" customClass="WebExtensionMetadataView" customModule="Orion" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="60" width="450" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="240" id="B97-Bh-GuH"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="pAd-XQ-Rsa" firstAttribute="leading" secondItem="Bfo-Ee-rbf" secondAttribute="trailing" constant="12" id="4fp-Na-i1O"/>
+                            <constraint firstItem="AOy-4B-I5o" firstAttribute="top" secondItem="LuI-RU-jbN" secondAttribute="top" id="64Z-P1-4Eg"/>
+                            <constraint firstAttribute="trailing" secondItem="AOy-4B-I5o" secondAttribute="trailing" id="BaC-wZ-cRf"/>
+                            <constraint firstItem="Bfo-Ee-rbf" firstAttribute="baseline" secondItem="pAd-XQ-Rsa" secondAttribute="baseline" id="FMi-vv-3jy"/>
+                            <constraint firstItem="AOy-4B-I5o" firstAttribute="leading" secondItem="LuI-RU-jbN" secondAttribute="leading" id="NJq-7A-PRX"/>
+                            <constraint firstAttribute="bottom" secondItem="Bfo-Ee-rbf" secondAttribute="bottom" constant="20" symbolic="YES" id="VpC-od-eEU"/>
+                            <constraint firstAttribute="trailing" secondItem="pAd-XQ-Rsa" secondAttribute="trailing" constant="20" id="gus-GF-Kz3"/>
+                            <constraint firstItem="Bfo-Ee-rbf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="LuI-RU-jbN" secondAttribute="leading" constant="20" symbolic="YES" id="o6i-It-c0j"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="metadataContainerView" destination="AOy-4B-I5o" id="mdd-s7-kfy"/>
+                    </connections>
+                </viewController>
+                <customObject id="XdW-G5-oCg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-414" y="731"/>
+        </scene>
+        <!--Extension Management View Controller-->
+        <scene sceneID="Ir6-2u-li3">
+            <objects>
+                <viewController storyboardIdentifier="extensionManagementVC" id="3kH-Mv-ca0" userLabel="Extension Management View Controller" customClass="WebExtensionManagementViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="zWT-Fi-Lcb">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PoC-MS-9tt">
+                                <rect key="frame" x="368" y="13" width="69" height="32"/>
+                                <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="nos-nH-1lz">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <color key="bezelColor" name="AccentColor"/>
+                                <connections>
+                                    <action selector="closeButtonPressed:" target="3kH-Mv-ca0" id="0Ax-Hh-k6R"/>
+                                </connections>
+                            </button>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IgF-hd-Ats">
+                                <rect key="frame" x="18" y="264" width="70" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Extensions" id="6D8-gp-Zpd">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2b4-3f-awH">
+                                <rect key="frame" x="0.0" y="60" width="450" height="196"/>
+                                <clipView key="contentView" id="N3N-RH-wbR">
+                                    <rect key="frame" x="1" y="1" width="448" height="194"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <collectionView id="20I-LV-SMG">
+                                            <rect key="frame" x="0.0" y="0.0" width="448" height="158"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                            <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="Eke-mL-tvO">
+                                                <size key="itemSize" width="50" height="50"/>
+                                            </collectionViewFlowLayout>
+                                            <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <connections>
+                                                <outlet property="dataSource" destination="3kH-Mv-ca0" id="eoN-ih-lbu"/>
+                                                <outlet property="delegate" destination="3kH-Mv-ca0" id="0KE-DB-eat"/>
+                                            </connections>
+                                        </collectionView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="j5q-hT-eIG">
+                                    <rect key="frame" x="1" y="144" width="233" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="kGX-cr-3y2">
+                                    <rect key="frame" x="234" y="1" width="15" height="143"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="2b4-3f-awH" firstAttribute="leading" secondItem="zWT-Fi-Lcb" secondAttribute="leading" id="4Wg-Jt-jR8"/>
+                            <constraint firstItem="2b4-3f-awH" firstAttribute="top" secondItem="IgF-hd-Ats" secondAttribute="bottom" constant="8" symbolic="YES" id="UTk-vj-HcB"/>
+                            <constraint firstItem="IgF-hd-Ats" firstAttribute="top" secondItem="zWT-Fi-Lcb" secondAttribute="top" constant="20" symbolic="YES" id="VZJ-QJ-S8b"/>
+                            <constraint firstItem="IgF-hd-Ats" firstAttribute="centerX" secondItem="zWT-Fi-Lcb" secondAttribute="centerX" constant="-172" id="Xcx-Yu-GAa"/>
+                            <constraint firstAttribute="trailing" secondItem="PoC-MS-9tt" secondAttribute="trailing" constant="20" symbolic="YES" id="aPS-qu-soC"/>
+                            <constraint firstAttribute="bottom" secondItem="PoC-MS-9tt" secondAttribute="bottom" constant="20" symbolic="YES" id="hHh-Xd-J4o"/>
+                            <constraint firstItem="PoC-MS-9tt" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zWT-Fi-Lcb" secondAttribute="leading" constant="20" symbolic="YES" id="mhT-gz-jMT"/>
+                            <constraint firstAttribute="trailing" secondItem="2b4-3f-awH" secondAttribute="trailing" id="pE5-hP-bjC"/>
+                            <constraint firstItem="PoC-MS-9tt" firstAttribute="top" secondItem="2b4-3f-awH" secondAttribute="bottom" constant="20" symbolic="YES" id="uz8-mu-bef"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="closeButton" destination="PoC-MS-9tt" id="lpx-CA-Msh"/>
+                        <outlet property="collectionView" destination="20I-LV-SMG" id="T6x-1q-EwI"/>
+                    </connections>
+                </viewController>
+                <customObject id="J4h-uS-FZJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="614" y="250"/>
         </scene>
     </scenes>
     <resources>
         <image name="NSGoBackTemplate" width="12" height="17"/>
         <image name="NSGoForwardTemplate" width="12" height="17"/>
         <image name="NSRefreshTemplate" width="18" height="21"/>
+        <image name="puzzlepiece.extension" catalog="system" width="19" height="15"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>
