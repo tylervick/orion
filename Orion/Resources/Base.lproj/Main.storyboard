@@ -739,9 +739,6 @@
                                 <toolbarItem reference="e7c-pv-4Nn"/>
                                 <toolbarItem reference="B3X-60-7yn"/>
                             </defaultToolbarItems>
-                            <connections>
-                                <outlet property="delegate" destination="B8D-0N-5wS" id="sWi-mf-UqD"/>
-                            </connections>
                         </toolbar>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
@@ -904,7 +901,7 @@ Gw
                 </viewController>
                 <customObject id="J4h-uS-FZJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="614" y="250"/>
+            <point key="canvasLocation" x="652" y="235"/>
         </scene>
     </scenes>
     <resources>

@@ -22,7 +22,11 @@ export default defineConfig({
     lib: {
       name: 'Browser',
       entry: resolve(root, 'lib', 'index.ts'),
-      formats: ['es', 'cjs', 'umd'],
+      formats: [
+        'umd',
+        // 'es',
+        // 'cjs',
+      ],
       fileName: (format) => `browser.${format}.js`,
     },
     rollupOptions: {

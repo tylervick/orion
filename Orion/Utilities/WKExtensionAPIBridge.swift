@@ -118,7 +118,7 @@ extension WKExtensionAPIBridge: WKScriptMessageHandlerWithReply {
         guard let results = try? modelContext.fetch(fd) else {
             return (nil, "Unable to fetch HistoryItem objects")
         }
-        
+
         let mostVisitedUrls = results.reduce(into: [URL: (Int, String)]()) { accumCount, hi in
             if let url = hi.url {
                 if let (curCount, curTitle) = accumCount[url] {

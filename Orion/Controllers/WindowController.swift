@@ -58,12 +58,9 @@ final class WindowController: NSWindowController {
             xpiDownloadManager: xpiDownloadManager
         )
         contentViewController = WebViewController(viewModel: webViewModel)
-        toolbar.insertItem(
-            withItemIdentifier: NSToolbarItem.Identifier(rawValue: "Test"),
-            at: toolbar.items.count
-        )
 
-        windowViewModel?.subscribeToWebExtension(self)
+        windowViewModel?.subscribeToBrowserActionExtensions(toolbar)
+        windowViewModel?.subscribeToWebExtensionInstallRequest(self)
 
         bindViewModel()
     }
@@ -105,7 +102,7 @@ extension WindowController: Subscriber {
         subscription.request(.max(1))
     }
 
-    func receive(_ viewModel: WebExtensionViewModel) -> Subscribers.Demand {
+    func receive(_ viewModel: WebExtensionInstallViewModel) -> Subscribers.Demand {
         if let vc = storyboard?
             .instantiateController(
                 withIdentifier: "extensionInstallVC"
@@ -118,17 +115,6 @@ extension WindowController: Subscriber {
     }
 
     func receive(completion _: Subscribers.Completion<Never>) {}
-}
-
-extension WindowController: NSToolbarDelegate {
-    func toolbar(
-        _: NSToolbar,
-        itemForItemIdentifier _: NSToolbarItem.Identifier,
-        willBeInsertedIntoToolbar _: Bool
-    ) -> NSToolbarItem? {
-//        print("Test2")
-        nil
-    }
 }
 
 extension WindowController: NSToolbarItemValidation {

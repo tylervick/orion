@@ -11,7 +11,7 @@ import os.log
 final class WebExtensionInstallViewController: NSViewController {
     @IBOutlet var metadataContainerView: NSView!
 
-    var viewModel: WebExtensionViewModel?
+    var viewModel: WebExtensionInstallViewModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()

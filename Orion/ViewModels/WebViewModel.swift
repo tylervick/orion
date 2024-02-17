@@ -33,7 +33,6 @@ final class WebViewModel: NSObject, ObservableObject {
         self.xpiDownloadManager = xpiDownloadManager
         apiBridge = WKExtensionAPIBridge(modelContext: modelContext)
         super.init()
-        logChanges()
     }
 
     func loadUserContentScripts(for webView: WKWebView) {
@@ -87,27 +86,13 @@ final class WebViewModel: NSObject, ObservableObject {
         }
         connection.start(queue: .global())
     }
-
-    private func logChanges() {
-        $urlString
-            .combineLatest($canGoBack, $canGoForward, $isLoading)
-            .sink { urlString, canGoBack, canGoForward, isLoading in
-                print("""
-                WebViewModel:
-                    urlString: \(urlString)
-                    canGoBack: \(canGoBack)
-                    canGoForward: \(canGoForward)
-                    isLoading: \(isLoading)
-                """)
-            }.store(in: &cancelBag)
-    }
 }
 
 extension WebViewModel: WKNavigationDelegate {
     private func updateViewModel(_ webView: WKWebView, navigation _: WKNavigation) {
         canGoBack = webView.canGoBack
         canGoForward = webView.canGoForward
-        if let url = webView.url {
+        if let url = webView.url, urlString != url.absoluteString {
             print("setting url from navigation: \(url)")
             urlString = url.absoluteString
         }

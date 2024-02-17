@@ -22,7 +22,8 @@ final class WebExtensionModel {
     }
 }
 
-struct WebExtensionManifest: Codable {
+@Model
+final class WebExtensionManifest: Codable {
     let applications: [String: [String: String]]
     let author: String
     let browserAction: BrowserAction?
@@ -111,11 +112,47 @@ struct WebExtensionManifest: Codable {
     }
 }
 
-struct BrowserAction: Codable {
+@Model
+final class BrowserAction: Codable {
     let browserStyle: Bool
     let defaultIcon: [String: URL]?
     let defaultPopup: URL?
     let defaultTitle: String
+
+    init(
+        browserStyle: Bool,
+        defaultIcon: [String: URL]?,
+        defaultPopup: URL?,
+        defaultTitle: String
+    ) {
+        self.browserStyle = browserStyle
+        self.defaultIcon = defaultIcon
+        self.defaultPopup = defaultPopup
+        self.defaultTitle = defaultTitle
+    }
+
+    enum CodingKeys: CodingKey {
+        case browserStyle
+        case defaultIcon
+        case defaultPopup
+        case defaultTitle
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        browserStyle = try container.decode(Bool.self, forKey: .browserStyle)
+        defaultIcon = try container.decodeIfPresent([String: URL].self, forKey: .defaultIcon)
+        defaultPopup = try container.decodeIfPresent(URL.self, forKey: .defaultPopup)
+        defaultTitle = try container.decode(String.self, forKey: .defaultTitle)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(browserStyle, forKey: .browserStyle)
+        try container.encodeIfPresent(defaultIcon, forKey: .defaultIcon)
+        try container.encodeIfPresent(defaultPopup, forKey: .defaultPopup)
+        try container.encode(defaultTitle, forKey: .defaultTitle)
+    }
 }
 
 struct OptionsUI: Codable {
