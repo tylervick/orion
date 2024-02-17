@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import os.log
 import SwiftData
 import UniformTypeIdentifiers
 import WebKit
@@ -19,13 +20,15 @@ final class WebViewModel: NSObject, ObservableObject {
     @Published var canGoForward: Bool = false
     @Published var isLoading: Bool = false
 
+    private let logger: Logger
     let modelContext: ModelContext
     let xpiDownloadManager: WKDownloadDelegate?
     let apiBridge: WKExtensionAPIBridge
 
     private lazy var cancelBag = Set<AnyCancellable>()
 
-    init(modelContext: ModelContext, xpiDownloadManager: WKDownloadDelegate?) {
+    init(logger: Logger, modelContext: ModelContext, xpiDownloadManager: WKDownloadDelegate?) {
+        self.logger = logger
         self.modelContext = modelContext
         self.xpiDownloadManager = xpiDownloadManager
         apiBridge = WKExtensionAPIBridge(modelContext: modelContext)
@@ -51,8 +54,8 @@ final class WebViewModel: NSObject, ObservableObject {
         }
     }
 
-    func addHistoryItem(id: Int, url: URL?) {
-        let historyItem = HistoryItem(id: id, url: url, visitTime: Date())
+    func addHistoryItem(id _: Int, url: URL?) {
+        let historyItem = HistoryItem(url: url, visitTime: Date())
         modelContext.insert(historyItem)
     }
 
@@ -101,17 +104,19 @@ final class WebViewModel: NSObject, ObservableObject {
 }
 
 extension WebViewModel: WKNavigationDelegate {
-    private func updateViewModel(_ webView: WKWebView, navigation: WKNavigation) {
+    private func updateViewModel(_ webView: WKWebView, navigation _: WKNavigation) {
         canGoBack = webView.canGoBack
         canGoForward = webView.canGoForward
         if let url = webView.url {
             print("setting url from navigation: \(url)")
             urlString = url.absoluteString
         }
-        addHistoryItem(id: navigation.hash, url: webView.url)
     }
 
-    func webView(_: WKWebView, didFinish _: WKNavigation!) {}
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        updateViewModel(webView, navigation: navigation)
+        addHistoryItem(id: navigation.hash, url: webView.url)
+    }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         updateViewModel(webView, navigation: navigation)

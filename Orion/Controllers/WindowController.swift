@@ -53,6 +53,7 @@ final class WindowController: NSWindowController {
             modelContext: container.mainContext
         )
         let webViewModel = WebViewModel(
+            logger: logger,
             modelContext: container.mainContext,
             xpiDownloadManager: xpiDownloadManager
         )
