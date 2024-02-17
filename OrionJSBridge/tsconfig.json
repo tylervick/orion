@@ -28,5 +28,5 @@
 
     "outDir": "dist"
   },
-  "include": ["lib", "globals.d.ts"]
+  "include": ["lib"]
 }

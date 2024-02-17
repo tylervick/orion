@@ -122,64 +122,15 @@ extension WindowViewModel: NSToolbarDelegate {
         if let webExtension = browserActionExtensions.first(where: {
             $0.id == toolbarItem.itemIdentifier.rawValue
         }) {
-            let browserActionViewController =
-                BrowserActionViewController(webExtension: webExtension)
+            let browserActionViewController = BrowserActionViewController(
+                logger: logger,
+                modelContext: modelContext,
+                webExtension: webExtension
+            )
             popover.contentViewController = browserActionViewController
         }
         popover.show(relativeTo: toolbarItem)
 
         logger.info("toolbar item clicked: \(toolbarItem.itemIdentifier.rawValue)")
-    }
-}
-
-final class BrowserActionViewController: NSViewController {
-    let webView: WKWebView?
-    let webExtension: WebExtensionModel?
-
-    init(webExtension: WebExtensionModel) {
-        self.webExtension = webExtension
-        webView = WKWebView()
-        super.init(nibName: nil, bundle: nil)
-        setupWebView()
-    }
-
-    required init?(coder: NSCoder) {
-        webExtension = nil
-        webView = nil
-        super.init(coder: coder)
-//        fatalError("\(Self.self) must be instantiated directly")
-    }
-
-    func setupWebView() {
-        guard let webView else {
-            return
-        }
-
-        webView.frame = view.frame
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        webView.isInspectable = true
-        view.addSubview(webView)
-        NSLayoutConstraint.activate([
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
-
-        // TODO: render file types other than html
-        if let defaultPopup = webExtension?.manifest.browserAction?.defaultPopup,
-           let popupUrl = webExtension?.path.appending(path: defaultPopup.path()),
-           let htmlContent = try? String(contentsOf: popupUrl)
-        {
-//            let popupRequest = URLRequest(url: popupUrl)
-
-            webView.loadHTMLString(
-                htmlContent,
-                baseURL: webExtension!.path.appending(path: "popup")
-            )
-//            webView.loadFileURL(popupUrl, allowingReadAccessTo: webExtension!.path.appending(path:
-//            "popup"))
-//            webView.load(popupRequest)
-        }
     }
 }

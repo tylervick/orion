@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F5FDC852B812A000091FD72 /* BrowserActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC842B812A000091FD72 /* BrowserActionViewController.swift */; };
+		2F5FDC882B8158BF0091FD72 /* FlyingFox in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5FDC872B8158BF0091FD72 /* FlyingFox */; };
+		2F5FDC8A2B816D170091FD72 /* WKPageBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC892B816D170091FD72 /* WKPageBridge.swift */; };
+		2F5FDC8C2B816D4D0091FD72 /* WKConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC8B2B816D4D0091FD72 /* WKConfiguration.swift */; };
 		2F68A2D02B72BD0A0002ADBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2CF2B72BD0A0002ADBE /* AppDelegate.swift */; };
 		2F68A2D22B72BD0A0002ADBE /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2D12B72BD0A0002ADBE /* WebViewController.swift */; };
 		2F68A2D42B72BD0B0002ADBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F68A2D32B72BD0B0002ADBE /* Assets.xcassets */; };
@@ -75,6 +79,9 @@
 
 /* Begin PBXFileReference section */
 		2F3304E12B7ACB660047F789 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2F5FDC842B812A000091FD72 /* BrowserActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserActionViewController.swift; sourceTree = "<group>"; };
+		2F5FDC892B816D170091FD72 /* WKPageBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKPageBridge.swift; sourceTree = "<group>"; };
+		2F5FDC8B2B816D4D0091FD72 /* WKConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKConfiguration.swift; sourceTree = "<group>"; };
 		2F68A2CC2B72BD0A0002ADBE /* Orion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F68A2CF2B72BD0A0002ADBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F68A2D12B72BD0A0002ADBE /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -4322,6 +4329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F68A2FD2B72BDDB0002ADBE /* WebKit.framework in Frameworks */,
+				2F5FDC882B8158BF0091FD72 /* FlyingFox in Frameworks */,
 				2F9182812B7C1C1800D03E0D /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4430,6 +4438,7 @@
 				2F68A30E2B731F5D0002ADBE /* WindowController.swift */,
 				2FD102452B78968200A2EEC7 /* WebExtensionManagementViewController.swift */,
 				2FD102472B793DDE00A2EEC7 /* WebExtensionInstallViewController.swift */,
+				2F5FDC842B812A000091FD72 /* BrowserActionViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -4485,6 +4494,8 @@
 				2FBEE1A32B7EBD6800E91B68 /* XPIDownloadManager.swift */,
 				2FBEE1A52B7EBEE000E91B68 /* Constants.swift */,
 				2FBEE1AB2B7FE4EB00E91B68 /* WKExtensionAPIBridge.swift */,
+				2F5FDC892B816D170091FD72 /* WKPageBridge.swift */,
+				2F5FDC8B2B816D4D0091FD72 /* WKConfiguration.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -12704,6 +12715,7 @@
 			name = Orion;
 			packageProductDependencies = (
 				2F9182802B7C1C1800D03E0D /* ZIPFoundation */,
+				2F5FDC872B8158BF0091FD72 /* FlyingFox */,
 			);
 			productName = Orion;
 			productReference = 2F68A2CC2B72BD0A0002ADBE /* Orion.app */;
@@ -12799,8 +12811,8 @@
 			);
 			mainGroup = 2F68A2C32B72BD0A0002ADBE;
 			packageReferences = (
-				2F68A3172B7331C40002ADBE /* XCRemoteSwiftPackageReference "SwiftFormat" */,
 				2F91827F2B7C1C1800D03E0D /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+				2F5FDC862B8158BF0091FD72 /* XCRemoteSwiftPackageReference "FlyingFox" */,
 			);
 			productRefGroup = 2F68A2CD2B72BD0A0002ADBE /* Products */;
 			projectDirPath = "";
@@ -12876,12 +12888,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FBEE1A12B7D8AD100E91B68 /* WebExtensionManagementViewModel.swift in Sources */,
+				2F5FDC8A2B816D170091FD72 /* WKPageBridge.swift in Sources */,
 				2FBEE1A42B7EBD6800E91B68 /* XPIDownloadManager.swift in Sources */,
 				2FD1021B2B781D5F00A2EEC7 /* HistoryItem.swift in Sources */,
+				2F5FDC8C2B816D4D0091FD72 /* WKConfiguration.swift in Sources */,
 				2FBEE1AA2B7EF08F00E91B68 /* WindowViewModel.swift in Sources */,
 				2FD1024C2B79815400A2EEC7 /* WebExtensionMetadataView.swift in Sources */,
 				2FD102462B78968200A2EEC7 /* WebExtensionManagementViewController.swift in Sources */,
 				2FD102482B793DDE00A2EEC7 /* WebExtensionInstallViewController.swift in Sources */,
+				2F5FDC852B812A000091FD72 /* BrowserActionViewController.swift in Sources */,
 				2FD1024E2B7981AF00A2EEC7 /* WebExtensionModel.swift in Sources */,
 				2F68A2D22B72BD0A0002ADBE /* WebViewController.swift in Sources */,
 				2F68A30F2B731F5D0002ADBE /* WindowController.swift in Sources */,
@@ -13314,12 +13329,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		2F68A3172B7331C40002ADBE /* XCRemoteSwiftPackageReference "SwiftFormat" */ = {
+		2F5FDC862B8158BF0091FD72 /* XCRemoteSwiftPackageReference "FlyingFox" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:nicklockwood/SwiftFormat.git";
+			repositoryURL = "https://github.com/swhitty/FlyingFox.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.53.1;
+				minimumVersion = 0.13.0;
 			};
 		};
 		2F91827F2B7C1C1800D03E0D /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
@@ -13333,6 +13348,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2F5FDC872B8158BF0091FD72 /* FlyingFox */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2F5FDC862B8158BF0091FD72 /* XCRemoteSwiftPackageReference "FlyingFox" */;
+			productName = FlyingFox;
+		};
 		2F9182802B7C1C1800D03E0D /* ZIPFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2F91827F2B7C1C1800D03E0D /* XCRemoteSwiftPackageReference "ZIPFoundation" */;

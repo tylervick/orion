@@ -23,7 +23,7 @@ final class WebViewModel: NSObject, ObservableObject {
     private let logger: Logger
     let modelContext: ModelContext
     let xpiDownloadManager: WKDownloadDelegate?
-    let apiBridge: WKExtensionAPIBridge
+    let configProviders: [WKConfigurationProviding]
 
     private lazy var cancelBag = Set<AnyCancellable>()
 
@@ -31,13 +31,18 @@ final class WebViewModel: NSObject, ObservableObject {
         self.logger = logger
         self.modelContext = modelContext
         self.xpiDownloadManager = xpiDownloadManager
-        apiBridge = WKExtensionAPIBridge(modelContext: modelContext)
+        configProviders = [
+            WKExtensionAPIBridge(modelContext: modelContext),
+            WKPageBridge(modelContext: modelContext),
+        ]
         super.init()
     }
 
     func loadUserContentScripts(for webView: WKWebView) {
         // TODO: Get content scripts from WebExtensions
-        apiBridge.configure(webView: webView)
+        for configProvider in configProviders {
+            configProvider.configure(webView: webView)
+        }
     }
 
     func loadUrl(_ urlString: String, for webView: WKWebView) {

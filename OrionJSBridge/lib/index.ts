@@ -1,13 +1,13 @@
 export * from './globals';
-import { checkAndReplaceInstallButton } from './addon';
+// import { checkAndReplaceInstallButton } from './addon';
 import { createHistoryProxy } from './history';
 import { topSites } from './topSites';
 
 createHistoryProxy();
 
-document.addEventListener('load', () => {
-  checkAndReplaceInstallButton();
-});
+// document.addEventListener('load', () => {
+//   checkAndReplaceInstallButton();
+// });
 
 const Browser = {
   topSites,

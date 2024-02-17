@@ -9,10 +9,14 @@ import Foundation
 import SwiftData
 import WebKit
 
-final class WKExtensionAPIBridge: NSObject {
+final class WKExtensionAPIBridge: NSObject, WKConfigurationProviding {
     private let modelContext: ModelContext
     private lazy var encoder = JSONEncoder()
     private lazy var decoder = JSONDecoder()
+
+    enum Message: String {
+        case history
+    }
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -42,12 +46,7 @@ final class WKExtensionAPIBridge: NSObject {
         webView.configuration.userContentController.addScriptMessageHandler(
             self,
             contentWorld: .page,
-            name: "extension"
-        )
-        webView.configuration.userContentController.addScriptMessageHandler(
-            self,
-            contentWorld: .page,
-            name: "history"
+            name: MessageName.extension
         )
     }
 }
@@ -61,36 +60,9 @@ extension WKExtensionAPIBridge: WKScriptMessageHandlerWithReply {
         switch message.name {
         case MessageName.extension:
             await handleWebExAPI(body: message.body)
-        case MessageName.history:
-            handleHistoryMessage(body: message.body)
         default:
             (nil, "Invalid message")
         }
-    }
-
-    func handleHistoryMessage(body: Any) -> (Any?, String?) {
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: body, options: [])
-            let message = try decoder.decode(HistoryItemMessage.self, from: jsonData)
-            let url = {
-                if let href = message.href {
-                    return URL(string: href)
-                }
-                if let host = message.host,
-                   let url = message.url,
-                   let components = URLComponents(string: "\(host)\(url)")
-                {
-                    return components.url
-                }
-                return nil
-            }()
-            let historyItem = HistoryItem(url: url, visitTime: Date())
-            modelContext.insert(historyItem)
-            try modelContext.save()
-        } catch {
-            return (nil, error.localizedDescription)
-        }
-        return (nil, nil)
     }
 
     func handleWebExAPI(body: Any) async -> (Any?, String?) {
@@ -156,24 +128,6 @@ struct WebExtAPIBody: Codable {
 
 enum MessageName {
     static let `extension` = "extension"
-    static let history = "history"
-}
-
-// This is a translated version of `HistoryItem` at ./OrionJSBrdige/lib/types.ts#HistoryItem
-// FIXME: Use a single source-of-truth with language-specific bindings (e.g. Proto, maybe github.com/Apple/pkl?)
-struct HistoryItemMessage: Codable {
-    enum HistoryEvent: String, Codable {
-        case pushState
-        case replaceState
-        case popState
-    }
-
-    let event: HistoryEvent
-    let href: String?
-    let host: String?
-    let state: [String: String]?
-    let title: String?
-    let url: String?
 }
 
 struct MostVisitedURL: Codable {
