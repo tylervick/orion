@@ -115,8 +115,7 @@ final class WindowViewModel: NSObject, ObservableObject {
                         let filteredKeys = model.manifest.icons?.keys.compactMap({ Int($0) })
                         .filter({ $0 <= 64 }),
                         let maxKey = filteredKeys.max(),
-                        let iconPath = model.manifest.icons?[String(maxKey)]
-                    {
+                        let iconPath = model.manifest.icons?[String(maxKey)] {
                         let imageUrl = model.path.appending(path: iconPath.path())
                         let image = NSImage(contentsOf: imageUrl)
                         image?.size = CGSize(width: 20, height: 20)

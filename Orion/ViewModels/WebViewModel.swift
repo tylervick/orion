@@ -18,7 +18,7 @@ final class WebViewModel: NSObject, ObservableObject {
     @Published var canGoBack: Bool = false
     @Published var canGoForward: Bool = false
     @Published var isLoading: Bool = false
-    @Published var title: String? = nil
+    @Published var title: String?
 
     private let logger: Logger
     let modelContext: ModelContext
@@ -136,8 +136,7 @@ extension WebViewModel: WKNavigationDelegate {
         _: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse
     ) async
-        -> WKNavigationResponsePolicy
-    {
+        -> WKNavigationResponsePolicy {
         if navigationResponse.canShowMIMEType {
             .allow
         } else {
@@ -152,8 +151,7 @@ extension WebViewModel: WKNavigationDelegate {
     ) {
         if let mimeType = navigationResponse.response.mimeType,
            let xpiMimeType = UTType.xpi.preferredMIMEType,
-           mimeType == xpiMimeType
-        {
+           mimeType == xpiMimeType {
             download.delegate = xpiDownloadManager
         }
     }

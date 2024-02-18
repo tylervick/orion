@@ -76,8 +76,7 @@ final class WindowController: NSWindowController {
         if let tabViewController = storyboard?
             .instantiateController(
                 withIdentifier: "tabViewController"
-            ) as? TabViewController
-        {
+            ) as? TabViewController {
             tabViewController.tabViewModel = tabViewModel
             tabViewController.view.setFrameSize(NSSize(width: 1280, height: 720))
             contentViewController = tabViewController
@@ -102,8 +101,7 @@ final class WindowController: NSWindowController {
 
     override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
         if let webExManagementViewController = segue
-            .destinationController as? WebExtManagementViewController
-        {
+            .destinationController as? WebExtManagementViewController {
             webExManagementViewController.viewModel = windowViewModel?
                 .makeWebExManagementViewModel()
         }
@@ -119,8 +117,7 @@ extension WindowController: Subscriber {
         if let vc = storyboard?
             .instantiateController(
                 withIdentifier: "extensionInstallVC"
-            ) as? WebExtInstallViewController
-        {
+            ) as? WebExtInstallViewController {
             vc.viewModel = viewModel
             contentViewController?.presentAsSheet(vc)
         }

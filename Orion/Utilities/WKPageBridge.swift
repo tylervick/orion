@@ -69,8 +69,7 @@ extension WKPageBridge: WKScriptMessageHandlerWithReply {
                 }
                 if let host = message.host,
                    let url = message.url,
-                   let components = URLComponents(string: "\(host)\(url)")
-                {
+                   let components = URLComponents(string: "\(host)\(url)") {
                     return components.url
                 }
                 return nil

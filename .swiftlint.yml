@@ -6,3 +6,6 @@ included:
 excluded:
   - WebKit
   - Orion/WebKit
+
+disabled_rules:
+  - trailing_comma

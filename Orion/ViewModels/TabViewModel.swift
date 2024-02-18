@@ -14,7 +14,7 @@ final class TabViewModel: ObservableObject {
     @Published var activeUrlString = ""
     @Published var canGoBack = false
     @Published var canGoForward = false
-    @Published var activeTitle: String? = nil
+    @Published var activeTitle: String?
 
     private let logger: Logger
     private let modelContext: ModelContext
