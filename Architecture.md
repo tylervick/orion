@@ -1,2 +1,0 @@
-
-![Architecture](/docs/diagram.png)

@@ -88,6 +88,25 @@ cd ..
   - `rm -rf ~/Library/Containers/com.tylervick.orion/Data/Documents/orion.store`
 - Uninstalling an extension works, but the button doesn't disappear until the app is relaunched
 
+
+### Challenges / Meta Notes
+![Architecture](/docs/diagram.png)
+
+Some difficulties encountered:
+- Arbitrarily loading web content in the Browser Action (popup)
+  - This was difficult seemingly because of macOS sandboxing. Since the extensions were not loaded from the app's bundle, they were not allowed to load arbitrary web content.
+  - There's probably a better way to programmatically "declare" the bundle or reduce sandboxing
+  - The final implementation uses a simple http file server (from FlyingFox) to serve the extension's popup when the button is clicked
+- Ensuring all history items are captured while avoiding duplicates
+  - As mentioned in the project spec, the `decidePolicyFor navigationAction` delegate method does not capture all navigation changes. The idea is to supplement the default WKWebViewNavigationDelegate with events emitted from the JSBridge, hooking into the History API. The final implementation settles on a select number of events/delegate methods to capture all navigation changes and omit duplicates.
+- Build system
+  - I'm not a fan of committing an xcodeproj with arbitrary schemes/configurations. In addition, there are a slew of project dependencies with different integrations: A shell script for WebKit, Bun for the JS bridge, Swift Package Manager for a couple Swift dependencies, and an xcodeproj that assumes the former are all in place.
+  - With more time, I would consider using a build system built for multi-language projects (e.g. Bazel) or some other declarative build steps
+- Other misc
+ - Having used MVVM more recently, organizing logic into AppKit's opinionated MVC left some pattern inconsistencies. With more time, I would perform an audit for a stricter separation of concerns.
+
+
+
 ### Attributions
 
 - Orion [Logo](https://kagi.com/orion/press-kit/icon-main-logo.png) by [Kagi](https://kagi.com/orion/press-kit/). Modifications were made to the original work for this project.
