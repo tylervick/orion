@@ -6,8 +6,6 @@
 //
 
 import Cocoa
-import FlyingFox
-import FlyingSocks
 import os.log
 import SwiftData
 import WebKit
@@ -15,10 +13,10 @@ import WebKit
 final class BrowserActionViewController: NSViewController {
     let webView: WKWebView?
     let logger: Logger
-    let webExtension: WebExtensionModel?
+    let webExtension: WebExtension?
     private lazy var fileServer = FileServer(addr: .inet(port: 0))
 
-    init(logger: Logger, modelContext: ModelContext, webExtension: WebExtensionModel) {
+    init(logger: Logger, modelContext: ModelContext, webExtension: WebExtension) {
         self.logger = logger
         self.webExtension = webExtension
         let webView = WKWebView()
@@ -84,31 +82,5 @@ final class BrowserActionViewController: NSViewController {
             let popupRequest = URLRequest(url: popupUrl)
             webView.load(popupRequest)
         }
-    }
-}
-
-final class FileServer {
-    private let server: HTTPServer
-
-    init(addr: SocketAddress) {
-        server = HTTPServer(address: addr)
-    }
-
-    func start(root: URL) async throws {
-        await server.appendRoute("GET /*", to: DirectoryHTTPHandler(root: root))
-        Task {
-            try await server.start()
-        }
-        try await server.waitUntilListening()
-    }
-
-    func stop() async {
-        if await server.isListening {
-            await server.stop(timeout: 2)
-        }
-    }
-
-    func getAddress() async -> Socket.Address? {
-        await server.listeningAddress
     }
 }

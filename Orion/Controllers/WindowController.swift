@@ -16,10 +16,6 @@ final class WindowController: NSWindowController {
     @IBOutlet var forwardItem: NSToolbarItem!
     @IBOutlet var locationTextField: NSTextField!
 
-    private var webViewController: WebViewController? {
-        contentViewController as? WebViewController
-    }
-
     private var tabViewController: TabViewController? {
         contentViewController as? TabViewController
     }
@@ -38,7 +34,7 @@ final class WindowController: NSWindowController {
         let configuration = ModelConfiguration(url: storeUrl, allowsSave: true)
         let container = try ModelContainer(
             for: HistoryItem.self,
-            WebExtensionModel.self,
+            WebExtension.self,
             configurations: configuration
         )
         container.mainContext.autosaveEnabled = true
@@ -48,7 +44,6 @@ final class WindowController: NSWindowController {
     override func windowDidLoad() {
         super.windowDidLoad()
 
-        // Create dependencies
         guard let container = try? makeContainer() else {
             fatalError("Failed to create ModelContainer")
         }
@@ -84,6 +79,7 @@ final class WindowController: NSWindowController {
             ) as? TabViewController
         {
             tabViewController.tabViewModel = tabViewModel
+            tabViewController.view.setFrameSize(NSSize(width: 1280, height: 720))
             contentViewController = tabViewController
         }
     }
@@ -106,7 +102,7 @@ final class WindowController: NSWindowController {
 
     override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
         if let webExManagementViewController = segue
-            .destinationController as? WebExtensionManagementViewController
+            .destinationController as? WebExtManagementViewController
         {
             webExManagementViewController.viewModel = windowViewModel?
                 .makeWebExManagementViewModel()
@@ -119,11 +115,11 @@ extension WindowController: Subscriber {
         subscription.request(.max(1))
     }
 
-    func receive(_ viewModel: WebExtensionInstallViewModel) -> Subscribers.Demand {
+    func receive(_ viewModel: WebExtInstallViewModel) -> Subscribers.Demand {
         if let vc = storyboard?
             .instantiateController(
                 withIdentifier: "extensionInstallVC"
-            ) as? WebExtensionInstallViewController
+            ) as? WebExtInstallViewController
         {
             vc.viewModel = viewModel
             contentViewController?.presentAsSheet(vc)

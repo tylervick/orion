@@ -36,26 +36,9 @@ final class WKPageBridge: NSObject, WKConfigurationProviding {
     }
 
     func configure(webView: WKWebView) {
-        // Load WebExtension API bridge script
-        guard let bridgeBundleUrl = Bundle.main.url(
-            forResource: "OrionJSBridge",
-            withExtension: "bundle"
-        ),
-            let bridgeBundle = Bundle(url: bridgeBundleUrl),
-            let jsUrl = bridgeBundle.url(forResource: "browser.umd", withExtension: "js"),
-            let jsSource = try? String(contentsOf: jsUrl)
-        else {
-            print("Unable to locate browser.umd.js resource")
-            return
-        }
-
-        let browserScript = WKUserScript(
-            source: jsSource,
-            injectionTime: .atDocumentStart,
-            forMainFrameOnly: false
-        )
-
-        webView.configuration.userContentController.addUserScript(browserScript)
+        // Assumes "browser.umd.js" is already injected into to the "page" content world
+        // Ideally we would update the TypeScript build to output multiple, namespaced bundles,
+        // loading them as-needed.
         webView.configuration.userContentController.addScriptMessageHandler(
             self,
             contentWorld: .page,
@@ -92,7 +75,7 @@ extension WKPageBridge: WKScriptMessageHandlerWithReply {
                 }
                 return nil
             }()
-            let historyItem = HistoryItem(url: url, visitTime: Date())
+            let historyItem = HistoryItem(url: url, title: message.title, visitTime: Date())
             modelContext.insert(historyItem)
             try modelContext.save()
         } catch {

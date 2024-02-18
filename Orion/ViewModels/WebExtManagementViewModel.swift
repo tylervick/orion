@@ -1,5 +1,5 @@
 //
-//  WebExtensionManagementViewModel.swift
+//  WebExtManagementViewModel.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/14/24.
@@ -10,8 +10,8 @@ import Foundation
 import os.log
 import SwiftData
 
-final class WebExtensionManagementViewModel: ObservableObject {
-    @Published var extensions: [WebExtensionModel] = []
+final class WebExtManagementViewModel: ObservableObject {
+    @Published var extensions: [WebExtension] = []
 
     private let modelContext: ModelContext
     private let logger: Logger
@@ -29,7 +29,7 @@ final class WebExtensionManagementViewModel: ObservableObject {
     }
 
     private func updateExtensions() {
-        let descriptor = FetchDescriptor<WebExtensionModel>()
+        let descriptor = FetchDescriptor<WebExtension>()
         do {
             let webExtensionModels = try modelContext.fetch(descriptor)
             logger.debug("Installed extension count: \(webExtensionModels.count)")
@@ -39,7 +39,7 @@ final class WebExtensionManagementViewModel: ObservableObject {
         }
     }
 
-    func uninstallExtension(_ model: WebExtensionModel) {
+    func uninstallExtension(_ model: WebExtension) {
         logger.info("Deleting extension: \(model.id)")
         modelContext.delete(model)
         do {

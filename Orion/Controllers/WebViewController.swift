@@ -30,7 +30,6 @@ final class WebViewController: NSViewController {
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
 
-        webView.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
         viewModel?.loadUserContentScripts(for: webView)
     }
 

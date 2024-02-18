@@ -21,7 +21,7 @@ enum ToolbarAction: Equatable {
 }
 
 final class WindowViewModel: NSObject, ObservableObject {
-    @Published private var browserActionExtensions: [WebExtensionModel] = []
+    @Published private var browserActionExtensions: [WebExtension] = []
 
     @Published var backEnabled = false
     @Published var forwardEnabled = false
@@ -44,6 +44,12 @@ final class WindowViewModel: NSObject, ObservableObject {
         self.modelContext = modelContext
         super.init()
 
+        NotificationCenter.default.publisher(for: .NSManagedObjectContextObjectsDidChange)
+            .print(".NSManagedObjectContextObjectsDidChange")
+            .sink { [weak self] _ in
+                self?.loadExtensions()
+            }
+            .store(in: &cancelBag)
         loadExtensions()
     }
 
@@ -52,10 +58,10 @@ final class WindowViewModel: NSObject, ObservableObject {
     }
 
     private func loadExtensions() {
-        let hasBrowserAction = #Predicate<WebExtensionModel> {
+        let hasBrowserAction = #Predicate<WebExtension> {
             $0.manifest.browserAction != nil
         }
-        let fd = FetchDescriptor<WebExtensionModel>(predicate: hasBrowserAction)
+        let fd = FetchDescriptor<WebExtension>(predicate: hasBrowserAction)
 
         do {
             browserActionExtensions = try modelContext.fetch(fd)
@@ -65,14 +71,14 @@ final class WindowViewModel: NSObject, ObservableObject {
     }
 
     func subscribeToWebExtensionInstallRequest(_ subscriber: any Subscriber<
-        WebExtensionInstallViewModel,
+        WebExtInstallViewModel,
         Never
     >) {
-        xpiPublisher.compactMap { [weak self] xpiUrl -> WebExtensionInstallViewModel? in
+        xpiPublisher.compactMap { [weak self] xpiUrl -> WebExtInstallViewModel? in
             guard let self else {
                 return nil
             }
-            return try? WebExtensionInstallViewModel(
+            return try? WebExtInstallViewModel(
                 modelContext: modelContext,
                 xpiUrl: xpiUrl,
                 logger: logger
@@ -84,41 +90,56 @@ final class WindowViewModel: NSObject, ObservableObject {
 
     func subscribeToBrowserActionExtensions(_ toolbar: NSToolbar) {
         toolbar.delegate = self
-        $browserActionExtensions.receive(on: DispatchQueue.main).sink { [weak self] models in
-            for model in models {
-                let itemIdentifier = NSToolbarItem.Identifier(rawValue: model.id)
+        $browserActionExtensions.removeDuplicates().receive(on: DispatchQueue.main)
+            .sink { [weak self] models in
 
-                let toolbarItem = NSToolbarItem(itemIdentifier: itemIdentifier)
-                toolbarItem.label = model.manifest.name
-                toolbarItem.paletteLabel = model.manifest.name
-                toolbarItem.target = self
-                toolbarItem.action = #selector(self?.browserActionExtensionClicked(_:))
+                modelLoop: for model in models {
+                    let itemIdentifier = NSToolbarItem.Identifier(rawValue: model.id)
 
-                if
-                    let filteredKeys = model.manifest.icons?.keys.compactMap({ Int($0) })
-                    .filter({ $0 <= 64 }),
-                    let maxKey = filteredKeys.max(),
-                    let iconPath = model.manifest.icons?[String(maxKey)]
-                {
-                    let imageUrl = model.path.appending(path: iconPath.path())
-                    let image = NSImage(contentsOf: imageUrl)
-                    image?.size = CGSize(width: 20, height: 20)
-                    toolbarItem.image = image
+                    // Don't insert existing extension IDs
+                    // The better way is to subscribe to individual models and CRUD them without
+                    // re-creating everything
+                    for item in toolbar.items {
+                        if item.itemIdentifier == itemIdentifier {
+                            continue modelLoop
+                        }
+                    }
+
+                    let toolbarItem = NSToolbarItem(itemIdentifier: itemIdentifier)
+                    toolbarItem.label = model.manifest.name
+                    toolbarItem.paletteLabel = model.manifest.name
+                    toolbarItem.target = self
+                    toolbarItem.action = #selector(self?.browserActionExtensionClicked(_:))
+
+                    if
+                        let filteredKeys = model.manifest.icons?.keys.compactMap({ Int($0) })
+                        .filter({ $0 <= 64 }),
+                        let maxKey = filteredKeys.max(),
+                        let iconPath = model.manifest.icons?[String(maxKey)]
+                    {
+                        let imageUrl = model.path.appending(path: iconPath.path())
+                        let image = NSImage(contentsOf: imageUrl)
+                        image?.size = CGSize(width: 20, height: 20)
+                        toolbarItem.image = image
+                    }
+
+                    self?.toolbarMap[itemIdentifier] = toolbarItem
+
+                    self?.logger.info("Created toolbar item for extension: \(model.id)")
+                    let insertIndex = toolbar.items.count > 2 ? toolbar.items.count - 2 : toolbar
+                        .items
+                        .count
+
+                    if !toolbar.items.contains(toolbarItem) {
+                        toolbar.insertItem(withItemIdentifier: itemIdentifier, at: insertIndex)
+                        self?.logger.info("Inserted item into toolbar: \(model.id)")
+                    }
                 }
-
-                self?.toolbarMap[itemIdentifier] = toolbarItem
-
-                self?.logger.info("Created toolbar item for extension: \(model.id)")
-                let insertIndex = toolbar.items.count > 2 ? toolbar.items.count - 2 : toolbar.items
-                    .count
-                toolbar.insertItem(withItemIdentifier: itemIdentifier, at: insertIndex)
-                self?.logger.info("Inserted item into toolbar: \(model.id)")
-            }
-        }.store(in: &cancelBag)
+            }.store(in: &cancelBag)
     }
 
-    func makeWebExManagementViewModel() -> WebExtensionManagementViewModel {
-        WebExtensionManagementViewModel(modelContext: modelContext, logger: logger)
+    func makeWebExManagementViewModel() -> WebExtManagementViewModel {
+        WebExtManagementViewModel(modelContext: modelContext, logger: logger)
     }
 }
 

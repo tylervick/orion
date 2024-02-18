@@ -24,3 +24,9 @@ final class HistoryItem {
         self.visitTime = visitTime
     }
 }
+
+struct MostVisitedURL: Codable {
+    let url: String
+    let title: String
+    let favicon: String?
+}

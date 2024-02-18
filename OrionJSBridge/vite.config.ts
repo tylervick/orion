@@ -1,4 +1,3 @@
-import typescript from '@rollup/plugin-typescript';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
@@ -9,24 +8,13 @@ const root = resolve(dirname(path));
 
 export default defineConfig({
   root,
-  plugins: [
-    dts({ include: ['lib'] }),
-    typescript({
-      include: ['lib/**/*.ts'],
-      exclude: ['node_modules', 'dist', 'vite.config.ts', 'globals.d.ts'],
-      tsconfig: './tsconfig.json',
-    }),
-  ],
+  plugins: [dts()],
   build: {
     copyPublicDir: false,
     lib: {
       name: 'Browser',
       entry: resolve(root, 'lib', 'index.ts'),
-      formats: [
-        'umd',
-        // 'es',
-        // 'cjs',
-      ],
+      formats: ['umd'],
       fileName: (format) => `browser.${format}.js`,
     },
     rollupOptions: {

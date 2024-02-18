@@ -14,8 +14,7 @@ import WebKit
 
 @objc
 final class WebViewModel: NSObject, ObservableObject {
-    @Published var urlString: String =
-        "https://addons.mozilla.org/en-US/firefox/addon/top-sites-button/"
+    @Published var urlString: String = "about:blank"
     @Published var canGoBack: Bool = false
     @Published var canGoForward: Bool = false
     @Published var isLoading: Bool = false
@@ -59,8 +58,8 @@ final class WebViewModel: NSObject, ObservableObject {
         }
     }
 
-    func addHistoryItem(id _: Int, url: URL?) {
-        let historyItem = HistoryItem(url: url, visitTime: Date())
+    func addHistoryItem(title: String?, url: URL?) {
+        let historyItem = HistoryItem(url: url, title: title, visitTime: Date())
         modelContext.insert(historyItem)
     }
 
@@ -107,7 +106,7 @@ extension WebViewModel: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         updateViewModel(webView, navigation: navigation)
-        addHistoryItem(id: navigation.hash, url: webView.url)
+        addHistoryItem(title: webView.title, url: webView.url)
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {

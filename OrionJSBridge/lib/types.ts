@@ -1,3 +1,6 @@
+import { HistoryItem } from './history';
+import { MessageBody } from './topSites';
+
 declare global {
   export interface Window {
     webkit: {
@@ -12,19 +15,3 @@ declare global {
     };
   }
 }
-
-export type MessageBody = {
-  method: 'topSites' | 'storage' | 'bookmarks';
-  payload: object;
-};
-
-export type HistoryEvent = 'pushState' | 'replaceState' | 'popstate';
-
-export type HistoryItem = {
-  event: HistoryEvent;
-  href: string | undefined;
-  host: string | undefined;
-  state: unknown;
-  title: string | undefined;
-  url: string | undefined;
-};

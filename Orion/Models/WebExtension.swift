@@ -1,5 +1,5 @@
 //
-//  WebExtensionModel.swift
+//  WebExtension.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/11/24.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class WebExtensionModel {
+final class WebExtension {
     @Attribute(.unique)
     var id: String
     var manifest: WebExtensionManifest
@@ -28,7 +28,7 @@ final class WebExtensionManifest: Codable {
     let author: String
     let browserAction: BrowserAction?
     let defaultLocale: String?
-//    let desc: String?
+    let desc: String?
     let homepageUrl: URL?
     let icons: [String: URL]?
     let manifestVersion: Int
@@ -42,7 +42,8 @@ final class WebExtensionManifest: Codable {
         case author
         case browserAction
         case defaultLocale
-//        case desc
+        case description
+        case desc
         case homepageUrl
         case icons
         case manifestVersion
@@ -57,6 +58,7 @@ final class WebExtensionManifest: Codable {
         author: String,
         browserAction: BrowserAction?,
         defaultLocale: String?,
+        desc: String?,
         homepageUrl: URL?,
         icons: [String: URL]?,
         manifestVersion: Int,
@@ -69,7 +71,7 @@ final class WebExtensionManifest: Codable {
         self.author = author
         self.browserAction = browserAction
         self.defaultLocale = defaultLocale
-//        self.desc = desc
+        self.desc = desc
         self.homepageUrl = homepageUrl
         self.icons = icons
         self.manifestVersion = manifestVersion
@@ -85,7 +87,8 @@ final class WebExtensionManifest: Codable {
         author = try container.decode(String.self, forKey: .author)
         browserAction = try container.decodeIfPresent(BrowserAction.self, forKey: .browserAction)
         defaultLocale = try container.decodeIfPresent(String.self, forKey: .defaultLocale)
-//        self.desc = try container.decodeIfPresent(String.self, forKey: .desc)
+        desc = try container.decodeIfPresent(String.self, forKey: .desc)
+        desc = try container.decodeIfPresent(String.self, forKey: .description)
         homepageUrl = try container.decodeIfPresent(URL.self, forKey: .homepageUrl)
         icons = try container.decodeIfPresent([String: URL].self, forKey: .icons)
         manifestVersion = try container.decode(Int.self, forKey: .manifestVersion)
@@ -101,7 +104,7 @@ final class WebExtensionManifest: Codable {
         try container.encode(author, forKey: .author)
         try container.encodeIfPresent(browserAction, forKey: .browserAction)
         try container.encodeIfPresent(defaultLocale, forKey: .defaultLocale)
-//        try container.encodeIfPresent(desc, forKey: .desc)
+        try container.encodeIfPresent(desc, forKey: .desc)
         try container.encodeIfPresent(homepageUrl, forKey: .homepageUrl)
         try container.encodeIfPresent(icons, forKey: .icons)
         try container.encode(manifestVersion, forKey: .manifestVersion)
@@ -167,7 +170,7 @@ extension WebExtensionManifest {
         author: "Test Author",
         browserAction: nil,
         defaultLocale: "en-US",
-//        desc: "Test Description",
+        desc: "Test Description",
         homepageUrl: nil,
         icons: nil,
         manifestVersion: 2,

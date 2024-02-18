@@ -9,6 +9,19 @@ import Foundation
 import SwiftData
 import WebKit
 
+enum WebExtAPIMethod: String, Codable {
+    case topSites
+}
+
+struct WebExtAPIBody: Codable {
+    let method: WebExtAPIMethod
+    let payload: [String: String]?
+}
+
+enum MessageName {
+    static let `extension` = "extension"
+}
+
 final class WKExtensionAPIBridge: NSObject, WKConfigurationProviding {
     private let modelContext: ModelContext
     private lazy var encoder = JSONEncoder()
@@ -115,23 +128,4 @@ extension WKExtensionAPIBridge: WKScriptMessageHandlerWithReply {
             return (nil, error.localizedDescription)
         }
     }
-}
-
-enum WebExtAPIMethod: String, Codable {
-    case topSites
-}
-
-struct WebExtAPIBody: Codable {
-    let method: WebExtAPIMethod
-    let payload: [String: String]?
-}
-
-enum MessageName {
-    static let `extension` = "extension"
-}
-
-struct MostVisitedURL: Codable {
-    let url: String
-    let title: String
-    let favicon: String?
 }

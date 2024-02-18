@@ -1,20 +1,11 @@
 export * from './globals';
-// import { checkAndReplaceInstallButton } from './addon';
-import { createHistoryProxy } from './history';
-import { topSites } from './topSites';
+import startBrowser, { Browser } from './browser';
+import startTab from './tab';
 
-createHistoryProxy();
+import './types';
 
-// document.addEventListener('load', () => {
-//   checkAndReplaceInstallButton();
-// });
+startTab();
 
-const Browser = {
-  topSites,
-};
-
-console.log('Orion Browser API loaded.');
-
-window.browser = Browser;
+startBrowser();
 
 export default Browser;

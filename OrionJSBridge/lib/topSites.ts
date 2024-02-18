@@ -1,4 +1,7 @@
-import type { MessageBody } from './types';
+export type MessageBody = {
+  method: 'topSites' | 'storage' | 'bookmarks';
+  payload: object;
+};
 
 type MostVisitedURL = {
   url: string;

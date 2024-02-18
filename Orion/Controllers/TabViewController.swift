@@ -34,7 +34,7 @@ final class TabViewController: NSTabViewController {
     }
 
     func receiveTabItem(_ tabItem: NSTabViewItem) {
-        insertTabViewItem(tabItem, at: 0)
+        insertTabViewItem(tabItem, at: tabViewItems.count)
         tabView.selectTabViewItem(tabItem)
     }
 
