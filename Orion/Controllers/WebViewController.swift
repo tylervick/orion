@@ -21,6 +21,9 @@ final class WebViewController: NSViewController {
         webView.isInspectable = true
         webView.navigationDelegate = viewModel
         webView.translatesAutoresizingMaskIntoConstraints = false
+        if let userAgent = webView.value(forKey: "userAgent") as? String {
+            webView.customUserAgent =  userAgent + "Version/17.3 Safari/605.1.15"
+        }
 
         view.addSubview(webView)
         NSLayoutConstraint.activate([
