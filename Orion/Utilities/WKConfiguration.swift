@@ -10,4 +10,3 @@ import WebKit
 protocol WKConfigurationProviding {
     func configure(webView: WKWebView)
 }
-

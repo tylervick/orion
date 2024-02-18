@@ -19,6 +19,7 @@ final class WebViewModel: NSObject, ObservableObject {
     @Published var canGoBack: Bool = false
     @Published var canGoForward: Bool = false
     @Published var isLoading: Bool = false
+    @Published var title: String? = nil
 
     private let logger: Logger
     let modelContext: ModelContext
@@ -95,6 +96,7 @@ final class WebViewModel: NSObject, ObservableObject {
 
 extension WebViewModel: WKNavigationDelegate {
     private func updateViewModel(_ webView: WKWebView, navigation _: WKNavigation) {
+        title = webView.title
         canGoBack = webView.canGoBack
         canGoForward = webView.canGoForward
         if let url = webView.url, urlString != url.absoluteString {
@@ -142,14 +144,6 @@ extension WebViewModel: WKNavigationDelegate {
         } else {
             .download
         }
-    }
-
-    func webView(
-        _: WKWebView,
-        navigationAction _: WKNavigationAction,
-        didBecome _: WKDownload
-    ) {
-//        download.delegate = xpiDownloadManager
     }
 
     func webView(

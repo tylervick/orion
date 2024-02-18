@@ -20,6 +20,10 @@ final class WindowController: NSWindowController {
         contentViewController as? WebViewController
     }
 
+    private var tabViewController: TabViewController? {
+        contentViewController as? TabViewController
+    }
+
     private var windowViewModel: WindowViewModel?
     private var cancelBag = Set<AnyCancellable>()
 
@@ -42,49 +46,62 @@ final class WindowController: NSWindowController {
     }
 
     override func windowDidLoad() {
+        super.windowDidLoad()
+
+        // Create dependencies
         guard let container = try? makeContainer() else {
             fatalError("Failed to create ModelContainer")
         }
         let logger = Logger()
         let xpiDownloadManager = XPIDownloadManager(logger: logger)
-        windowViewModel = WindowViewModel(
+        let windowViewModel = WindowViewModel(
             logger: logger,
             xpiPublisher: xpiDownloadManager.xpiPublisher,
             modelContext: container.mainContext
         )
-        let webViewModel = WebViewModel(
+        self.windowViewModel = windowViewModel
+
+        windowViewModel.subscribeToBrowserActionExtensions(toolbar)
+        windowViewModel.subscribeToWebExtensionInstallRequest(self)
+
+        let tabViewModel = TabViewModel(
             logger: logger,
             modelContext: container.mainContext,
-            xpiDownloadManager: xpiDownloadManager
+            xpiDownloadDelegate: xpiDownloadManager,
+            toolbarActionPublisher: windowViewModel.toolbarActionPublisher
         )
-        contentViewController = WebViewController(viewModel: webViewModel)
 
-        windowViewModel?.subscribeToBrowserActionExtensions(toolbar)
-        windowViewModel?.subscribeToWebExtensionInstallRequest(self)
-
-        bindViewModel()
-    }
-
-    private func bindViewModel() {
-        webViewController?.viewModel?.$urlString
-            .receive(on: DispatchQueue.main)
+        tabViewModel.$canGoBack.link(with: &windowViewModel.$backEnabled)
+        tabViewModel.$canGoForward.link(with: &windowViewModel.$forwardEnabled)
+        tabViewModel.$activeUrlString.removeDuplicates().receive(on: DispatchQueue.main)
             .sink { [weak self] urlString in
-                print("Setting locationTextField string value to \(urlString)")
                 self?.locationTextField.stringValue = urlString
-            }
-            .store(in: &cancelBag)
+            }.store(in: &cancelBag)
+
+        if let tabViewController = storyboard?
+            .instantiateController(
+                withIdentifier: "tabViewController"
+            ) as? TabViewController
+        {
+            tabViewController.tabViewModel = tabViewModel
+            contentViewController = tabViewController
+        }
     }
 
     @IBAction func backButtonClicked(_: NSToolbarItem) {
-        webViewController?.performBack()
+        windowViewModel?.publishToolbarAction(.back)
     }
 
     @IBAction func forwardButtonClicked(_: NSToolbarItem) {
-        webViewController?.performForward()
+        windowViewModel?.publishToolbarAction(.forward)
     }
 
     @IBAction func reloadButtonClicked(_: NSToolbarItem) {
-        webViewController?.performReload()
+        windowViewModel?.publishToolbarAction(.reload)
+    }
+
+    @IBAction func newTabButtonClicked(_: NSToolbarItem) {
+        windowViewModel?.publishToolbarAction(.newTab)
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
@@ -121,9 +138,9 @@ extension WindowController: NSToolbarItemValidation {
     func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
         switch item {
         case backItem:
-            webViewController?.viewModel?.canGoBack ?? false
+            windowViewModel?.backEnabled ?? false
         case forwardItem:
-            webViewController?.viewModel?.canGoForward ?? false
+            windowViewModel?.forwardEnabled ?? false
         default:
             true
         }
@@ -137,7 +154,7 @@ extension WindowController: NSTextFieldDelegate {
         doCommandBy commandSelector: Selector
     ) -> Bool {
         if commandSelector == #selector(NSResponder.insertNewline(_:)) {
-            webViewController?.loadUrlString(locationTextField.stringValue)
+            windowViewModel?.publishToolbarAction(.urlSubmitted(locationTextField.stringValue))
             return true
         }
         return false

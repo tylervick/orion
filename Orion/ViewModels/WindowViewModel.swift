@@ -12,16 +12,31 @@ import os.log
 import SwiftData
 import WebKit
 
+enum ToolbarAction: Equatable {
+    case back
+    case forward
+    case reload
+    case newTab
+    case urlSubmitted(String)
+}
+
 final class WindowViewModel: NSObject, ObservableObject {
     @Published private var browserActionExtensions: [WebExtensionModel] = []
+
+    @Published var backEnabled = false
+    @Published var forwardEnabled = false
 
     private let logger: Logger
     private let xpiPublisher: AnyPublisher<URL, Never>
     private let modelContext: ModelContext
+    private let toolbarActionSubject = PassthroughSubject<ToolbarAction, Never>()
 
     private var cancelBag = Set<AnyCancellable>()
-
     private var toolbarMap: [NSToolbarItem.Identifier: NSToolbarItem] = [:]
+
+    var toolbarActionPublisher: AnyPublisher<ToolbarAction, Never> {
+        toolbarActionSubject.eraseToAnyPublisher()
+    }
 
     init(logger: Logger, xpiPublisher: AnyPublisher<URL, Never>, modelContext: ModelContext) {
         self.logger = logger
@@ -30,10 +45,10 @@ final class WindowViewModel: NSObject, ObservableObject {
         super.init()
 
         loadExtensions()
+    }
 
-        $browserActionExtensions.print("Browser Action Extensions").sink(receiveValue: { _ in
-
-        }).store(in: &cancelBag)
+    func publishToolbarAction(_ action: ToolbarAction) {
+        toolbarActionSubject.send(action)
     }
 
     private func loadExtensions() {
@@ -94,7 +109,9 @@ final class WindowViewModel: NSObject, ObservableObject {
                 self?.toolbarMap[itemIdentifier] = toolbarItem
 
                 self?.logger.info("Created toolbar item for extension: \(model.id)")
-                toolbar.insertItem(withItemIdentifier: itemIdentifier, at: toolbar.items.count)
+                let insertIndex = toolbar.items.count > 2 ? toolbar.items.count - 2 : toolbar.items
+                    .count
+                toolbar.insertItem(withItemIdentifier: itemIdentifier, at: insertIndex)
                 self?.logger.info("Inserted item into toolbar: \(model.id)")
             }
         }.store(in: &cancelBag)
@@ -116,7 +133,7 @@ extension WindowViewModel: NSToolbarDelegate {
 
     @objc func browserActionExtensionClicked(_ toolbarItem: NSToolbarItem) {
         let popover = NSPopover()
-        popover.contentSize = CGSize(width: 200, height: 200)
+        popover.contentSize = CGSize(width: 400, height: 600)
         popover.animates = true
         popover.behavior = .semitransient
         if let webExtension = browserActionExtensions.first(where: {
@@ -130,7 +147,12 @@ extension WindowViewModel: NSToolbarDelegate {
             popover.contentViewController = browserActionViewController
         }
         popover.show(relativeTo: toolbarItem)
+    }
+}
 
-        logger.info("toolbar item clicked: \(toolbarItem.itemIdentifier.rawValue)")
+extension Published.Publisher where Value: Equatable {
+    mutating func link(with other: inout Self) {
+        removeDuplicates().assign(to: &other)
+        other.removeDuplicates().assign(to: &self)
     }
 }
