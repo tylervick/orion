@@ -7,35 +7,42 @@
 
 import Combine
 import Foundation
+import os.log
 import SwiftData
 import UniformTypeIdentifiers
 import WebKit
 
 @objc
 final class WebViewModel: NSObject, ObservableObject {
-    @Published var urlString: String =
-        "https://addons.mozilla.org/en-US/firefox/addon/top-sites-button/"
+    @Published var urlString: String = "about:blank"
     @Published var canGoBack: Bool = false
     @Published var canGoForward: Bool = false
     @Published var isLoading: Bool = false
+    @Published var title: String? = nil
 
+    private let logger: Logger
     let modelContext: ModelContext
     let xpiDownloadManager: WKDownloadDelegate?
-    let apiBridge: WKExtensionAPIBridge
+    let configProviders: [WKConfigurationProviding]
 
     private lazy var cancelBag = Set<AnyCancellable>()
 
-    init(modelContext: ModelContext, xpiDownloadManager: WKDownloadDelegate?) {
+    init(logger: Logger, modelContext: ModelContext, xpiDownloadManager: WKDownloadDelegate?) {
+        self.logger = logger
         self.modelContext = modelContext
         self.xpiDownloadManager = xpiDownloadManager
-        apiBridge = WKExtensionAPIBridge(modelContext: modelContext)
+        configProviders = [
+            WKExtensionAPIBridge(modelContext: modelContext),
+            WKPageBridge(modelContext: modelContext),
+        ]
         super.init()
-        logChanges()
     }
 
     func loadUserContentScripts(for webView: WKWebView) {
         // TODO: Get content scripts from WebExtensions
-        apiBridge.configure(webView: webView)
+        for configProvider in configProviders {
+            configProvider.configure(webView: webView)
+        }
     }
 
     func loadUrl(_ urlString: String, for webView: WKWebView) {
@@ -51,8 +58,8 @@ final class WebViewModel: NSObject, ObservableObject {
         }
     }
 
-    func addHistoryItem(id: Int, url: URL?) {
-        let historyItem = HistoryItem(id: id, url: url, visitTime: Date())
+    func addHistoryItem(title: String?, url: URL?) {
+        let historyItem = HistoryItem(url: url, title: title, visitTime: Date())
         modelContext.insert(historyItem)
     }
 
@@ -84,34 +91,23 @@ final class WebViewModel: NSObject, ObservableObject {
         }
         connection.start(queue: .global())
     }
-
-    private func logChanges() {
-        $urlString
-            .combineLatest($canGoBack, $canGoForward, $isLoading)
-            .sink { urlString, canGoBack, canGoForward, isLoading in
-                print("""
-                WebViewModel:
-                    urlString: \(urlString)
-                    canGoBack: \(canGoBack)
-                    canGoForward: \(canGoForward)
-                    isLoading: \(isLoading)
-                """)
-            }.store(in: &cancelBag)
-    }
 }
 
 extension WebViewModel: WKNavigationDelegate {
-    private func updateViewModel(_ webView: WKWebView, navigation: WKNavigation) {
+    private func updateViewModel(_ webView: WKWebView, navigation _: WKNavigation) {
+        title = webView.title
         canGoBack = webView.canGoBack
         canGoForward = webView.canGoForward
-        if let url = webView.url {
+        if let url = webView.url, urlString != url.absoluteString {
             print("setting url from navigation: \(url)")
             urlString = url.absoluteString
         }
-        addHistoryItem(id: navigation.hash, url: webView.url)
     }
 
-    func webView(_: WKWebView, didFinish _: WKNavigation!) {}
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        updateViewModel(webView, navigation: navigation)
+        addHistoryItem(title: webView.title, url: webView.url)
+    }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         updateViewModel(webView, navigation: navigation)
@@ -147,14 +143,6 @@ extension WebViewModel: WKNavigationDelegate {
         } else {
             .download
         }
-    }
-
-    func webView(
-        _: WKWebView,
-        navigationAction _: WKNavigationAction,
-        didBecome _: WKDownload
-    ) {
-//        download.delegate = xpiDownloadManager
     }
 
     func webView(

@@ -1,5 +1,5 @@
 //
-//  WebExtensionModel.swift
+//  WebExtension.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/11/24.
@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class WebExtensionModel {
+final class WebExtension {
     @Attribute(.unique)
     var id: String
     var manifest: WebExtensionManifest
@@ -22,12 +22,13 @@ final class WebExtensionModel {
     }
 }
 
-struct WebExtensionManifest: Codable {
+@Model
+final class WebExtensionManifest: Codable {
     let applications: [String: [String: String]]
     let author: String
     let browserAction: BrowserAction?
     let defaultLocale: String?
-//    let desc: String?
+    let desc: String?
     let homepageUrl: URL?
     let icons: [String: URL]?
     let manifestVersion: Int
@@ -41,7 +42,8 @@ struct WebExtensionManifest: Codable {
         case author
         case browserAction
         case defaultLocale
-//        case desc
+        case description
+        case desc
         case homepageUrl
         case icons
         case manifestVersion
@@ -56,6 +58,7 @@ struct WebExtensionManifest: Codable {
         author: String,
         browserAction: BrowserAction?,
         defaultLocale: String?,
+        desc: String?,
         homepageUrl: URL?,
         icons: [String: URL]?,
         manifestVersion: Int,
@@ -68,7 +71,7 @@ struct WebExtensionManifest: Codable {
         self.author = author
         self.browserAction = browserAction
         self.defaultLocale = defaultLocale
-//        self.desc = desc
+        self.desc = desc
         self.homepageUrl = homepageUrl
         self.icons = icons
         self.manifestVersion = manifestVersion
@@ -84,7 +87,8 @@ struct WebExtensionManifest: Codable {
         author = try container.decode(String.self, forKey: .author)
         browserAction = try container.decodeIfPresent(BrowserAction.self, forKey: .browserAction)
         defaultLocale = try container.decodeIfPresent(String.self, forKey: .defaultLocale)
-//        self.desc = try container.decodeIfPresent(String.self, forKey: .desc)
+        desc = try container.decodeIfPresent(String.self, forKey: .desc)
+        desc = try container.decodeIfPresent(String.self, forKey: .description)
         homepageUrl = try container.decodeIfPresent(URL.self, forKey: .homepageUrl)
         icons = try container.decodeIfPresent([String: URL].self, forKey: .icons)
         manifestVersion = try container.decode(Int.self, forKey: .manifestVersion)
@@ -100,7 +104,7 @@ struct WebExtensionManifest: Codable {
         try container.encode(author, forKey: .author)
         try container.encodeIfPresent(browserAction, forKey: .browserAction)
         try container.encodeIfPresent(defaultLocale, forKey: .defaultLocale)
-//        try container.encodeIfPresent(desc, forKey: .desc)
+        try container.encodeIfPresent(desc, forKey: .desc)
         try container.encodeIfPresent(homepageUrl, forKey: .homepageUrl)
         try container.encodeIfPresent(icons, forKey: .icons)
         try container.encode(manifestVersion, forKey: .manifestVersion)
@@ -111,11 +115,47 @@ struct WebExtensionManifest: Codable {
     }
 }
 
-struct BrowserAction: Codable {
+@Model
+final class BrowserAction: Codable {
     let browserStyle: Bool
     let defaultIcon: [String: URL]?
     let defaultPopup: URL?
     let defaultTitle: String
+
+    init(
+        browserStyle: Bool,
+        defaultIcon: [String: URL]?,
+        defaultPopup: URL?,
+        defaultTitle: String
+    ) {
+        self.browserStyle = browserStyle
+        self.defaultIcon = defaultIcon
+        self.defaultPopup = defaultPopup
+        self.defaultTitle = defaultTitle
+    }
+
+    enum CodingKeys: CodingKey {
+        case browserStyle
+        case defaultIcon
+        case defaultPopup
+        case defaultTitle
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        browserStyle = try container.decode(Bool.self, forKey: .browserStyle)
+        defaultIcon = try container.decodeIfPresent([String: URL].self, forKey: .defaultIcon)
+        defaultPopup = try container.decodeIfPresent(URL.self, forKey: .defaultPopup)
+        defaultTitle = try container.decode(String.self, forKey: .defaultTitle)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(browserStyle, forKey: .browserStyle)
+        try container.encodeIfPresent(defaultIcon, forKey: .defaultIcon)
+        try container.encodeIfPresent(defaultPopup, forKey: .defaultPopup)
+        try container.encode(defaultTitle, forKey: .defaultTitle)
+    }
 }
 
 struct OptionsUI: Codable {
@@ -130,7 +170,7 @@ extension WebExtensionManifest {
         author: "Test Author",
         browserAction: nil,
         defaultLocale: "en-US",
-//        desc: "Test Description",
+        desc: "Test Description",
         homepageUrl: nil,
         icons: nil,
         manifestVersion: 2,

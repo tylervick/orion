@@ -13,7 +13,7 @@ final class WebExtensionMetadataView: NSView {
             if let manifest {
                 nameLabel?.stringValue = manifest.name
                 authorLabel?.stringValue = manifest.author
-                descriptionLabel?.stringValue = ""
+                descriptionLabel?.stringValue = manifest.desc ?? ""
             }
         }
     }
@@ -41,8 +41,7 @@ final class WebExtensionMetadataView: NSView {
     private func setupViews() {
         let nameLabel = NSTextField.create(label: manifest?.name ?? "")
         let authorLabel = NSTextField.create(label: manifest?.author ?? "")
-        let descriptionLabel = NSTextField.create(label: "")
-        // etc...
+        let descriptionLabel = NSTextField.create(label: manifest?.desc ?? "")
 
         for item in [nameLabel, authorLabel, descriptionLabel] {
             addSubview(item)

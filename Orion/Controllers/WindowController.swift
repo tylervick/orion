@@ -16,8 +16,8 @@ final class WindowController: NSWindowController {
     @IBOutlet var forwardItem: NSToolbarItem!
     @IBOutlet var locationTextField: NSTextField!
 
-    private var webViewController: WebViewController? {
-        contentViewController as? WebViewController
+    private var tabViewController: TabViewController? {
+        contentViewController as? TabViewController
     }
 
     private var windowViewModel: WindowViewModel?
@@ -34,7 +34,7 @@ final class WindowController: NSWindowController {
         let configuration = ModelConfiguration(url: storeUrl, allowsSave: true)
         let container = try ModelContainer(
             for: HistoryItem.self,
-            WebExtensionModel.self,
+            WebExtension.self,
             configurations: configuration
         )
         container.mainContext.autosaveEnabled = true
@@ -42,56 +42,67 @@ final class WindowController: NSWindowController {
     }
 
     override func windowDidLoad() {
+        super.windowDidLoad()
+
         guard let container = try? makeContainer() else {
             fatalError("Failed to create ModelContainer")
         }
         let logger = Logger()
         let xpiDownloadManager = XPIDownloadManager(logger: logger)
-        windowViewModel = WindowViewModel(
+        let windowViewModel = WindowViewModel(
             logger: logger,
             xpiPublisher: xpiDownloadManager.xpiPublisher,
             modelContext: container.mainContext
         )
-        let webViewModel = WebViewModel(
+        self.windowViewModel = windowViewModel
+
+        windowViewModel.subscribeToBrowserActionExtensions(toolbar)
+        windowViewModel.subscribeToWebExtensionInstallRequest(self)
+
+        let tabViewModel = TabViewModel(
+            logger: logger,
             modelContext: container.mainContext,
-            xpiDownloadManager: xpiDownloadManager
-        )
-        contentViewController = WebViewController(viewModel: webViewModel)
-        toolbar.insertItem(
-            withItemIdentifier: NSToolbarItem.Identifier(rawValue: "Test"),
-            at: toolbar.items.count
+            xpiDownloadDelegate: xpiDownloadManager,
+            toolbarActionPublisher: windowViewModel.toolbarActionPublisher
         )
 
-        windowViewModel?.subscribeToWebExtension(self)
-
-        bindViewModel()
-    }
-
-    private func bindViewModel() {
-        webViewController?.viewModel?.$urlString
-            .receive(on: DispatchQueue.main)
+        tabViewModel.$canGoBack.link(with: &windowViewModel.$backEnabled)
+        tabViewModel.$canGoForward.link(with: &windowViewModel.$forwardEnabled)
+        tabViewModel.$activeUrlString.removeDuplicates().receive(on: DispatchQueue.main)
             .sink { [weak self] urlString in
-                print("Setting locationTextField string value to \(urlString)")
                 self?.locationTextField.stringValue = urlString
-            }
-            .store(in: &cancelBag)
+            }.store(in: &cancelBag)
+
+        if let tabViewController = storyboard?
+            .instantiateController(
+                withIdentifier: "tabViewController"
+            ) as? TabViewController
+        {
+            tabViewController.tabViewModel = tabViewModel
+            tabViewController.view.setFrameSize(NSSize(width: 1280, height: 720))
+            contentViewController = tabViewController
+        }
     }
 
     @IBAction func backButtonClicked(_: NSToolbarItem) {
-        webViewController?.performBack()
+        windowViewModel?.publishToolbarAction(.back)
     }
 
     @IBAction func forwardButtonClicked(_: NSToolbarItem) {
-        webViewController?.performForward()
+        windowViewModel?.publishToolbarAction(.forward)
     }
 
     @IBAction func reloadButtonClicked(_: NSToolbarItem) {
-        webViewController?.performReload()
+        windowViewModel?.publishToolbarAction(.reload)
+    }
+
+    @IBAction func newTabButtonClicked(_: NSToolbarItem) {
+        windowViewModel?.publishToolbarAction(.newTab)
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
         if let webExManagementViewController = segue
-            .destinationController as? WebExtensionManagementViewController
+            .destinationController as? WebExtManagementViewController
         {
             webExManagementViewController.viewModel = windowViewModel?
                 .makeWebExManagementViewModel()
@@ -104,11 +115,11 @@ extension WindowController: Subscriber {
         subscription.request(.max(1))
     }
 
-    func receive(_ viewModel: WebExtensionViewModel) -> Subscribers.Demand {
+    func receive(_ viewModel: WebExtInstallViewModel) -> Subscribers.Demand {
         if let vc = storyboard?
             .instantiateController(
                 withIdentifier: "extensionInstallVC"
-            ) as? WebExtensionInstallViewController
+            ) as? WebExtInstallViewController
         {
             vc.viewModel = viewModel
             contentViewController?.presentAsSheet(vc)
@@ -119,24 +130,13 @@ extension WindowController: Subscriber {
     func receive(completion _: Subscribers.Completion<Never>) {}
 }
 
-extension WindowController: NSToolbarDelegate {
-    func toolbar(
-        _: NSToolbar,
-        itemForItemIdentifier _: NSToolbarItem.Identifier,
-        willBeInsertedIntoToolbar _: Bool
-    ) -> NSToolbarItem? {
-//        print("Test2")
-        nil
-    }
-}
-
 extension WindowController: NSToolbarItemValidation {
     func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
         switch item {
         case backItem:
-            webViewController?.viewModel?.canGoBack ?? false
+            windowViewModel?.backEnabled ?? false
         case forwardItem:
-            webViewController?.viewModel?.canGoForward ?? false
+            windowViewModel?.forwardEnabled ?? false
         default:
             true
         }
@@ -150,7 +150,7 @@ extension WindowController: NSTextFieldDelegate {
         doCommandBy commandSelector: Selector
     ) -> Bool {
         if commandSelector == #selector(NSResponder.insertNewline(_:)) {
-            webViewController?.loadUrlString(locationTextField.stringValue)
+            windowViewModel?.publishToolbarAction(.urlSubmitted(locationTextField.stringValue))
             return true
         }
         return false

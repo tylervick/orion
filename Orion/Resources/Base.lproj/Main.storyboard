@@ -687,8 +687,7 @@
                 <windowController id="B8D-0N-5wS" customClass="WindowController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="480" height="270"/>
+                        <rect key="contentRect" x="609" y="381" width="480" height="270"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <toolbar key="toolbar" implicitIdentifier="BF2280D5-9D13-4583-9A8E-98DA88D966D2" centeredItem="EPg-ef-yCJ" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="ePJ-5n-yfr">
                             <allowedToolbarItems>
@@ -710,6 +709,11 @@
                                 <toolbarItem implicitItemIdentifier="3CC1A2F0-704C-4EE4-A366-4231B1804808" label="Manage Extensions" paletteLabel="Manage Extensions" tag="-1" image="puzzlepiece.extension" catalog="system" bordered="YES" sizingBehavior="auto" id="B3X-60-7yn" userLabel="Extension Item">
                                     <connections>
                                         <segue destination="3kH-Mv-ca0" kind="modal" identifier="extensionManagementSegue" id="RJc-AL-uuN"/>
+                                    </connections>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="85CCAA82-CA80-45F4-8FA6-7DF7DBA14BC5" label="New Tab" paletteLabel="New Tab" tag="-1" image="plus" catalog="system" bordered="YES" sizingBehavior="auto" id="bo2-pL-d31">
+                                    <connections>
+                                        <action selector="newTabButtonClicked:" target="B8D-0N-5wS" id="mak-jJ-nH8"/>
                                     </connections>
                                 </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="7B4EFCD1-4BE9-4216-8A1C-1FA1766EB8F5" label="URL Bar" paletteLabel="URL Bar" visibilityPriority="3" sizingBehavior="auto" id="EPg-ef-yCJ" userLabel="Location">
@@ -738,10 +742,8 @@
                                 <toolbarItem reference="3QO-rr-6J5"/>
                                 <toolbarItem reference="e7c-pv-4Nn"/>
                                 <toolbarItem reference="B3X-60-7yn"/>
+                                <toolbarItem reference="bo2-pL-d31"/>
                             </defaultToolbarItems>
-                            <connections>
-                                <outlet property="delegate" destination="B8D-0N-5wS" id="sWi-mf-UqD"/>
-                            </connections>
                         </toolbar>
                         <connections>
                             <outlet property="delegate" destination="B8D-0N-5wS" id="98r-iN-zZc"/>
@@ -752,6 +754,7 @@
                         <outlet property="forwardItem" destination="cgg-Ih-uNa" id="DwX-SF-D2w"/>
                         <outlet property="locationTextField" destination="6WM-5Q-JZk" id="1c5-Qz-6tj"/>
                         <outlet property="toolbar" destination="ePJ-5n-yfr" id="bTV-KQ-jhd"/>
+                        <outlet property="window" destination="IQv-IB-iLA" id="kxd-1Q-kPs"/>
                     </connections>
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -774,7 +777,7 @@
         <!--Extension Install View Controller-->
         <scene sceneID="ELd-RN-zwC">
             <objects>
-                <viewController storyboardIdentifier="extensionInstallVC" id="Y9Q-nR-ZP1" userLabel="Extension Install View Controller" customClass="WebExtensionInstallViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="extensionInstallVC" id="Y9Q-nR-ZP1" userLabel="Extension Install View Controller" customClass="WebExtInstallViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="LuI-RU-jbN">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -803,24 +806,36 @@ Gw
                                 </connections>
                             </button>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="AOy-4B-I5o" userLabel="Extension Metadata Container View" customClass="WebExtensionMetadataView" customModule="Orion" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="60" width="450" height="240"/>
+                                <rect key="frame" x="0.0" y="60" width="450" height="178"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="240" id="B97-Bh-GuH"/>
+                                    <constraint firstAttribute="height" constant="178" id="B97-Bh-GuH"/>
                                 </constraints>
                             </customView>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BKn-Sh-8ge">
+                                <rect key="frame" x="20" y="264" width="412" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Install Extension?" id="HPa-Uq-QeN">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="pAd-XQ-Rsa" firstAttribute="leading" secondItem="Bfo-Ee-rbf" secondAttribute="trailing" constant="12" id="4fp-Na-i1O"/>
-                            <constraint firstItem="AOy-4B-I5o" firstAttribute="top" secondItem="LuI-RU-jbN" secondAttribute="top" id="64Z-P1-4Eg"/>
+                            <constraint firstItem="AOy-4B-I5o" firstAttribute="top" secondItem="LuI-RU-jbN" secondAttribute="top" constant="62" id="64Z-P1-4Eg"/>
                             <constraint firstAttribute="trailing" secondItem="AOy-4B-I5o" secondAttribute="trailing" id="BaC-wZ-cRf"/>
                             <constraint firstItem="Bfo-Ee-rbf" firstAttribute="baseline" secondItem="pAd-XQ-Rsa" secondAttribute="baseline" id="FMi-vv-3jy"/>
+                            <constraint firstItem="BKn-Sh-8ge" firstAttribute="top" secondItem="LuI-RU-jbN" secondAttribute="top" constant="20" symbolic="YES" id="G3a-Aw-njY"/>
                             <constraint firstItem="AOy-4B-I5o" firstAttribute="leading" secondItem="LuI-RU-jbN" secondAttribute="leading" id="NJq-7A-PRX"/>
                             <constraint firstAttribute="bottom" secondItem="Bfo-Ee-rbf" secondAttribute="bottom" constant="20" symbolic="YES" id="VpC-od-eEU"/>
                             <constraint firstAttribute="trailing" secondItem="pAd-XQ-Rsa" secondAttribute="trailing" constant="20" id="gus-GF-Kz3"/>
+                            <constraint firstItem="BKn-Sh-8ge" firstAttribute="leading" secondItem="LuI-RU-jbN" secondAttribute="leading" constant="22" id="k9C-a1-4Si"/>
                             <constraint firstItem="Bfo-Ee-rbf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="LuI-RU-jbN" secondAttribute="leading" constant="20" symbolic="YES" id="o6i-It-c0j"/>
+                            <constraint firstItem="BKn-Sh-8ge" firstAttribute="trailing" secondItem="pAd-XQ-Rsa" secondAttribute="trailing" id="yUO-8t-ivg"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="installPrompt" destination="BKn-Sh-8ge" id="QZS-bB-yKU"/>
                         <outlet property="metadataContainerView" destination="AOy-4B-I5o" id="mdd-s7-kfy"/>
                     </connections>
                 </viewController>
@@ -831,7 +846,7 @@ Gw
         <!--Extension Management View Controller-->
         <scene sceneID="Ir6-2u-li3">
             <objects>
-                <viewController storyboardIdentifier="extensionManagementVC" id="3kH-Mv-ca0" userLabel="Extension Management View Controller" customClass="WebExtensionManagementViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="extensionManagementVC" id="3kH-Mv-ca0" userLabel="Extension Management View Controller" customClass="WebExtManagementViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="zWT-Fi-Lcb">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -904,13 +919,34 @@ Gw
                 </viewController>
                 <customObject id="J4h-uS-FZJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="614" y="250"/>
+            <point key="canvasLocation" x="652" y="235"/>
+        </scene>
+        <!--Tab View Controller-->
+        <scene sceneID="oxc-Pr-gju">
+            <objects>
+                <tabViewController storyboardIdentifier="tabViewController" id="igR-ek-fLQ" customClass="TabViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabView key="tabView" type="noTabsNoBorder" id="6hy-Og-wcs">
+                        <rect key="frame" x="0.0" y="0.0" width="1280" height="720"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <font key="font" metaFont="message"/>
+                        <connections>
+                            <outlet property="delegate" destination="igR-ek-fLQ" id="X27-aD-zWK"/>
+                        </connections>
+                    </tabView>
+                    <connections>
+                        <outlet property="tabView" destination="6hy-Og-wcs" id="QA9-Wk-KHB"/>
+                    </connections>
+                </tabViewController>
+                <customObject id="1JX-gY-BbL" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="652" y="828"/>
         </scene>
     </scenes>
     <resources>
         <image name="NSGoBackTemplate" width="12" height="17"/>
         <image name="NSGoForwardTemplate" width="12" height="17"/>
         <image name="NSRefreshTemplate" width="18" height="21"/>
+        <image name="plus" catalog="system" width="14" height="13"/>
         <image name="puzzlepiece.extension" catalog="system" width="19" height="15"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

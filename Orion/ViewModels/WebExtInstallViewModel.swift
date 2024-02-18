@@ -1,5 +1,5 @@
 //
-//  WebExtensionViewModel.swift
+//  WebExtInstallViewModel.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/11/24.
@@ -11,16 +11,16 @@ import SwiftData
 import UniformTypeIdentifiers
 import ZIPFoundation
 
-enum Errors: Error {
-    case manifestMissingOrMalformed
-}
-
-final class WebExtensionViewModel: ObservableObject {
+final class WebExtInstallViewModel: ObservableObject {
     @Published var manifest: WebExtensionManifest?
     @Published var xpiUrl: URL
 
     private let modelContext: ModelContext
     private let logger: Logger
+
+    enum Errors: Error {
+        case manifestMissingOrMalformed
+    }
 
     init(modelContext: ModelContext, xpiUrl: URL, logger: Logger) throws {
         self.xpiUrl = xpiUrl
@@ -55,29 +55,23 @@ final class WebExtensionViewModel: ObservableObject {
 
         // Move the xpi archive from the tmp staging area to app support
         let id = UUID().uuidString
-        let webExtDir = try FileManager.default.url(
+        let installUrl = try FileManager.default.url(
             for: .applicationSupportDirectory,
             in: .userDomainMask,
             appropriateFor: nil,
             create: true
-        ).appending(path: "WebExtensions")
+        )
+        .appending(path: "WebExtensions")
+        .appending(component: id)
 
-        if !FileManager.default.fileExists(atPath: webExtDir.path()) {
-            try FileManager.default.createDirectory(
-                at: webExtDir,
-                withIntermediateDirectories: true
-            )
-        }
-
-        let installUrl = webExtDir.appending(component: id)
-            .appendingPathExtension(UTType.xpi.preferredFilenameExtension ?? "xpi")
         if FileManager.default.fileExists(atPath: installUrl.path()) {
             try FileManager.default.removeItem(at: installUrl)
         }
 
-        try FileManager.default.moveItem(at: xpiUrl, to: installUrl)
+        try FileManager.default.createDirectory(at: installUrl, withIntermediateDirectories: true)
+        try FileManager.default.unzipItem(at: xpiUrl, to: installUrl)
 
-        let model = WebExtensionModel(id: id, manifest: manifest, path: installUrl)
+        let model = WebExtension(id: id, manifest: manifest, path: installUrl)
         modelContext.insert(model)
         try modelContext.save()
     }

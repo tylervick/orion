@@ -1,5 +1,5 @@
 //
-//  WebExtensionInstallViewController.swift
+//  WebExtInstallViewController.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/11/24.
@@ -8,10 +8,11 @@
 import Cocoa
 import os.log
 
-final class WebExtensionInstallViewController: NSViewController {
+final class WebExtInstallViewController: NSViewController {
+    @IBOutlet var installPrompt: NSTextField!
     @IBOutlet var metadataContainerView: NSView!
 
-    var viewModel: WebExtensionViewModel?
+    var viewModel: WebExtInstallViewModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,9 @@ final class WebExtensionInstallViewController: NSViewController {
             frame: metadataContainerView.frame,
             manifest: manifest
         )
+
+        installPrompt.stringValue = "Install \(manifest.name)?"
+
         extensionMetadataView.translatesAutoresizingMaskIntoConstraints = false
         metadataContainerView.addSubview(extensionMetadataView)
 
