@@ -39,7 +39,6 @@ final class TabViewModel: ObservableObject {
 
     func subscribeNewTabAction(_ onNewTab: @escaping (NSTabViewItem) -> Void) {
         toolbarActionPublisher
-            .print()
             .filter {
                 $0 == .newTab
             }

@@ -46,14 +46,14 @@ final class WebViewModel: NSObject, ObservableObject {
     }
 
     func loadUrl(_ urlString: String, for webView: WKWebView) {
-        parseUrlString(urlString) { res in
+        parseUrlString(urlString) { [weak self] res in
             switch res {
             case let .success(url):
                 DispatchQueue.main.async {
                     webView.load(URLRequest(url: url))
                 }
             case let .failure(error):
-                print("Failed to lookup domain: \(urlString) with error: \(error)")
+                self?.logger.error("Failed to lookup domain: \(urlString) with error: \(error)")
             }
         }
     }
@@ -99,7 +99,7 @@ extension WebViewModel: WKNavigationDelegate {
         canGoBack = webView.canGoBack
         canGoForward = webView.canGoForward
         if let url = webView.url, urlString != url.absoluteString {
-            print("setting url from navigation: \(url)")
+            logger.debug("setting url from navigation: \(url)")
             urlString = url.absoluteString
         }
     }

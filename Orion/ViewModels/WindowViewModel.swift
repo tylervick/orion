@@ -45,7 +45,6 @@ final class WindowViewModel: NSObject, ObservableObject {
         super.init()
 
         NotificationCenter.default.publisher(for: .NSManagedObjectContextObjectsDidChange)
-            .print(".NSManagedObjectContextObjectsDidChange")
             .sink { [weak self] _ in
                 self?.loadExtensions()
             }
