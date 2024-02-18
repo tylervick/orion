@@ -1,3 +1,23 @@
+<p align="center">
+  <img src="Orion/Resources/Assets.xcassets/AppIcon.appiconset/icon_256@2x.png" alt="Logo" height=170>
+</p>
+<h1 align="center">orion</h1>
+
+<p align="center">
+<img src="https://img.shields.io/github/stars/tylervick/orion" alt="stars">
+</p>
+
+<div align="center">
+  <a href="#screenshots">Screenshots</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="#specifications">Specifications</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="#build">Build</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="https://github.com/tylervick/orion/issues/new">Issues</a>
+  <br />
+</div>
+
 # orion
 
 ## Screenshots
@@ -67,3 +87,7 @@ cd ..
 - To clear history/extensions, delete the db file
   - `rm -rf ~/Library/Containers/com.tylervick.orion/Data/Documents/orion.store`
 - Uninstalling an extension works, but the button doesn't disappear until the app is relaunched
+
+### Attributions
+
+- Orion [Logo](https://kagi.com/orion/press-kit/icon-main-logo.png) by [Kagi](https://kagi.com/orion/press-kit/). Modifications were made to the original work for this project.
