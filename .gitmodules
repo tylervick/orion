@@ -1,4 +1,4 @@
 [submodule "WebKit"]
     path = WebKit
-    url = https://github.com/WebKit/WebKit.git
+    url = git@github.com:tylervick/WebKit.git
     branch = main
