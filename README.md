@@ -118,6 +118,8 @@ Update 2024-02-25
 - This required the removal of the JSBridge History methods and instead hook into WebKit's NavigationState object.
   - NavigationState already captures the navigation changes through a private history API, so we can likely just expose this functionality publicly.
   - Additionally, the didUpdateHistoryTitle method is also exposed in order to populate the history items with correct titles.
+- While we now have a single delegate method that captures all navigation events and satisfies the project requirement, this behavior is not the same as conventional browsers. Beyond basic redirects, there are other patterns that fire multiple navigation events when loading a "single" page.
+  - For example, navigating to `https://theverge.com` fires 3-4 navigation events on the initial page load. The user only experiences a single "navigation" event, but our implementation records multiple history items.
 
 ### Attributions
 
