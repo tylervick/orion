@@ -47,9 +47,6 @@ Create a simple macOS app called Orion using Swift and AppKit. The app UI will c
 ### Prerequisites
 
 - Xcode 15.X (Tested on 15.2 (15C500b))
-- Bun
-    - `brew install bun`
-    - Or see https://github.com/oven-sh/bun?tab=readme-ov-file#install
 
 ### Steps
 
@@ -65,22 +62,32 @@ Tools/Scripts/build-webkit --release
 cd ..
 ```
 
-#### 3. Generate JS Bridge
-```
-cd OrionJSBridge
-bun install
-bun run build
-cd ..
-```
-
-#### 4. Open/build the project
-##### 4.1 Open the project
+#### 3. Open/build the project
+##### 3.1 Open the project
 - `open Orion.xcodeproj`
 
-##### 4.2 Build the project
+##### 3.2 Build the project
 - "Product" -> "Build" in Xcode
 - Or `xcodebuild -scheme Orion -configuration Release`
 
+
+### (optional) Build OrionJSBridge
+
+The OrionJSBridge payload contains a pre-built `browser.umd.js` file, used to communicate between the app and the web extensions. To build the payload from source:
+
+#### 1. Install Bun (recommended) or NodeJS
+
+- Bun
+    - `brew install bun`
+    - Or see https://github.com/oven-sh/bun?tab=readme-ov-file#install
+
+#### 2. Build JS Bridge
+```
+cd OrionJSBridge
+bun install
+bun run xcode
+cd ..
+```
 
 ### WIP Notes
 - There's currently no UI for closing tabs, the window must be relaunched to close tabs
@@ -105,7 +112,12 @@ Some difficulties encountered:
 - Other misc
  - Having used MVVM more recently, organizing logic into AppKit's opinionated MVC left some pattern inconsistencies. With more time, I would perform an audit for a stricter separation of concerns.
 
-
+Update 2024-02-25
+- Reworking the history capture mechanism to satisfy the requirement:
+> Implement a custom WebKit navigation delegate method which will be fired every time when navigation changes (including manipulated navigation through History API).
+- This required the removal of the JSBridge History methods and instead hook into WebKit's NavigationState object.
+  - NavigationState already captures the navigation changes through a private history API, so we can likely just expose this functionality publicly.
+  - Additionally, the didUpdateHistoryTitle method is also exposed in order to populate the history items with correct titles.
 
 ### Attributions
 
