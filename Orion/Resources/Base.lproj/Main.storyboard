@@ -23,7 +23,11 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
+                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                            <connections>
+                                                <segue destination="EyB-Y6-yLO" kind="show" id="RZy-Kt-WaT"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                                         <menuItem title="Services" id="NMo-om-nkz">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -681,10 +685,48 @@
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
         </scene>
-        <!--Window Controller-->
+        <!--Preferences Window Controller-->
+        <scene sceneID="K7m-S3-uJx">
+            <objects>
+                <windowController id="EyB-Y6-yLO" userLabel="Preferences Window Controller" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Een-Da-Xd9">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="255" y="323" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+                        <view key="contentView" id="jH1-3l-fI4">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="EyB-Y6-yLO" id="lyg-vD-acb"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="iXs-dz-50j" kind="relationship" relationship="window.shadowedContentViewController" id="SGT-tJ-f13"/>
+                    </connections>
+                </windowController>
+                <customObject id="782-aF-ba5" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1" y="-231"/>
+        </scene>
+        <!--Preferences View Controller-->
+        <scene sceneID="95E-6S-EUq">
+            <objects>
+                <viewController id="iXs-dz-50j" userLabel="Preferences View Controller" sceneMemberID="viewController">
+                    <view key="view" id="RFL-Xj-s09">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="4Pa-Uu-nJV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="592" y="-231"/>
+        </scene>
+        <!--Web Window Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
-                <windowController id="B8D-0N-5wS" customClass="WindowController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
+                <windowController id="B8D-0N-5wS" userLabel="Web Window Controller" customClass="WebWindowController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <rect key="contentRect" x="609" y="381" width="480" height="270"/>
@@ -708,7 +750,7 @@
                                 </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="3CC1A2F0-704C-4EE4-A366-4231B1804808" label="Manage Extensions" paletteLabel="Manage Extensions" tag="-1" image="puzzlepiece.extension" catalog="system" bordered="YES" sizingBehavior="auto" id="B3X-60-7yn" userLabel="Extension Item">
                                     <connections>
-                                        <segue destination="3kH-Mv-ca0" kind="modal" identifier="extensionManagementSegue" id="RJc-AL-uuN"/>
+                                        <segue destination="3kH-Mv-ca0" kind="sheet" identifier="extensionManagementSegue" id="RJc-AL-uuN"/>
                                     </connections>
                                 </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="85CCAA82-CA80-45F4-8FA6-7DF7DBA14BC5" label="New Tab" paletteLabel="New Tab" tag="-1" image="plus" catalog="system" bordered="YES" sizingBehavior="auto" id="bo2-pL-d31">
@@ -718,7 +760,7 @@
                                 </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="7B4EFCD1-4BE9-4216-8A1C-1FA1766EB8F5" label="URL Bar" paletteLabel="URL Bar" visibilityPriority="3" sizingBehavior="auto" id="EPg-ef-yCJ" userLabel="Location">
                                     <nil key="toolTip"/>
-                                    <textField key="view" verticalHuggingPriority="750" contentType="url" id="6WM-5Q-JZk">
+                                    <textField key="view" focusRingType="none" verticalHuggingPriority="750" contentType="url" id="6WM-5Q-JZk">
                                         <rect key="frame" x="0.0" y="14" width="480" height="22"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Search or enter website name" usesSingleLineMode="YES" bezelStyle="round" id="bVb-rP-Krc">
@@ -726,6 +768,7 @@
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
+                                        <accessibility identifier="locationTextField"/>
                                         <connections>
                                             <outlet property="delegate" destination="B8D-0N-5wS" id="62V-IR-dD7"/>
                                         </connections>
@@ -765,24 +808,24 @@
         <scene sceneID="hIz-AP-VOD">
             <objects>
                 <viewController storyboardIdentifier="webVC" id="XfG-lQ-9wD" customClass="WebViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="m2S-Jp-Qdl">
+                    <view key="view" identifier="webView" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </view>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="590"/>
+            <point key="canvasLocation" x="-231" y="632"/>
         </scene>
         <!--Extension Install View Controller-->
         <scene sceneID="ELd-RN-zwC">
             <objects>
                 <viewController storyboardIdentifier="extensionInstallVC" id="Y9Q-nR-ZP1" userLabel="Extension Install View Controller" customClass="WebExtInstallViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="LuI-RU-jbN">
+                    <view key="view" identifier="webExtInstallView" id="LuI-RU-jbN">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pAd-XQ-Rsa">
+                            <button identifier="webExtInstallInstallButton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pAd-XQ-Rsa">
                                 <rect key="frame" x="367" y="13" width="70" height="32"/>
                                 <buttonCell key="cell" type="push" title="Install" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DeC-zU-RE0">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -792,7 +835,7 @@
                                     <action selector="installButtonClicked:" target="Y9Q-nR-ZP1" id="IyS-C3-IRd"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bfo-Ee-rbf">
+                            <button identifier="webExtInstallCancelButton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Bfo-Ee-rbf">
                                 <rect key="frame" x="293" y="13" width="76" height="32"/>
                                 <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2aG-82-YpQ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -805,13 +848,13 @@ Gw
                                     <action selector="cancelButtonClicked:" target="Y9Q-nR-ZP1" id="VJj-bt-LvZ"/>
                                 </connections>
                             </button>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="AOy-4B-I5o" userLabel="Extension Metadata Container View" customClass="WebExtensionMetadataView" customModule="Orion" customModuleProvider="target">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="AOy-4B-I5o" userLabel="Extension Metadata Container View" customClass="WebExtMetadataView" customModule="Orion" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="60" width="450" height="178"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="178" id="B97-Bh-GuH"/>
                                 </constraints>
                             </customView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BKn-Sh-8ge">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BKn-Sh-8ge">
                                 <rect key="frame" x="20" y="264" width="412" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Install Extension?" id="HPa-Uq-QeN">
                                     <font key="font" metaFont="system"/>
@@ -841,17 +884,17 @@ Gw
                 </viewController>
                 <customObject id="XdW-G5-oCg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-414" y="731"/>
+            <point key="canvasLocation" x="1301" y="265"/>
         </scene>
         <!--Extension Management View Controller-->
         <scene sceneID="Ir6-2u-li3">
             <objects>
-                <viewController storyboardIdentifier="extensionManagementVC" id="3kH-Mv-ca0" userLabel="Extension Management View Controller" customClass="WebExtManagementViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="zWT-Fi-Lcb">
+                <viewController storyboardIdentifier="extensionManagementVC" id="3kH-Mv-ca0" userLabel="Extension Management View Controller" customClass="WebExtManageViewController" customModule="Orion" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" identifier="webExtManageView" id="zWT-Fi-Lcb">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PoC-MS-9tt">
+                            <button identifier="webExtManageCloseButton" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PoC-MS-9tt">
                                 <rect key="frame" x="368" y="13" width="69" height="32"/>
                                 <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="nos-nH-1lz">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -862,7 +905,7 @@ Gw
                                     <action selector="closeButtonPressed:" target="3kH-Mv-ca0" id="0Ax-Hh-k6R"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IgF-hd-Ats">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IgF-hd-Ats">
                                 <rect key="frame" x="18" y="264" width="70" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Extensions" id="6D8-gp-Zpd">
                                     <font key="font" metaFont="system"/>
@@ -919,7 +962,7 @@ Gw
                 </viewController>
                 <customObject id="J4h-uS-FZJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="652" y="235"/>
+            <point key="canvasLocation" x="839" y="265"/>
         </scene>
         <!--Tab View Controller-->
         <scene sceneID="oxc-Pr-gju">
@@ -939,7 +982,7 @@ Gw
                 </tabViewController>
                 <customObject id="1JX-gY-BbL" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="652" y="828"/>
+            <point key="canvasLocation" x="668" y="868"/>
         </scene>
     </scenes>
     <resources>

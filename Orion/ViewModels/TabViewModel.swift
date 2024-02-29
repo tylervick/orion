@@ -19,7 +19,7 @@ final class TabViewModel: ObservableObject {
     private let logger: Logger
     private let modelContext: ModelContext
     private let xpiDownloadDelegate: WKDownloadDelegate?
-    private let toolbarActionPublisher: AnyPublisher<ToolbarAction, Never>
+    private let toolbarActionPublisher: AnyPublisher<WebWindowToolbarAction, Never>
 
     private var cancelBag = Set<AnyCancellable>()
 
@@ -29,7 +29,7 @@ final class TabViewModel: ObservableObject {
         logger: Logger,
         modelContext: ModelContext,
         xpiDownloadDelegate: WKDownloadDelegate?,
-        toolbarActionPublisher: AnyPublisher<ToolbarAction, Never>
+        toolbarActionPublisher: AnyPublisher<WebWindowToolbarAction, Never>
     ) {
         self.logger = logger
         self.modelContext = modelContext

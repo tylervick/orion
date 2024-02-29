@@ -7,37 +7,58 @@
 
 import XCTest
 
+extension XCUIElement {
+    static var webWindow: XCUIElement {
+        XCUIApplication().windows.element(matching: .identifier(equals: "webWindow"))
+    }
+
+    static var urlTextField: XCUIElement {
+        XCUIApplication().textFields.element(matching: .label(equals: "URL Bar"))
+    }
+
+    static var manageExtensionsButton: XCUIElement {
+        XCUIApplication().buttons.element(matching: .label(equals: "Manage Extensions"))
+    }
+}
+
+extension NSPredicate {
+    static func label(equals expectedLabel: String) -> NSPredicate {
+        NSPredicate(format: "label = %@", expectedLabel)
+    }
+
+    static func identifier(equals expectedId: String) -> NSPredicate {
+        NSPredicate(format: "identifier = %@", expectedId)
+    }
+}
+
 final class OrionUITests: XCTestCase {
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in
-        // the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation -
-        // required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in
-        // the class.
-    }
-
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
     func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
+        measure(metrics: [XCTApplicationLaunchMetric()]) {
+            XCUIApplication().launch()
         }
+    }
+
+    func testWindowIsDisplayed() throws {
+        XCUIApplication().launch()
+        XCTAssert(XCUIElement.webWindow.isHittable)
+    }
+    
+    func testNavigateToValidURL() throws {
+        XCUIApplication().launch()
+        XCTAssert(XCUIElement.urlTextField.isHittable)
+        XCUIElement.urlTextField.tap()
+        XCUIElement.urlTextField.typeKey("a", modifierFlags: .command)
+        XCUIElement.urlTextField.typeText("https://example.com\n")
+    }
+    
+    func testOpenWebExtManage() throws {
+        XCUIApplication().launch()
+        XCTAssert(XCUIElement.manageExtensionsButton.isHittable)
+        XCUIElement.manageExtensionsButton.click()
+        XCTAssert(XCUIApplication().sheets.firstMatch.isHittable)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  WebExtManagementViewController.swift
+//  WebExtManageViewController.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/10/24.
@@ -13,11 +13,11 @@ private extension NSUserInterfaceItemIdentifier {
         NSUserInterfaceItemIdentifier(rawValue: "WebExtManagementCollectionViewItem")
 }
 
-final class WebExtManagementViewController: NSViewController {
+final class WebExtManageViewController: NSViewController {
     @IBOutlet var closeButton: NSButton!
     @IBOutlet var collectionView: NSCollectionView!
 
-    var viewModel: WebExtManagementViewModel?
+    var viewModel: WebExtManageViewModel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +29,7 @@ final class WebExtManagementViewController: NSViewController {
         collectionView.collectionViewLayout = layout
 
         collectionView.register(
-            WebExtManagementCollectionViewItem.self,
+            WebExtManageCollectionViewItem.self,
             forItemWithIdentifier: .extensionCollectionViewItem
         )
     }
@@ -39,7 +39,7 @@ final class WebExtManagementViewController: NSViewController {
     }
 }
 
-extension WebExtManagementViewController: NSCollectionViewDataSource {
+extension WebExtManageViewController: NSCollectionViewDataSource {
     final class UninstallButton: NSButton {
         var webExtension: WebExtension?
     }
@@ -60,7 +60,7 @@ extension WebExtManagementViewController: NSCollectionViewDataSource {
         if let data = viewModel?.extensions[indexPath.item] {
             item.representedObject = data
 
-            if let webExtensionMetadataView = item as? WebExtManagementCollectionViewItem {
+            if let webExtensionMetadataView = item as? WebExtManageCollectionViewItem {
                 let uninstallButton = UninstallButton(
                     title: "Uninstall",
                     target: self,
@@ -92,4 +92,4 @@ extension WebExtManagementViewController: NSCollectionViewDataSource {
     }
 }
 
-extension WebExtManagementViewController: NSCollectionViewDelegate {}
+extension WebExtManageViewController: NSCollectionViewDelegate {}

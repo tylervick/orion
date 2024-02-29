@@ -10,12 +10,12 @@ import SwiftData
 
 @Model
 final class HistoryItem {
-    var url: URL?
+    var url: String?
     var title: String?
     var visitTime: Date?
 
     init(
-        url: URL? = nil,
+        url: String? = nil,
         title: String? = nil,
         visitTime: Date? = nil
     ) {

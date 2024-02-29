@@ -1,5 +1,5 @@
 //
-//  XPIDownloadManager.swift
+//  WebExtDownloadManager.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/15/24.
@@ -10,7 +10,7 @@ import Foundation
 import os.log
 import WebKit
 
-final class XPIDownloadManager: NSObject, WKDownloadDelegate {
+final class WebExtDownloadManager: NSObject, WKDownloadDelegate {
     private var pendingDownloads = [WKDownload: URL]()
     private var downloadFinishedSubject = PassthroughSubject<URL, Never>()
 

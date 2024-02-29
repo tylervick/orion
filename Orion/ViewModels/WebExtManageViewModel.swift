@@ -1,5 +1,5 @@
 //
-//  WebExtManagementViewModel.swift
+//  WebExtManageViewModel.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/14/24.
@@ -10,7 +10,7 @@ import Foundation
 import os.log
 import SwiftData
 
-final class WebExtManagementViewModel: ObservableObject {
+final class WebExtManageViewModel: ObservableObject {
     @Published var extensions: [WebExtension] = []
 
     private let modelContext: ModelContext

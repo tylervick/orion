@@ -14,7 +14,7 @@ import WebKit
 
 @objc
 final class WebViewModel: NSObject, ObservableObject {
-    @Published var urlString: String = "about:blank"
+    @Published var urlString: String = aboutBlank
     @Published var canGoBack: Bool = false
     @Published var canGoForward: Bool = false
     @Published var isLoading: Bool = false
@@ -23,7 +23,7 @@ final class WebViewModel: NSObject, ObservableObject {
     private let logger: Logger
     let modelContext: ModelContext
     let xpiDownloadManager: WKDownloadDelegate?
-    let configProviders: [WKConfigurationProviding]
+    let configProviders: [WebViewConfiguring]
 
     private lazy var cancelBag = Set<AnyCancellable>()
 
@@ -32,8 +32,7 @@ final class WebViewModel: NSObject, ObservableObject {
         self.modelContext = modelContext
         self.xpiDownloadManager = xpiDownloadManager
         configProviders = [
-            WKExtensionAPIBridge(modelContext: modelContext),
-            WKPageBridge(modelContext: modelContext),
+            WebExtMessageHandler(logger: logger, modelContext: modelContext),
         ]
         super.init()
     }
@@ -41,83 +40,89 @@ final class WebViewModel: NSObject, ObservableObject {
     func loadUserContentScripts(for webView: WKWebView) {
         // TODO: Get content scripts from WebExtensions
         for configProvider in configProviders {
-            configProvider.configure(webView: webView)
+            configProvider.configure(webViewConfiguration: webView.configuration)
         }
     }
 
-    func loadUrl(_ urlString: String, for webView: WKWebView) {
-        parseUrlString(urlString) { [weak self] res in
-            switch res {
-            case let .success(url):
-                DispatchQueue.main.async {
-                    webView.load(URLRequest(url: url))
-                }
-            case let .failure(error):
-                self?.logger.error("Failed to lookup domain: \(urlString) with error: \(error)")
+    func load(urlString: String, for webView: WKWebView) {
+        do {
+            let url = try parse(urlString: urlString)
+            DispatchQueue.main.async {
+                webView.load(URLRequest(url: url))
             }
+        } catch {
+            logger.error("Failed to create URL from input: \(urlString)")
         }
     }
 
     func addHistoryItem(title: String?, url: URL?) {
-        let historyItem = HistoryItem(url: url, title: title, visitTime: Date())
+        let historyItem = HistoryItem(url: url?.absoluteString, title: title, visitTime: Date())
         modelContext.insert(historyItem)
     }
+    
+    func updateHistoryItem(newTitle title: String, forUrl url: URL) {
+        let urlString = url.absoluteString
+        let predicate = #Predicate<HistoryItem> {
+            $0.url == urlString
+        }
+        let descriptor = FetchDescriptor<HistoryItem>(predicate: predicate)
+        do {
+            let items = try modelContext.fetch(descriptor)
+            items.forEach { $0.title = title }
+            try modelContext.save()
+        } catch {
+            logger.error("Failed to fetch items for url \(url) with error \(error)")
+        }
+    }
 
-    private func parseUrlString(
-        _ urlString: String,
-        completion: @escaping (Result<URL, Error>) -> Void
-    ) {
+    private func parse(urlString: String) throws -> URL {
+        // If the user entered a valid URL, use it
         if let url = try? URL(urlString, strategy: .url.host(.required)) {
-            completion(.success(url))
-            return
+            return url
+        }
+        
+        // Next, attempt to "fix" the URL by adding a scheme.
+        // E.g. the input "google.com" is not a valid URL, but "https://google.com" is.
+        // TODO: Perform a DNS lookup to first check if the "domain" is valid
+        if let url = URL(string: "https://\(urlString)") {
+            return url
+        }
+        
+        // If the above didn't work, fallback to a search query
+        if let url = URL(string: "\(searchPrefixUrl)\(urlString)") {
+            return url
         }
 
-        let connection = NWConnection(host: NWEndpoint.Host(urlString), port: .http, using: .tcp)
-        connection.stateUpdateHandler = { state in
-            switch state {
-            case .ready:
-                defer {
-                    connection.cancel()
-                }
-                if let url = URL(string: "http://\(urlString)") {
-                    completion(.success(url))
-                    return
-                }
-            case let .failed(error):
-                completion(.failure(error))
-            default:
-                break
-            }
-        }
-        connection.start(queue: .global())
+        throw URLError(.badURL)
     }
 }
 
 extension WebViewModel: WKNavigationDelegate {
-    private func updateViewModel(_ webView: WKWebView, navigation _: WKNavigation) {
-        title = webView.title
+    private func updateViewModel(_ webView: WKWebView) {
         canGoBack = webView.canGoBack
         canGoForward = webView.canGoForward
         if let url = webView.url, urlString != url.absoluteString {
             logger.debug("setting url from navigation: \(url)")
             urlString = url.absoluteString
         }
+        if let webViewTitle = webView.title, webViewTitle != "" {
+            title = webViewTitle
+        }
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        updateViewModel(webView, navigation: navigation)
-        addHistoryItem(title: webView.title, url: webView.url)
+        updateViewModel(webView)
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        updateViewModel(webView, navigation: navigation)
+        updateViewModel(webView)
     }
 
     func webView(
         _ webView: WKWebView,
         didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!
     ) {
-        updateViewModel(webView, navigation: navigation)
+        updateViewModel(webView)
     }
 
     func webView(
@@ -136,7 +141,8 @@ extension WebViewModel: WKNavigationDelegate {
         _: WKWebView,
         decidePolicyFor navigationResponse: WKNavigationResponse
     ) async
-        -> WKNavigationResponsePolicy {
+        -> WKNavigationResponsePolicy
+    {
         if navigationResponse.canShowMIMEType {
             .allow
         } else {
@@ -151,8 +157,19 @@ extension WebViewModel: WKNavigationDelegate {
     ) {
         if let mimeType = navigationResponse.response.mimeType,
            let xpiMimeType = UTType.xpi.preferredMIMEType,
-           mimeType == xpiMimeType {
+           mimeType == xpiMimeType
+        {
             download.delegate = xpiDownloadManager
         }
+    }
+
+    func webView(_: WKWebView, didNavigateWith navigationData: WKNavigationData) {
+        addHistoryItem(title: navigationData.title, url: navigationData.destinationURL)
+    }
+    
+    func webView(_ webView: WKWebView, didUpdateHistoryTitle title: String, for url: URL) {
+        // Update the current tab/window's title
+        self.title = title
+        updateHistoryItem(newTitle: title, forUrl: url)
     }
 }

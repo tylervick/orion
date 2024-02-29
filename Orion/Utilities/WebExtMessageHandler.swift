@@ -1,11 +1,12 @@
 //
-//  WKExtensionAPIBridge.swift
+//  WebExtMessageHandler.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/16/24.
 //
 
 import Foundation
+import os.log
 import SwiftData
 import WebKit
 
@@ -22,20 +23,13 @@ enum MessageName {
     static let `extension` = "extension"
 }
 
-final class WKExtensionAPIBridge: NSObject, WKConfigurationProviding {
+final class WebExtMessageHandler: NSObject, WebViewConfiguring {
     private let modelContext: ModelContext
+    private let logger: Logger
+
     private lazy var encoder = JSONEncoder()
     private lazy var decoder = JSONDecoder()
-
-    enum Message: String {
-        case history
-    }
-
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-
-    func configure(webView: WKWebView) {
+    private lazy var browserScript: WKUserScript? = {
         // Load WebExtension API bridge script
         guard let bridgeBundleUrl = Bundle.main.url(
             forResource: "OrionJSBridge",
@@ -45,27 +39,40 @@ final class WKExtensionAPIBridge: NSObject, WKConfigurationProviding {
             let jsUrl = bridgeBundle.url(forResource: "browser.umd", withExtension: "js"),
             let jsSource = try? String(contentsOf: jsUrl)
         else {
-            print("Unable to locate browser.umd.js resource")
-            return
+            print("Unable to locate browser.umd.js resource. Skipping WebExtMessageHandler.")
+            return nil
         }
 
-        let browserScript = WKUserScript(
+        return WKUserScript(
             source: jsSource,
             injectionTime: .atDocumentStart,
             forMainFrameOnly: false
         )
+    }()
 
-        webView.configuration.userContentController.addUserScript(browserScript)
-        webView.configuration.userContentController.addScriptMessageHandler(
-            self,
-            contentWorld: .page,
-            name: MessageName.extension
-        )
+    enum Message: String {
+        case history
+    }
+
+    init(logger: Logger, modelContext: ModelContext) {
+        self.logger = logger
+        self.modelContext = modelContext
+    }
+
+    func configure(webViewConfiguration: WKWebViewConfiguration) {
+        if let browserScript {
+            webViewConfiguration.userContentController.addUserScript(browserScript)
+            webViewConfiguration.userContentController.addScriptMessageHandler(
+                self,
+                contentWorld: .page,
+                name: MessageName.extension
+            )
+        }
     }
 }
 
 @MainActor
-extension WKExtensionAPIBridge: WKScriptMessageHandlerWithReply {
+extension WebExtMessageHandler: WKScriptMessageHandlerWithReply {
     func userContentController(
         _: WKUserContentController,
         didReceive message: WKScriptMessage
@@ -104,19 +111,19 @@ extension WKExtensionAPIBridge: WKScriptMessageHandlerWithReply {
             return (nil, "Unable to fetch HistoryItem objects")
         }
 
-        let mostVisitedUrls = results.reduce(into: [URL: (Int, String)]()) { accumCount, hi in
+        let mostVisitedUrls = results.reduce(into: [String: (Int, String)]()) { accumCount, hi in
             if let url = hi.url {
                 if let (curCount, curTitle) = accumCount[url] {
                     accumCount[url] = (curCount + 1, hi.title ?? curTitle)
                     return
                 }
-                accumCount[url] = (0, hi.title ?? url.absoluteString)
+                accumCount[url] = (0, hi.title ?? url)
             }
         }.sorted {
             $0.value.0 > $1.value.0
         }.map { url, arg1 in
             let (_, title) = arg1
-            return MostVisitedURL(url: url.absoluteString, title: title, favicon: nil)
+            return MostVisitedURL(url: url, title: title, favicon: nil)
         }
 
         do {

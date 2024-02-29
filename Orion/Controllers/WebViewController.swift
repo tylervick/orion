@@ -47,16 +47,8 @@ final class WebViewController: NSViewController {
         super.init(coder: coder)
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Load initial urlString if present
-        if let urlString = viewModel?.urlString {
-            loadUrlString(urlString)
-        }
-    }
-
     func loadUrlString(_ urlString: String) {
-        viewModel?.loadUrl(urlString, for: webView)
+        viewModel?.load(urlString: urlString, for: webView)
     }
 
     func performBack() {

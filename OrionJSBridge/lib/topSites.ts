@@ -9,6 +9,7 @@ type MostVisitedURL = {
   favicon: string | undefined;
 };
 
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 const isMostVisitedURL = (object: any): object is MostVisitedURL => {
   return (
     typeof object.url === 'string' &&
@@ -32,13 +33,12 @@ export interface TopSites {
 
 export const topSites: TopSites = {
   get: async (options) => {
-    let body: MessageBody = {
+    const body: MessageBody = {
       method: 'topSites',
       payload: options,
     };
 
     return window.webkit.messageHandlers.extension.postMessage(body).then((response) => {
-      console.log('response', response);
       if (Array.isArray(response) && response.every(isMostVisitedURL)) {
         return response;
       }

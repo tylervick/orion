@@ -1,5 +1,5 @@
 //
-//  WebExtensionMetadataView.swift
+//  WebExtMetadataView.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/11/24.
@@ -7,7 +7,7 @@
 
 import Cocoa
 
-final class WebExtensionMetadataView: NSView {
+final class WebExtMetadataView: NSView {
     var manifest: WebExtensionManifest? {
         didSet {
             if let manifest {

@@ -1,5 +1,5 @@
 //
-//  WindowController.swift
+//  WebWindowController.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/6/24.
@@ -10,7 +10,7 @@ import Combine
 import os.log
 import SwiftData
 
-final class WindowController: NSWindowController {
+final class WebWindowController: NSWindowController {
     @IBOutlet var toolbar: NSToolbar!
     @IBOutlet var backItem: NSToolbarItem!
     @IBOutlet var forwardItem: NSToolbarItem!
@@ -20,7 +20,7 @@ final class WindowController: NSWindowController {
         contentViewController as? TabViewController
     }
 
-    private var windowViewModel: WindowViewModel?
+    private var windowViewModel: WebWindowViewModel?
     private var cancelBag = Set<AnyCancellable>()
 
     private func makeContainer() throws -> ModelContainer {
@@ -43,13 +43,14 @@ final class WindowController: NSWindowController {
 
     override func windowDidLoad() {
         super.windowDidLoad()
+        window?.setAccessibilityIdentifier("webWindow")
 
         guard let container = try? makeContainer() else {
             fatalError("Failed to create ModelContainer")
         }
         let logger = Logger()
-        let xpiDownloadManager = XPIDownloadManager(logger: logger)
-        let windowViewModel = WindowViewModel(
+        let xpiDownloadManager = WebExtDownloadManager(logger: logger)
+        let windowViewModel = WebWindowViewModel(
             logger: logger,
             xpiPublisher: xpiDownloadManager.xpiPublisher,
             modelContext: container.mainContext
@@ -76,7 +77,8 @@ final class WindowController: NSWindowController {
         if let tabViewController = storyboard?
             .instantiateController(
                 withIdentifier: "tabViewController"
-            ) as? TabViewController {
+            ) as? TabViewController
+        {
             tabViewController.tabViewModel = tabViewModel
             tabViewController.view.setFrameSize(NSSize(width: 1280, height: 720))
             contentViewController = tabViewController
@@ -101,14 +103,15 @@ final class WindowController: NSWindowController {
 
     override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
         if let webExManagementViewController = segue
-            .destinationController as? WebExtManagementViewController {
+            .destinationController as? WebExtManageViewController
+        {
             webExManagementViewController.viewModel = windowViewModel?
                 .makeWebExManagementViewModel()
         }
     }
 }
 
-extension WindowController: Subscriber {
+extension WebWindowController: Subscriber {
     func receive(subscription: Subscription) {
         subscription.request(.max(1))
     }
@@ -117,7 +120,8 @@ extension WindowController: Subscriber {
         if let vc = storyboard?
             .instantiateController(
                 withIdentifier: "extensionInstallVC"
-            ) as? WebExtInstallViewController {
+            ) as? WebExtInstallViewController
+        {
             vc.viewModel = viewModel
             contentViewController?.presentAsSheet(vc)
         }
@@ -127,7 +131,7 @@ extension WindowController: Subscriber {
     func receive(completion _: Subscribers.Completion<Never>) {}
 }
 
-extension WindowController: NSToolbarItemValidation {
+extension WebWindowController: NSToolbarItemValidation {
     func validateToolbarItem(_ item: NSToolbarItem) -> Bool {
         switch item {
         case backItem:
@@ -140,7 +144,7 @@ extension WindowController: NSToolbarItemValidation {
     }
 }
 
-extension WindowController: NSTextFieldDelegate {
+extension WebWindowController: NSTextFieldDelegate {
     func control(
         _: NSControl,
         textView _: NSTextView,

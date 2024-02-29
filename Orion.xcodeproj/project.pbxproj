@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F46A62D2B8F13060025453A /* BrowserActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F46A62C2B8F13060025453A /* BrowserActionViewModel.swift */; };
+		2F46A62F2B8F17C20025453A /* BrowserActionSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F46A62E2B8F17C20025453A /* BrowserActionSchemeHandler.swift */; };
 		2F5FDC852B812A000091FD72 /* BrowserActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC842B812A000091FD72 /* BrowserActionViewController.swift */; };
 		2F5FDC882B8158BF0091FD72 /* FlyingFox in Frameworks */ = {isa = PBXBuildFile; productRef = 2F5FDC872B8158BF0091FD72 /* FlyingFox */; };
-		2F5FDC8A2B816D170091FD72 /* WKPageBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC892B816D170091FD72 /* WKPageBridge.swift */; };
-		2F5FDC8C2B816D4D0091FD72 /* WKConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC8B2B816D4D0091FD72 /* WKConfiguration.swift */; };
+		2F5FDC8C2B816D4D0091FD72 /* WebViewConfiguring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC8B2B816D4D0091FD72 /* WebViewConfiguring.swift */; };
 		2F5FDC8E2B817B200091FD72 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC8D2B817B200091FD72 /* TabViewController.swift */; };
 		2F68A2D02B72BD0A0002ADBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2CF2B72BD0A0002ADBE /* AppDelegate.swift */; };
 		2F68A2D22B72BD0A0002ADBE /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2D12B72BD0A0002ADBE /* WebViewController.swift */; };
@@ -19,27 +20,26 @@
 		2F68A2E22B72BD0B0002ADBE /* OrionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2E12B72BD0B0002ADBE /* OrionTests.swift */; };
 		2F68A2EC2B72BD0B0002ADBE /* OrionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2EB2B72BD0B0002ADBE /* OrionUITests.swift */; };
 		2F68A2EE2B72BD0B0002ADBE /* OrionUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2ED2B72BD0B0002ADBE /* OrionUITestsLaunchTests.swift */; };
-		2F68A30F2B731F5D0002ADBE /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A30E2B731F5D0002ADBE /* WindowController.swift */; };
+		2F68A30F2B731F5D0002ADBE /* WebWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A30E2B731F5D0002ADBE /* WebWindowController.swift */; };
 		2F7275392B8197BF00B5EB8F /* TabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7275382B8197BF00B5EB8F /* TabViewModel.swift */; };
-		2F72753D2B81C40A00B5EB8F /* FileServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F72753C2B81C40A00B5EB8F /* FileServer.swift */; };
-		2F72753F2B81C65D00B5EB8F /* WebExtManagementCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F72753E2B81C65D00B5EB8F /* WebExtManagementCollectionViewItem.swift */; };
+		2F72753F2B81C65D00B5EB8F /* WebExtManageCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F72753E2B81C65D00B5EB8F /* WebExtManageCollectionViewItem.swift */; };
 		2F9182812B7C1C1800D03E0D /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9182802B7C1C1800D03E0D /* ZIPFoundation */; };
-		2F9614E92B8577750087CB7E /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F9614E82B8577750087CB7E /* JavaScriptCore.framework */; };
-		2F9614EA2B8577750087CB7E /* JavaScriptCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F9614E82B8577750087CB7E /* JavaScriptCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2F9614EF2B857A0A0087CB7E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F9614EE2B857A0A0087CB7E /* WebKit.framework */; };
-		2F9614F02B857A0A0087CB7E /* WebKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F9614EE2B857A0A0087CB7E /* WebKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2F9999EE2B8D87C1000A7C3F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F9999ED2B8D87C1000A7C3F /* WebKit.framework */; };
+		2F9999EF2B8D87C1000A7C3F /* WebKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F9999ED2B8D87C1000A7C3F /* WebKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2F9999F22B8D8836000A7C3F /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F9999F12B8D8836000A7C3F /* JavaScriptCore.framework */; };
+		2F9999F32B8D8836000A7C3F /* JavaScriptCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F9999F12B8D8836000A7C3F /* JavaScriptCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2F9FF4222B759D970041DFA2 /* WebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9FF4212B759D970041DFA2 /* WebViewModel.swift */; };
-		2FBEE1A12B7D8AD100E91B68 /* WebExtManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBEE1A02B7D8AD100E91B68 /* WebExtManagementViewModel.swift */; };
-		2FBEE1A42B7EBD6800E91B68 /* XPIDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBEE1A32B7EBD6800E91B68 /* XPIDownloadManager.swift */; };
+		2FBEE1A12B7D8AD100E91B68 /* WebExtManageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBEE1A02B7D8AD100E91B68 /* WebExtManageViewModel.swift */; };
+		2FBEE1A42B7EBD6800E91B68 /* WebExtDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBEE1A32B7EBD6800E91B68 /* WebExtDownloadManager.swift */; };
 		2FBEE1A62B7EBEE000E91B68 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBEE1A52B7EBEE000E91B68 /* Constants.swift */; };
-		2FBEE1AA2B7EF08F00E91B68 /* WindowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBEE1A92B7EF08F00E91B68 /* WindowViewModel.swift */; };
-		2FBEE1AC2B7FE4EB00E91B68 /* WKExtensionAPIBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBEE1AB2B7FE4EB00E91B68 /* WKExtensionAPIBridge.swift */; };
+		2FBEE1AA2B7EF08F00E91B68 /* WebWindowViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBEE1A92B7EF08F00E91B68 /* WebWindowViewModel.swift */; };
+		2FBEE1AC2B7FE4EB00E91B68 /* WebExtMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBEE1AB2B7FE4EB00E91B68 /* WebExtMessageHandler.swift */; };
 		2FBEFF5F2B7FFEBD00E91B68 /* OrionJSBridge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2FBEE1B12B7FEE7200E91B68 /* OrionJSBridge.bundle */; };
 		2FD1021B2B781D5F00A2EEC7 /* HistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1021A2B781D5F00A2EEC7 /* HistoryItem.swift */; };
-		2FD102462B78968200A2EEC7 /* WebExtManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD102452B78968200A2EEC7 /* WebExtManagementViewController.swift */; };
+		2FD102462B78968200A2EEC7 /* WebExtManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD102452B78968200A2EEC7 /* WebExtManageViewController.swift */; };
 		2FD102482B793DDE00A2EEC7 /* WebExtInstallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD102472B793DDE00A2EEC7 /* WebExtInstallViewController.swift */; };
 		2FD1024A2B79806A00A2EEC7 /* WebExtInstallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD102492B79806A00A2EEC7 /* WebExtInstallViewModel.swift */; };
-		2FD1024C2B79815400A2EEC7 /* WebExtensionMetadataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1024B2B79815400A2EEC7 /* WebExtensionMetadataView.swift */; };
+		2FD1024C2B79815400A2EEC7 /* WebExtMetadataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1024B2B79815400A2EEC7 /* WebExtMetadataView.swift */; };
 		2FD1024E2B7981AF00A2EEC7 /* WebExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD1024D2B7981AF00A2EEC7 /* WebExtension.swift */; };
 		2FE34BA02B853FE300F2337D /* browser.umd.js in Resources */ = {isa = PBXBuildFile; fileRef = 2FE34B9D2B853FE300F2337D /* browser.umd.js */; };
 /* End PBXBuildFile section */
@@ -69,14 +69,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		2F0FA1982B8564C80049D46A /* Embed Frameworks */ = {
+		2F9999F02B8D87C1000A7C3F /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2F9614F02B857A0A0087CB7E /* WebKit.framework in Embed Frameworks */,
-				2F9614EA2B8577750087CB7E /* JavaScriptCore.framework in Embed Frameworks */,
+				2F9999F32B8D8836000A7C3F /* JavaScriptCore.framework in Embed Frameworks */,
+				2F9999EF2B8D87C1000A7C3F /* WebKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,9 +85,10 @@
 
 /* Begin PBXFileReference section */
 		2F3304E12B7ACB660047F789 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2F46A62C2B8F13060025453A /* BrowserActionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserActionViewModel.swift; sourceTree = "<group>"; };
+		2F46A62E2B8F17C20025453A /* BrowserActionSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserActionSchemeHandler.swift; sourceTree = "<group>"; };
 		2F5FDC842B812A000091FD72 /* BrowserActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserActionViewController.swift; sourceTree = "<group>"; };
-		2F5FDC892B816D170091FD72 /* WKPageBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKPageBridge.swift; sourceTree = "<group>"; };
-		2F5FDC8B2B816D4D0091FD72 /* WKConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKConfiguration.swift; sourceTree = "<group>"; };
+		2F5FDC8B2B816D4D0091FD72 /* WebViewConfiguring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewConfiguring.swift; sourceTree = "<group>"; };
 		2F5FDC8D2B817B200091FD72 /* TabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		2F68A2CC2B72BD0A0002ADBE /* Orion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F68A2CF2B72BD0A0002ADBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -100,24 +101,25 @@
 		2F68A2E72B72BD0B0002ADBE /* OrionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OrionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F68A2EB2B72BD0B0002ADBE /* OrionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrionUITests.swift; sourceTree = "<group>"; };
 		2F68A2ED2B72BD0B0002ADBE /* OrionUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrionUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		2F68A30E2B731F5D0002ADBE /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
+		2F68A30E2B731F5D0002ADBE /* WebWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebWindowController.swift; sourceTree = "<group>"; };
 		2F7275382B8197BF00B5EB8F /* TabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewModel.swift; sourceTree = "<group>"; };
-		2F72753C2B81C40A00B5EB8F /* FileServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileServer.swift; sourceTree = "<group>"; };
-		2F72753E2B81C65D00B5EB8F /* WebExtManagementCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtManagementCollectionViewItem.swift; sourceTree = "<group>"; };
+		2F72753E2B81C65D00B5EB8F /* WebExtManageCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtManageCollectionViewItem.swift; sourceTree = "<group>"; };
 		2F9614E82B8577750087CB7E /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = WebKit/WebKitBuild/Debug/JavaScriptCore.framework; sourceTree = "<group>"; };
 		2F9614EE2B857A0A0087CB7E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = WebKit/WebKitBuild/Debug/WebKit.framework; sourceTree = "<group>"; };
+		2F9999ED2B8D87C1000A7C3F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = WebKit/WebKitBuild/Release/WebKit.framework; sourceTree = "<group>"; };
+		2F9999F12B8D8836000A7C3F /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = WebKit/WebKitBuild/Release/JavaScriptCore.framework; sourceTree = "<group>"; };
 		2F9FF4212B759D970041DFA2 /* WebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewModel.swift; sourceTree = "<group>"; };
-		2FBEE1A02B7D8AD100E91B68 /* WebExtManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtManagementViewModel.swift; sourceTree = "<group>"; };
-		2FBEE1A32B7EBD6800E91B68 /* XPIDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XPIDownloadManager.swift; sourceTree = "<group>"; };
+		2FBEE1A02B7D8AD100E91B68 /* WebExtManageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtManageViewModel.swift; sourceTree = "<group>"; };
+		2FBEE1A32B7EBD6800E91B68 /* WebExtDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtDownloadManager.swift; sourceTree = "<group>"; };
 		2FBEE1A52B7EBEE000E91B68 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		2FBEE1A92B7EF08F00E91B68 /* WindowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowViewModel.swift; sourceTree = "<group>"; };
-		2FBEE1AB2B7FE4EB00E91B68 /* WKExtensionAPIBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKExtensionAPIBridge.swift; sourceTree = "<group>"; };
+		2FBEE1A92B7EF08F00E91B68 /* WebWindowViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebWindowViewModel.swift; sourceTree = "<group>"; };
+		2FBEE1AB2B7FE4EB00E91B68 /* WebExtMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtMessageHandler.swift; sourceTree = "<group>"; };
 		2FBEE1B12B7FEE7200E91B68 /* OrionJSBridge.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OrionJSBridge.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FD1021A2B781D5F00A2EEC7 /* HistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItem.swift; sourceTree = "<group>"; };
-		2FD102452B78968200A2EEC7 /* WebExtManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtManagementViewController.swift; sourceTree = "<group>"; };
+		2FD102452B78968200A2EEC7 /* WebExtManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtManageViewController.swift; sourceTree = "<group>"; };
 		2FD102472B793DDE00A2EEC7 /* WebExtInstallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtInstallViewController.swift; sourceTree = "<group>"; };
 		2FD102492B79806A00A2EEC7 /* WebExtInstallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtInstallViewModel.swift; sourceTree = "<group>"; };
-		2FD1024B2B79815400A2EEC7 /* WebExtensionMetadataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtensionMetadataView.swift; sourceTree = "<group>"; };
+		2FD1024B2B79815400A2EEC7 /* WebExtMetadataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtMetadataView.swift; sourceTree = "<group>"; };
 		2FD1024D2B7981AF00A2EEC7 /* WebExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtension.swift; sourceTree = "<group>"; };
 		2FE34B972B853FE300F2337D /* globals.d.ts */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.typescript; path = globals.d.ts; sourceTree = "<group>"; };
 		2FE34B982B853FE300F2337D /* tab.d.ts */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.typescript; path = tab.d.ts; sourceTree = "<group>"; };
@@ -135,10 +137,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F9614E92B8577750087CB7E /* JavaScriptCore.framework in Frameworks */,
+				2F9999F22B8D8836000A7C3F /* JavaScriptCore.framework in Frameworks */,
 				2F5FDC882B8158BF0091FD72 /* FlyingFox in Frameworks */,
-				2F9614EF2B857A0A0087CB7E /* WebKit.framework in Frameworks */,
 				2F9182812B7C1C1800D03E0D /* ZIPFoundation in Frameworks */,
+				2F9999EE2B8D87C1000A7C3F /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,8 +243,8 @@
 			isa = PBXGroup;
 			children = (
 				2F68A2D12B72BD0A0002ADBE /* WebViewController.swift */,
-				2F68A30E2B731F5D0002ADBE /* WindowController.swift */,
-				2FD102452B78968200A2EEC7 /* WebExtManagementViewController.swift */,
+				2F68A30E2B731F5D0002ADBE /* WebWindowController.swift */,
+				2FD102452B78968200A2EEC7 /* WebExtManageViewController.swift */,
 				2FD102472B793DDE00A2EEC7 /* WebExtInstallViewController.swift */,
 				2F5FDC842B812A000091FD72 /* BrowserActionViewController.swift */,
 				2F5FDC8D2B817B200091FD72 /* TabViewController.swift */,
@@ -253,8 +255,8 @@
 		2F68A3022B72F6DC0002ADBE /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2FD1024B2B79815400A2EEC7 /* WebExtensionMetadataView.swift */,
-				2F72753E2B81C65D00B5EB8F /* WebExtManagementCollectionViewItem.swift */,
+				2FD1024B2B79815400A2EEC7 /* WebExtMetadataView.swift */,
+				2F72753E2B81C65D00B5EB8F /* WebExtManageCollectionViewItem.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -283,9 +285,10 @@
 			children = (
 				2F9FF4212B759D970041DFA2 /* WebViewModel.swift */,
 				2FD102492B79806A00A2EEC7 /* WebExtInstallViewModel.swift */,
-				2FBEE1A02B7D8AD100E91B68 /* WebExtManagementViewModel.swift */,
-				2FBEE1A92B7EF08F00E91B68 /* WindowViewModel.swift */,
+				2FBEE1A02B7D8AD100E91B68 /* WebExtManageViewModel.swift */,
+				2FBEE1A92B7EF08F00E91B68 /* WebWindowViewModel.swift */,
 				2F7275382B8197BF00B5EB8F /* TabViewModel.swift */,
+				2F46A62C2B8F13060025453A /* BrowserActionViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -293,7 +296,9 @@
 		2F91827C2B7C1BC500D03E0D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F9999F12B8D8836000A7C3F /* JavaScriptCore.framework */,
 				2F9614EE2B857A0A0087CB7E /* WebKit.framework */,
+				2F9999ED2B8D87C1000A7C3F /* WebKit.framework */,
 				2F9614E82B8577750087CB7E /* JavaScriptCore.framework */,
 			);
 			name = Frameworks;
@@ -302,12 +307,11 @@
 		2FBEE1A22B7EBD4200E91B68 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				2FBEE1A32B7EBD6800E91B68 /* XPIDownloadManager.swift */,
+				2FBEE1A32B7EBD6800E91B68 /* WebExtDownloadManager.swift */,
 				2FBEE1A52B7EBEE000E91B68 /* Constants.swift */,
-				2FBEE1AB2B7FE4EB00E91B68 /* WKExtensionAPIBridge.swift */,
-				2F5FDC892B816D170091FD72 /* WKPageBridge.swift */,
-				2F5FDC8B2B816D4D0091FD72 /* WKConfiguration.swift */,
-				2F72753C2B81C40A00B5EB8F /* FileServer.swift */,
+				2FBEE1AB2B7FE4EB00E91B68 /* WebExtMessageHandler.swift */,
+				2F5FDC8B2B816D4D0091FD72 /* WebViewConfiguring.swift */,
+				2F46A62E2B8F17C20025453A /* BrowserActionSchemeHandler.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -338,7 +342,7 @@
 				2F68A2C82B72BD0A0002ADBE /* Sources */,
 				2F68A2C92B72BD0A0002ADBE /* Frameworks */,
 				2F68A2CA2B72BD0A0002ADBE /* Resources */,
-				2F0FA1982B8564C80049D46A /* Embed Frameworks */,
+				2F9999F02B8D87C1000A7C3F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -498,26 +502,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2FBEE1A12B7D8AD100E91B68 /* WebExtManagementViewModel.swift in Sources */,
-				2F5FDC8A2B816D170091FD72 /* WKPageBridge.swift in Sources */,
-				2FBEE1A42B7EBD6800E91B68 /* XPIDownloadManager.swift in Sources */,
+				2FBEE1A12B7D8AD100E91B68 /* WebExtManageViewModel.swift in Sources */,
+				2FBEE1A42B7EBD6800E91B68 /* WebExtDownloadManager.swift in Sources */,
 				2FD1021B2B781D5F00A2EEC7 /* HistoryItem.swift in Sources */,
-				2F5FDC8C2B816D4D0091FD72 /* WKConfiguration.swift in Sources */,
-				2FBEE1AA2B7EF08F00E91B68 /* WindowViewModel.swift in Sources */,
-				2FD1024C2B79815400A2EEC7 /* WebExtensionMetadataView.swift in Sources */,
-				2FD102462B78968200A2EEC7 /* WebExtManagementViewController.swift in Sources */,
+				2F5FDC8C2B816D4D0091FD72 /* WebViewConfiguring.swift in Sources */,
+				2FBEE1AA2B7EF08F00E91B68 /* WebWindowViewModel.swift in Sources */,
+				2FD1024C2B79815400A2EEC7 /* WebExtMetadataView.swift in Sources */,
+				2FD102462B78968200A2EEC7 /* WebExtManageViewController.swift in Sources */,
 				2F5FDC8E2B817B200091FD72 /* TabViewController.swift in Sources */,
 				2FD102482B793DDE00A2EEC7 /* WebExtInstallViewController.swift in Sources */,
 				2F5FDC852B812A000091FD72 /* BrowserActionViewController.swift in Sources */,
+				2F46A62F2B8F17C20025453A /* BrowserActionSchemeHandler.swift in Sources */,
 				2FD1024E2B7981AF00A2EEC7 /* WebExtension.swift in Sources */,
 				2F68A2D22B72BD0A0002ADBE /* WebViewController.swift in Sources */,
-				2F68A30F2B731F5D0002ADBE /* WindowController.swift in Sources */,
+				2F68A30F2B731F5D0002ADBE /* WebWindowController.swift in Sources */,
+				2F46A62D2B8F13060025453A /* BrowserActionViewModel.swift in Sources */,
 				2F68A2D02B72BD0A0002ADBE /* AppDelegate.swift in Sources */,
 				2FBEE1A62B7EBEE000E91B68 /* Constants.swift in Sources */,
 				2FD1024A2B79806A00A2EEC7 /* WebExtInstallViewModel.swift in Sources */,
-				2F72753D2B81C40A00B5EB8F /* FileServer.swift in Sources */,
-				2FBEE1AC2B7FE4EB00E91B68 /* WKExtensionAPIBridge.swift in Sources */,
-				2F72753F2B81C65D00B5EB8F /* WebExtManagementCollectionViewItem.swift in Sources */,
+				2FBEE1AC2B7FE4EB00E91B68 /* WebExtMessageHandler.swift in Sources */,
+				2F72753F2B81C65D00B5EB8F /* WebExtManageCollectionViewItem.swift in Sources */,
 				2F7275392B8197BF00B5EB8F /* TabViewModel.swift in Sources */,
 				2F9FF4222B759D970041DFA2 /* WebViewModel.swift in Sources */,
 			);
@@ -706,19 +710,18 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Orion/Orion.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = 352UZEKYPP;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/WebKit/WebKitBuild/Debug/**",
-					"$(PROJECT_DIR)/WebKit/WebKitBuild/Debug",
+					"$(PROJECT_DIR)/WebKit/WebKitBuild/Release",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Orion/Info.plist;
@@ -733,7 +736,7 @@
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"-Wl,-dyld_env",
-					"-Wl,DYLD_VERSIONED_FRAMEWORK_PATH=$(PROJECT_DIR)/WebKit/WebKitBuild/Debug",
+					"-Wl,DYLD_VERSIONED_FRAMEWORK_PATH=$(PROJECT_DIR)/WebKit/WebKitBuild/Release",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tylervick.Orion;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -751,18 +754,17 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Orion/Orion.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=macosx*]" = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = 352UZEKYPP;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/WebKit/WebKitBuild/Debug/**",
-					"$(PROJECT_DIR)/WebKit/WebKitBuild/Debug",
+					"$(PROJECT_DIR)/WebKit/WebKitBuild/Release",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Orion/Info.plist;
@@ -778,7 +780,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-Wl,-dyld_env",
-					"-Wl,DYLD_VERSIONED_FRAMEWORK_PATH=$(PROJECT_DIR)/WebKit/WebKitBuild/Debug",
+					"-Wl,DYLD_VERSIONED_FRAMEWORK_PATH=$(PROJECT_DIR)/WebKit/WebKitBuild/Release",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.tylervick.Orion;
 				PRODUCT_NAME = "$(TARGET_NAME)";

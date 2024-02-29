@@ -1,5 +1,5 @@
 //
-//  WindowViewModel.swift
+//  WebWindowViewModel.swift
 //  Orion
 //
 //  Created by Tyler Vick on 2/15/24.
@@ -12,7 +12,7 @@ import os.log
 import SwiftData
 import WebKit
 
-enum ToolbarAction: Equatable {
+enum WebWindowToolbarAction: Equatable {
     case back
     case forward
     case reload
@@ -20,7 +20,7 @@ enum ToolbarAction: Equatable {
     case urlSubmitted(String)
 }
 
-final class WindowViewModel: NSObject, ObservableObject {
+final class WebWindowViewModel: NSObject, ObservableObject {
     @Published private var browserActionExtensions: [WebExtension] = []
 
     @Published var backEnabled = false
@@ -29,12 +29,12 @@ final class WindowViewModel: NSObject, ObservableObject {
     private let logger: Logger
     private let xpiPublisher: AnyPublisher<URL, Never>
     private let modelContext: ModelContext
-    private let toolbarActionSubject = PassthroughSubject<ToolbarAction, Never>()
+    private let toolbarActionSubject = PassthroughSubject<WebWindowToolbarAction, Never>()
 
     private var cancelBag = Set<AnyCancellable>()
     private var toolbarMap: [NSToolbarItem.Identifier: NSToolbarItem] = [:]
 
-    var toolbarActionPublisher: AnyPublisher<ToolbarAction, Never> {
+    var toolbarActionPublisher: AnyPublisher<WebWindowToolbarAction, Never> {
         toolbarActionSubject.eraseToAnyPublisher()
     }
 
@@ -52,7 +52,7 @@ final class WindowViewModel: NSObject, ObservableObject {
         loadExtensions()
     }
 
-    func publishToolbarAction(_ action: ToolbarAction) {
+    func publishToolbarAction(_ action: WebWindowToolbarAction) {
         toolbarActionSubject.send(action)
     }
 
@@ -114,7 +114,8 @@ final class WindowViewModel: NSObject, ObservableObject {
                         let filteredKeys = model.manifest.icons?.keys.compactMap({ Int($0) })
                         .filter({ $0 <= 64 }),
                         let maxKey = filteredKeys.max(),
-                        let iconPath = model.manifest.icons?[String(maxKey)] {
+                        let iconPath = model.manifest.icons?[String(maxKey)]
+                    {
                         let imageUrl = model.path.appending(path: iconPath.path())
                         let image = NSImage(contentsOf: imageUrl)
                         image?.size = CGSize(width: 20, height: 20)
@@ -136,12 +137,12 @@ final class WindowViewModel: NSObject, ObservableObject {
             }.store(in: &cancelBag)
     }
 
-    func makeWebExManagementViewModel() -> WebExtManagementViewModel {
-        WebExtManagementViewModel(modelContext: modelContext, logger: logger)
+    func makeWebExManagementViewModel() -> WebExtManageViewModel {
+        WebExtManageViewModel(modelContext: modelContext, logger: logger)
     }
 }
 
-extension WindowViewModel: NSToolbarDelegate {
+extension WebWindowViewModel: NSToolbarDelegate {
     func toolbar(
         _: NSToolbar,
         itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier,
@@ -158,11 +159,13 @@ extension WindowViewModel: NSToolbarDelegate {
         if let webExtension = browserActionExtensions.first(where: {
             $0.id == toolbarItem.itemIdentifier.rawValue
         }) {
-            let browserActionViewController = BrowserActionViewController(
+            let browserActionViewModel = BrowserActionViewModel(
                 logger: logger,
                 modelContext: modelContext,
                 webExtension: webExtension
             )
+            let browserActionViewController =
+                BrowserActionViewController(viewModel: browserActionViewModel)
             popover.contentViewController = browserActionViewController
         }
         popover.show(relativeTo: toolbarItem)
