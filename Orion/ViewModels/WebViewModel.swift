@@ -163,8 +163,11 @@ extension WebViewModel: WKNavigationDelegate {
         }
     }
 
-    func webView(_: WKWebView, didNavigateWith navigationData: WKNavigationData) {
-        addHistoryItem(title: navigationData.title, url: navigationData.destinationURL)
+    func webView(_ webView: WKWebView, didNavigateWith navigationData: WKNavigationData) {
+        // avoid recording history when redirecting
+        if navigationData.destinationURL == navigationData.originalRequest.url {
+            addHistoryItem(title: navigationData.title, url: navigationData.destinationURL)
+        }
     }
 
     func webView(_: WKWebView, didUpdateHistoryTitle title: String, for url: URL) {
