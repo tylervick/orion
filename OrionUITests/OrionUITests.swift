@@ -46,7 +46,7 @@ final class OrionUITests: XCTestCase {
         XCUIApplication().launch()
         XCTAssert(XCUIElement.webWindow.isHittable)
     }
-    
+
     func testNavigateToValidURL() throws {
         XCUIApplication().launch()
         XCTAssert(XCUIElement.urlTextField.isHittable)
@@ -54,7 +54,7 @@ final class OrionUITests: XCTestCase {
         XCUIElement.urlTextField.typeKey("a", modifierFlags: .command)
         XCUIElement.urlTextField.typeText("https://example.com\n")
     }
-    
+
     func testOpenWebExtManage() throws {
         XCUIApplication().launch()
         XCTAssert(XCUIElement.manageExtensionsButton.isHittable)

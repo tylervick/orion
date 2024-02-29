@@ -59,7 +59,7 @@ final class WebViewModel: NSObject, ObservableObject {
         let historyItem = HistoryItem(url: url?.absoluteString, title: title, visitTime: Date())
         modelContext.insert(historyItem)
     }
-    
+
     func updateHistoryItem(newTitle title: String, forUrl url: URL) {
         let urlString = url.absoluteString
         let predicate = #Predicate<HistoryItem> {
@@ -80,14 +80,14 @@ final class WebViewModel: NSObject, ObservableObject {
         if let url = try? URL(urlString, strategy: .url.host(.required)) {
             return url
         }
-        
+
         // Next, attempt to "fix" the URL by adding a scheme.
         // E.g. the input "google.com" is not a valid URL, but "https://google.com" is.
         // TODO: Perform a DNS lookup to first check if the "domain" is valid
         if let url = URL(string: "https://\(urlString)") {
             return url
         }
-        
+
         // If the above didn't work, fallback to a search query
         if let url = URL(string: "\(searchPrefixUrl)\(urlString)") {
             return url
@@ -110,17 +110,17 @@ extension WebViewModel: WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish _: WKNavigation!) {
         updateViewModel(webView)
     }
 
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation _: WKNavigation!) {
         updateViewModel(webView)
     }
 
     func webView(
         _ webView: WKWebView,
-        didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!
+        didReceiveServerRedirectForProvisionalNavigation _: WKNavigation!
     ) {
         updateViewModel(webView)
     }
@@ -166,8 +166,8 @@ extension WebViewModel: WKNavigationDelegate {
     func webView(_: WKWebView, didNavigateWith navigationData: WKNavigationData) {
         addHistoryItem(title: navigationData.title, url: navigationData.destinationURL)
     }
-    
-    func webView(_ webView: WKWebView, didUpdateHistoryTitle title: String, for url: URL) {
+
+    func webView(_: WKWebView, didUpdateHistoryTitle title: String, for url: URL) {
         // Update the current tab/window's title
         self.title = title
         updateHistoryItem(newTitle: title, forUrl: url)
