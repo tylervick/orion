@@ -23,31 +23,34 @@ final class WebWindowController: NSWindowController {
     private var windowViewModel: WebWindowViewModel?
     private var cancelBag = Set<AnyCancellable>()
 
-    private func makeContainer() throws -> ModelContainer {
-        let storeUrl = try FileManager.default.url(
-            for: .documentDirectory,
-            in: .userDomainMask,
-            appropriateFor: nil,
-            create: false
-        ).appendingPathComponent("orion.store")
-
-        let configuration = ModelConfiguration(url: storeUrl, allowsSave: true)
-        let container = try ModelContainer(
-            for: HistoryItem.self,
-            WebExtension.self,
-            configurations: configuration
-        )
-        container.mainContext.autosaveEnabled = true
-        return container
+    private func makeContainer() -> ModelContainer {
+        do {
+            let storeUrl = try FileManager.default.url(
+                for: .documentDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: false
+            ).appendingPathComponent("orion.store")
+            
+            let configuration = ModelConfiguration(url: storeUrl, allowsSave: true)
+            let container = try ModelContainer(
+                for: HistoryItem.self,
+                WebExtension.self,
+                migrationPlan: HistoryItemMigrationPlan.self,
+                configurations: configuration
+            )
+            container.mainContext.autosaveEnabled = true
+            return container
+        } catch {
+            fatalError("Failed to create ModelContainer with error: \(error)")
+        }
     }
 
     override func windowDidLoad() {
         super.windowDidLoad()
         window?.setAccessibilityIdentifier("webWindow")
 
-        guard let container = try? makeContainer() else {
-            fatalError("Failed to create ModelContainer")
-        }
+        let container = makeContainer()
         let logger = Logger()
         let xpiDownloadManager = WebExtDownloadManager(logger: logger)
         let windowViewModel = WebWindowViewModel(
