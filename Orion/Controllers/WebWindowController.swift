@@ -23,7 +23,7 @@ final class WebWindowController: NSWindowController {
     private var windowViewModel: WebWindowViewModel?
     private var cancelBag = Set<AnyCancellable>()
 
-    private func makeContainer() -> ModelContainer {
+    private func makeContainer(recreateIfNeeded: Bool = true) -> ModelContainer {
         do {
             let storeUrl = try FileManager.default.url(
                 for: .documentDirectory,
@@ -31,16 +31,29 @@ final class WebWindowController: NSWindowController {
                 appropriateFor: nil,
                 create: false
             ).appendingPathComponent("orion.store")
-            
+
             let configuration = ModelConfiguration(url: storeUrl, allowsSave: true)
-            let container = try ModelContainer(
-                for: HistoryItem.self,
-                WebExtension.self,
-                migrationPlan: HistoryItemMigrationPlan.self,
-                configurations: configuration
-            )
-            container.mainContext.autosaveEnabled = true
-            return container
+            do {
+                let container = try ModelContainer(
+                    for: HistoryItem.self,
+                    WebExtension.self,
+                    migrationPlan: HistoryItemMigrationPlan.self,
+                    configurations: configuration
+                )
+
+                container.mainContext.autosaveEnabled = true
+                return container
+            } catch {
+                if recreateIfNeeded {
+                    // We're only here if the expected DB migration failed,
+                    // therefore we delete the "bad" store.
+                    // TODO: Backup the "corrupted" db and alert the user
+                    try FileManager.default.removeItem(at: storeUrl)
+                    return makeContainer(recreateIfNeeded: false)
+                } else {
+                    throw error
+                }
+            }
         } catch {
             fatalError("Failed to create ModelContainer with error: \(error)")
         }
