@@ -25,22 +25,23 @@ final class WebWindowViewModel: NSObject, ObservableObject {
 
     @Published var backEnabled = false
     @Published var forwardEnabled = false
+    @Published var title: String? = nil
 
     private let logger: Logger
-    private let xpiPublisher: AnyPublisher<URL, Never>
+    private let webExtDownloadManager: WebExtDownloadManager
     private let modelContext: ModelContext
-    private let toolbarActionSubject = PassthroughSubject<WebWindowToolbarAction, Never>()
 
     private var cancelBag = Set<AnyCancellable>()
     private var toolbarMap: [NSToolbarItem.Identifier: NSToolbarItem] = [:]
 
+    private let toolbarActionSubject = PassthroughSubject<WebWindowToolbarAction, Never>()
     var toolbarActionPublisher: AnyPublisher<WebWindowToolbarAction, Never> {
         toolbarActionSubject.eraseToAnyPublisher()
     }
 
-    init(logger: Logger, xpiPublisher: AnyPublisher<URL, Never>, modelContext: ModelContext) {
+    init(logger: Logger, webExtDownloadManager: WebExtDownloadManager, modelContext: ModelContext) {
         self.logger = logger
-        self.xpiPublisher = xpiPublisher
+        self.webExtDownloadManager = webExtDownloadManager
         self.modelContext = modelContext
         super.init()
 
@@ -50,6 +51,33 @@ final class WebWindowViewModel: NSObject, ObservableObject {
             }
             .store(in: &cancelBag)
         loadExtensions()
+    }
+
+    func makeWebViewModel() -> WebViewModel {
+        let webViewModel = WebViewModel(
+            logger: logger,
+            modelContext: modelContext,
+            xpiDownloadManager: webExtDownloadManager
+        )
+        webViewModel.$canGoBack.removeDuplicates().assign(to: &$backEnabled)
+        webViewModel.$canGoForward.removeDuplicates().assign(to: &$forwardEnabled)
+        webViewModel.$title.removeDuplicates().assign(to: &$title)
+
+        return webViewModel
+    }
+
+    // Creates a new instance of WebWindowController to be added as a new "tab" in the supplied window
+    func newTab(currentWindow: NSWindow) {
+        let sb = NSStoryboard(name: "Main", bundle: nil)
+
+        guard let newController = sb.instantiateInitialController() as? WebWindowController,
+              let newWindow = newController.window
+        else {
+            return
+        }
+
+        currentWindow.addTabbedWindow(newWindow, ordered: .above)
+        newWindow.makeKeyAndOrderFront(currentWindow)
     }
 
     func publishToolbarAction(_ action: WebWindowToolbarAction) {
@@ -73,18 +101,19 @@ final class WebWindowViewModel: NSObject, ObservableObject {
         WebExtInstallViewModel,
         Never
     >) {
-        xpiPublisher.compactMap { [weak self] xpiUrl -> WebExtInstallViewModel? in
-            guard let self else {
-                return nil
+        webExtDownloadManager.xpiPublisher
+            .compactMap { [weak self] xpiUrl -> WebExtInstallViewModel? in
+                guard let self else {
+                    return nil
+                }
+                return try? WebExtInstallViewModel(
+                    modelContext: modelContext,
+                    xpiUrl: xpiUrl,
+                    logger: logger
+                )
             }
-            return try? WebExtInstallViewModel(
-                modelContext: modelContext,
-                xpiUrl: xpiUrl,
-                logger: logger
-            )
-        }
-        .receive(on: DispatchQueue.main)
-        .subscribe(subscriber)
+            .receive(on: DispatchQueue.main)
+            .subscribe(subscriber)
     }
 
     func subscribeToBrowserActionExtensions(_ toolbar: NSToolbar) {

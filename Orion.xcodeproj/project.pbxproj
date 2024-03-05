@@ -11,7 +11,6 @@
 		2F46A62F2B8F17C20025453A /* BrowserActionSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F46A62E2B8F17C20025453A /* BrowserActionSchemeHandler.swift */; };
 		2F5FDC852B812A000091FD72 /* BrowserActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC842B812A000091FD72 /* BrowserActionViewController.swift */; };
 		2F5FDC8C2B816D4D0091FD72 /* WebViewConfiguring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC8B2B816D4D0091FD72 /* WebViewConfiguring.swift */; };
-		2F5FDC8E2B817B200091FD72 /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5FDC8D2B817B200091FD72 /* TabViewController.swift */; };
 		2F68A2D02B72BD0A0002ADBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2CF2B72BD0A0002ADBE /* AppDelegate.swift */; };
 		2F68A2D22B72BD0A0002ADBE /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2D12B72BD0A0002ADBE /* WebViewController.swift */; };
 		2F68A2D42B72BD0B0002ADBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2F68A2D32B72BD0B0002ADBE /* Assets.xcassets */; };
@@ -20,8 +19,8 @@
 		2F68A2EC2B72BD0B0002ADBE /* OrionUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2EB2B72BD0B0002ADBE /* OrionUITests.swift */; };
 		2F68A2EE2B72BD0B0002ADBE /* OrionUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A2ED2B72BD0B0002ADBE /* OrionUITestsLaunchTests.swift */; };
 		2F68A30F2B731F5D0002ADBE /* WebWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F68A30E2B731F5D0002ADBE /* WebWindowController.swift */; };
-		2F7275392B8197BF00B5EB8F /* TabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7275382B8197BF00B5EB8F /* TabViewModel.swift */; };
 		2F72753F2B81C65D00B5EB8F /* WebExtManageCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F72753E2B81C65D00B5EB8F /* WebExtManageCollectionViewItem.swift */; };
+		2F8692362B9698E700EE5AC9 /* ModelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F8692352B9698E700EE5AC9 /* ModelService.swift */; };
 		2F9182812B7C1C1800D03E0D /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 2F9182802B7C1C1800D03E0D /* ZIPFoundation */; };
 		2F9999EE2B8D87C1000A7C3F /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F9999ED2B8D87C1000A7C3F /* WebKit.framework */; };
 		2F9999EF2B8D87C1000A7C3F /* WebKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F9999ED2B8D87C1000A7C3F /* WebKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -88,7 +87,6 @@
 		2F46A62E2B8F17C20025453A /* BrowserActionSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserActionSchemeHandler.swift; sourceTree = "<group>"; };
 		2F5FDC842B812A000091FD72 /* BrowserActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserActionViewController.swift; sourceTree = "<group>"; };
 		2F5FDC8B2B816D4D0091FD72 /* WebViewConfiguring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewConfiguring.swift; sourceTree = "<group>"; };
-		2F5FDC8D2B817B200091FD72 /* TabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		2F68A2CC2B72BD0A0002ADBE /* Orion.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orion.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F68A2CF2B72BD0A0002ADBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F68A2D12B72BD0A0002ADBE /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -101,8 +99,8 @@
 		2F68A2EB2B72BD0B0002ADBE /* OrionUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrionUITests.swift; sourceTree = "<group>"; };
 		2F68A2ED2B72BD0B0002ADBE /* OrionUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrionUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		2F68A30E2B731F5D0002ADBE /* WebWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebWindowController.swift; sourceTree = "<group>"; };
-		2F7275382B8197BF00B5EB8F /* TabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewModel.swift; sourceTree = "<group>"; };
 		2F72753E2B81C65D00B5EB8F /* WebExtManageCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebExtManageCollectionViewItem.swift; sourceTree = "<group>"; };
+		2F8692352B9698E700EE5AC9 /* ModelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelService.swift; sourceTree = "<group>"; };
 		2F9614E82B8577750087CB7E /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = WebKit/WebKitBuild/Debug/JavaScriptCore.framework; sourceTree = "<group>"; };
 		2F9614EE2B857A0A0087CB7E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = WebKit/WebKitBuild/Debug/WebKit.framework; sourceTree = "<group>"; };
 		2F9999ED2B8D87C1000A7C3F /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = WebKit/WebKitBuild/Release/WebKit.framework; sourceTree = "<group>"; };
@@ -245,7 +243,6 @@
 				2FD102452B78968200A2EEC7 /* WebExtManageViewController.swift */,
 				2FD102472B793DDE00A2EEC7 /* WebExtInstallViewController.swift */,
 				2F5FDC842B812A000091FD72 /* BrowserActionViewController.swift */,
-				2F5FDC8D2B817B200091FD72 /* TabViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -285,7 +282,6 @@
 				2FD102492B79806A00A2EEC7 /* WebExtInstallViewModel.swift */,
 				2FBEE1A02B7D8AD100E91B68 /* WebExtManageViewModel.swift */,
 				2FBEE1A92B7EF08F00E91B68 /* WebWindowViewModel.swift */,
-				2F7275382B8197BF00B5EB8F /* TabViewModel.swift */,
 				2F46A62C2B8F13060025453A /* BrowserActionViewModel.swift */,
 			);
 			path = ViewModels;
@@ -310,6 +306,7 @@
 				2FBEE1AB2B7FE4EB00E91B68 /* WebExtMessageHandler.swift */,
 				2F5FDC8B2B816D4D0091FD72 /* WebViewConfiguring.swift */,
 				2F46A62E2B8F17C20025453A /* BrowserActionSchemeHandler.swift */,
+				2F8692352B9698E700EE5AC9 /* ModelService.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -505,12 +502,12 @@
 				2FBEE1AA2B7EF08F00E91B68 /* WebWindowViewModel.swift in Sources */,
 				2FD1024C2B79815400A2EEC7 /* WebExtMetadataView.swift in Sources */,
 				2FD102462B78968200A2EEC7 /* WebExtManageViewController.swift in Sources */,
-				2F5FDC8E2B817B200091FD72 /* TabViewController.swift in Sources */,
 				2FD102482B793DDE00A2EEC7 /* WebExtInstallViewController.swift in Sources */,
 				2F5FDC852B812A000091FD72 /* BrowserActionViewController.swift in Sources */,
 				2F46A62F2B8F17C20025453A /* BrowserActionSchemeHandler.swift in Sources */,
 				2FD1024E2B7981AF00A2EEC7 /* WebExtension.swift in Sources */,
 				2F68A2D22B72BD0A0002ADBE /* WebViewController.swift in Sources */,
+				2F8692362B9698E700EE5AC9 /* ModelService.swift in Sources */,
 				2F68A30F2B731F5D0002ADBE /* WebWindowController.swift in Sources */,
 				2F46A62D2B8F13060025453A /* BrowserActionViewModel.swift in Sources */,
 				2F68A2D02B72BD0A0002ADBE /* AppDelegate.swift in Sources */,
@@ -518,7 +515,6 @@
 				2FD1024A2B79806A00A2EEC7 /* WebExtInstallViewModel.swift in Sources */,
 				2FBEE1AC2B7FE4EB00E91B68 /* WebExtMessageHandler.swift in Sources */,
 				2F72753F2B81C65D00B5EB8F /* WebExtManageCollectionViewItem.swift in Sources */,
-				2F7275392B8197BF00B5EB8F /* TabViewModel.swift in Sources */,
 				2F9FF4222B759D970041DFA2 /* WebViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

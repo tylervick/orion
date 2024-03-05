@@ -35,11 +35,29 @@ final class WebViewController: NSViewController {
         ])
 
         viewModel?.loadUserContentScripts(for: webView)
+
     }
 
-    init(viewModel: WebViewModel) {
+    init(viewModel: WebViewModel, actionPublisher: AnyPublisher<WebWindowToolbarAction, Never>) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        
+        actionPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                switch $0 {
+                case .back:
+                    self?.performBack()
+                case .forward:
+                    self?.performForward()
+                case .reload:
+                    self?.performReload()
+                case let .urlSubmitted(urlString):
+                    self?.loadUrlString(urlString)
+                default:
+                    break
+                }
+            }.store(in: &cancelBag)
     }
 
     required init?(coder: NSCoder) {

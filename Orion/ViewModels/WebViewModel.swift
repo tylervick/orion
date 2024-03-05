@@ -163,7 +163,7 @@ extension WebViewModel: WKNavigationDelegate {
         }
     }
 
-    func webView(_ webView: WKWebView, didNavigateWith navigationData: WKNavigationData) {
+    func webView(_: WKWebView, didNavigateWith navigationData: WKNavigationData) {
         // avoid recording history when redirecting
         if navigationData.destinationURL == navigationData.originalRequest.url {
             addHistoryItem(title: navigationData.title, url: navigationData.destinationURL)

@@ -16,89 +16,51 @@ final class WebWindowController: NSWindowController {
     @IBOutlet var forwardItem: NSToolbarItem!
     @IBOutlet var locationTextField: NSTextField!
 
-    private var tabViewController: TabViewController? {
-        contentViewController as? TabViewController
-    }
-
     private var windowViewModel: WebWindowViewModel?
     private var cancelBag = Set<AnyCancellable>()
-
-    private func makeContainer(recreateIfNeeded: Bool = true) -> ModelContainer {
-        do {
-            let storeUrl = try FileManager.default.url(
-                for: .documentDirectory,
-                in: .userDomainMask,
-                appropriateFor: nil,
-                create: false
-            ).appendingPathComponent("orion.store")
-
-            let configuration = ModelConfiguration(url: storeUrl, allowsSave: true)
-            do {
-                let container = try ModelContainer(
-                    for: HistoryItem.self,
-                    WebExtension.self,
-                    migrationPlan: HistoryItemMigrationPlan.self,
-                    configurations: configuration
-                )
-
-                container.mainContext.autosaveEnabled = true
-                return container
-            } catch {
-                if recreateIfNeeded {
-                    // We're only here if the expected DB migration failed,
-                    // therefore we delete the "bad" store.
-                    // TODO: Backup the "corrupted" db and alert the user
-                    try FileManager.default.removeItem(at: storeUrl)
-                    return makeContainer(recreateIfNeeded: false)
-                } else {
-                    throw error
-                }
-            }
-        } catch {
-            fatalError("Failed to create ModelContainer with error: \(error)")
-        }
-    }
 
     override func windowDidLoad() {
         super.windowDidLoad()
         window?.setAccessibilityIdentifier("webWindow")
+        window?.titleVisibility = .hidden
 
-        let container = makeContainer()
+        // Show tab bar by default
+        if let tabBarVisible = window?.tabGroup?.isTabBarVisible, !tabBarVisible {
+            window?.toggleTabBar(self)
+        }
+
         let logger = Logger()
-        let xpiDownloadManager = WebExtDownloadManager(logger: logger)
+        let webExtDownloadManager = WebExtDownloadManager(logger: logger)
         let windowViewModel = WebWindowViewModel(
             logger: logger,
-            xpiPublisher: xpiDownloadManager.xpiPublisher,
-            modelContext: container.mainContext
+            webExtDownloadManager: webExtDownloadManager,
+            modelContext: ModelService.shared.context
         )
-        self.windowViewModel = windowViewModel
 
         windowViewModel.subscribeToBrowserActionExtensions(toolbar)
         windowViewModel.subscribeToWebExtensionInstallRequest(self)
+        self.windowViewModel = windowViewModel
 
-        let tabViewModel = TabViewModel(
-            logger: logger,
-            modelContext: container.mainContext,
-            xpiDownloadDelegate: xpiDownloadManager,
-            toolbarActionPublisher: windowViewModel.toolbarActionPublisher
-        )
+        let webViewModel = windowViewModel.makeWebViewModel()
 
-        tabViewModel.$canGoBack.link(with: &windowViewModel.$backEnabled)
-        tabViewModel.$canGoForward.link(with: &windowViewModel.$forwardEnabled)
-        tabViewModel.$activeUrlString.removeDuplicates().receive(on: DispatchQueue.main)
+        // observe webview location changes and update the URL bar (locationTextField)
+        webViewModel.$urlString.removeDuplicates().receive(on: DispatchQueue.main)
             .sink { [weak self] urlString in
                 self?.locationTextField.stringValue = urlString
             }.store(in: &cancelBag)
 
-        if let tabViewController = storyboard?
-            .instantiateController(
-                withIdentifier: "tabViewController"
-            ) as? TabViewController
-        {
-            tabViewController.tabViewModel = tabViewModel
-            tabViewController.view.setFrameSize(NSSize(width: 1280, height: 720))
-            contentViewController = tabViewController
-        }
+        // observe document title and set to current window title (aka tab title)
+        webViewModel.$title.removeDuplicates().compactMap { $0 }.receive(on: DispatchQueue.main)
+            .sink { [weak self] title in
+                self?.window?.title = title
+            }.store(in: &cancelBag)
+
+        let viewController = WebViewController(
+            viewModel: webViewModel,
+            actionPublisher: windowViewModel.toolbarActionPublisher
+        )
+        viewController.view.setFrameSize(NSSize(width: 1280, height: 720))
+        contentViewController = viewController
     }
 
     @IBAction func backButtonClicked(_: NSToolbarItem) {
@@ -115,6 +77,13 @@ final class WebWindowController: NSWindowController {
 
     @IBAction func newTabButtonClicked(_: NSToolbarItem) {
         windowViewModel?.publishToolbarAction(.newTab)
+        newWindowForTab(self)
+    }
+
+    override func newWindowForTab(_: Any?) {
+        if let window {
+            windowViewModel?.newTab(currentWindow: window)
+        }
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
