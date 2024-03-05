@@ -22,9 +22,9 @@
 
 ## Screenshots
 
-![Screenshot 1](/docs/SCR-20240218-cpaa.png)
+![Screenshot 1](/docs/SCR-20240304-untm.png)
 
-![Install Extension](/docs/SCR-20240218-cpwf.jpeg)
+![Install Extension](/docs/SCR-20240304-uogv.png)
 
 ![Running Web Extension](/docs/SCR-20240218-crst.jpeg)
 
